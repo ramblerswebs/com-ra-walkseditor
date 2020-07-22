@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+    <fields name="filter">
+        <field name="search" type="text" hint="COM_RA_WALKSEDITOR_SEARCH_FILTER_SUBMIT"
+               label="COM_USERS_FILTER_SEARCH_DESC"
+               class="js-stools-search-string" />
+
+        <field name="date.from" label="COM_RA_WALKSEDITOR_WALKS_DATE_FILTER_FROM" type="calendar" onchange="this.form.submit();" filter="safehtml" class="inputbox" showtime="false" translateformat="false" hint="COM_RA_WALKSEDITOR_WALKS_DATE_FILTER_FROM"/>
+<field name="date.to" label="COM_RA_WALKSEDITOR_WALKS_DATE_FILTER_TO" type="calendar" onchange="this.form.submit();" filter="safehtml" class="inputbox" showtime="false" translateformat="false" hint="COM_RA_WALKSEDITOR_WALKS_DATE_FILTER_TO"/>
+<field name="category" label="COM_RA_WALKSEDITOR_FORM_LBL_WALK_CATEGORY" type="category" extension="com_ra_walkseditor.walks" onchange="this.form.submit();" default="">
+  <option value=""/>
+  <option value="">JOPTION_SELECT_CATEGORY</option>
+</field>
+<field name="status" label="COM_RA_WALKSEDITOR_FORM_LBL_WALK_STATUS" type="list" onchange="this.form.submit();" default="COM_RA_WALKSEDITOR_WALKS_STATUS_FILTER">
+  <option value="">COM_RA_WALKSEDITOR_WALKS_STATUS_FILTER</option>
+  <option value="Draft">COM_RA_WALKSEDITOR_WALKS_STATUS_OPTION_DRAFT</option>
+  <option value="AwaitingApproval">COM_RA_WALKSEDITOR_WALKS_STATUS_OPTION_AWAITINGAPPROVAL</option>
+  <option value="Published">COM_RA_WALKSEDITOR_WALKS_STATUS_OPTION_PUBLISHED</option>
+  <option value="Cancelled">COM_RA_WALKSEDITOR_WALKS_STATUS_OPTION_CANCELLED</option>
+</field>
+
+
+    </fields>
+</form>
