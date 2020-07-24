@@ -69,6 +69,7 @@ $canEdit = Ra_walkseditorHelpersRa_walkseditor::canUserEdit($this->item, $user);
 	<?php echo $this->form->renderField('telephone1'); ?>
 
 	<?php echo $this->form->renderField('telephone2'); ?>
+         <?php if (true === false) { // remove this section CEV ?>
 				<div class="fltlft" <?php if (!JFactory::getUser()->authorise('core.admin','ra_walkseditor')): ?> style="display:none;" <?php endif; ?> >
                 <?php echo JHtml::_('sliders.start', 'permissions-sliders-'.$this->item->id, array('useCookie'=>1)); ?>
                 <?php echo JHtml::_('sliders.panel', JText::_('ACL Configuration'), 'access-rules'); ?>
@@ -91,6 +92,7 @@ $canEdit = Ra_walkseditorHelpersRa_walkseditor::canUserEdit($this->item, $user);
                     });
                 </script>
              <?php endif; ?>
+                 <?php } ?>
 			<div class="control-group">
 				<div class="controls">
 
