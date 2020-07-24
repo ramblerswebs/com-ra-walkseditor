@@ -99,7 +99,7 @@ $document->addStyleSheet(Uri::root() . 'media/com_ra_walkseditor/css/list.css');
                                 </a>
                             </td>
                         <?php endif; ?>
-                        <?php $walk = new RDraftWalk($item->content); ?>
+                        <?php $walk = new RWalkseditorWalk($item->content); ?>
                         <td>
 
                             <?php

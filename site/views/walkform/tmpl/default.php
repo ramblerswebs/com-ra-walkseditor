@@ -119,7 +119,7 @@ if ($copy) {
 			<?php echo HTMLHelper::_('form.token'); ?>
 		</form>
                           <?php
-        $form = new RLeafletWalkseditor;
+        $form = new RWalkseditor;
         //       $form->cancel = Route::_('index.php?option=com_ra_draftgwem2&task=draftgwem2eventform.cancel');
         $form->fields['submit'] = "js-submitbtn";
         $form->fields['content'] = "jform_content";
