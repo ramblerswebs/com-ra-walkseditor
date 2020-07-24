@@ -101,7 +101,7 @@ if ($copy) {
 				<div class="controls ra-move-controls">
 
 					<?php if ($this->canSave): ?>
-						<button type="submit" class="validate btn btn-primary">
+						<button id="js-submitbtn" type="submit" class="validate btn btn-primary">
 							<?php echo Text::_('JSUBMIT'); ?>
 						</button>
 					<?php endif; ?>
