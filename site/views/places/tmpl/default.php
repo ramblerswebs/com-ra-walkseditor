@@ -115,8 +115,7 @@ $document->addStyleSheet(Uri::root() . 'media/com_ra_walkseditor/css/list.css');
 				<?php if (isset($item->checked_out) && $item->checked_out) : ?>
 					<?php echo JHtml::_('jgrid.checkedout', $i, $item->uEditor, $item->checked_out_time, 'places.', $canCheckin); ?>
 				<?php endif; ?>
-				<a href="<?php echo JRoute::_('index.php?option=com_ra_walkseditor&view=place&id='.(int) $item->id); ?>">
-				<?php echo $this->escape($item->name); ?></a>
+				<?php echo $this->escape($item->name); ?>
 				</td>
 				<td>
 
@@ -139,10 +138,10 @@ $document->addStyleSheet(Uri::root() . 'media/com_ra_walkseditor/css/list.css');
 								<?php if ($canEdit || $canDelete): ?>
 					<td class="center">
 						<?php if ($canEdit): ?>
-							<a href="<?php echo JRoute::_('index.php?option=com_ra_walkseditor&task=place.edit&id=' . $item->id, false, 2); ?>" class="btn btn-mini" type="button"><i class="icon-edit" ></i></a>
+							<a href="<?php echo JRoute::_('index.php?option=com_ra_walkseditor&task=place.edit&id=' . $item->id, false, 2); ?>" class="btn btn-mini" type="button">Edit</a>
 						<?php endif; ?>
 						<?php if ($canDelete): ?>
-							<a href="<?php echo JRoute::_('index.php?option=com_ra_walkseditor&task=placeform.remove&id=' . $item->id, false, 2); ?>" class="btn btn-mini delete-button" type="button"><i class="icon-trash" ></i></a>
+							<a href="<?php echo JRoute::_('index.php?option=com_ra_walkseditor&task=placeform.remove&id=' . $item->id, false, 2); ?>" class="btn btn-mini delete-button" type="button">Delete</a>
 						<?php endif; ?>
 					</td>
 				<?php endif; ?>

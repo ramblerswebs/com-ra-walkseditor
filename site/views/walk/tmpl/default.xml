@@ -11,7 +11,7 @@
             label="COM_RA_WALKSEDITOR_FIELDSET_ITEM_ID_SELECT_LABEL">
             <field
                 name="item_id"
-                query="SELECT `id` FROM #__ra_walkseditor_events ORDER BY `id`"
+                query="SELECT `id` FROM #__ra_walkseditor_walks ORDER BY `id`"
                 type="sql"
                 key_field="id" 
                 value_field="id"

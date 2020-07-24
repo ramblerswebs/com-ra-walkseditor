@@ -294,7 +294,7 @@ $wheres2[] = 'a.telephone2 LIKE ' . $word;
 
 
 
-//Search Walks.
+//Search Events.
 if ($limit > 0) {
     switch ($phrase) {
         case 'exact':
@@ -337,7 +337,7 @@ if ($limit > 0) {
                         'a.id AS title',
                         '"" AS created',
                         'a.id AS text',
-                        '"Walk" AS section',
+                        '"Event" AS section',
                         '1 AS browsernav'
                     )
             )
@@ -353,7 +353,7 @@ if ($limit > 0) {
 
     if (isset($list)) {
         foreach ($list as $key => $item) {
-            $list[$key]->href = JRoute::_('index.php?option=com_ra_walkseditor&view=walk&id=' . $item->id, false, 2);
+            $list[$key]->href = JRoute::_('index.php?option=com_ra_walkseditor&view=event&id=' . $item->id, false, 2);
         }
     }
 

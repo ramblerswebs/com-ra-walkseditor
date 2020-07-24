@@ -32,7 +32,7 @@ class Ra_walkseditorTablewalk extends \Joomla\CMS\Table\Table
 	public function __construct(&$db)
 	{
 		JObserverMapper::addObserverClassToClass('JTableObserverContenthistory', 'Ra_walkseditorTablewalk', array('typeAlias' => 'com_ra_walkseditor.walk'));
-		parent::__construct('#__ra_walkseditor_events', 'id', $db);
+		parent::__construct('#__ra_walkseditor_walks', 'id', $db);
         $this->setColumnAlias('published', 'state');
     }
 

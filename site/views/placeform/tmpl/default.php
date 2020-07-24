@@ -60,7 +60,8 @@ $canEdit = Ra_walkseditorHelpersRa_walkseditor::canUserEdit($this->item, $user);
 
 				<?php echo $this->form->getInput('created_by'); ?>
 				<?php echo $this->form->getInput('modified_by'); ?>
-	<?php echo $this->form->renderField('name'); ?>
+	<div style="display:none">
+        <?php echo $this->form->renderField('name'); ?>
 
 	<?php echo $this->form->renderField('abbr'); ?>
 
@@ -73,12 +74,12 @@ $canEdit = Ra_walkseditorHelpersRa_walkseditor::canUserEdit($this->item, $user);
 	<?php echo $this->form->renderField('gridreference'); ?>
 
 	<?php echo $this->form->renderField('what3words'); ?>
-
+        </div>
 			<div class="control-group">
-				<div class="controls">
+				<div class="controls ra-move-controls">
 
 					<?php if ($this->canSave): ?>
-						<button type="submit" class="validate btn btn-primary">
+						<button id="js-submitbtn" type="submit" class="validate btn btn-primary">
 							<?php echo Text::_('JSUBMIT'); ?>
 						</button>
 					<?php endif; ?>
@@ -95,5 +96,20 @@ $canEdit = Ra_walkseditorHelpersRa_walkseditor::canUserEdit($this->item, $user);
 				   value="placeform.save"/>
 			<?php echo HTMLHelper::_('form.token'); ?>
 		</form>
+                                                 <?php
+        $form = new RLeafletWalkseditor;
+        $form->fields=[];
+  //      $form->cancel = Route::_('index.php?option=com_ra_draftgwem2&task=draftgwem2eventform.cancel');
+        $form->fields['submit'] = "js-submitbtn";
+        $form->fields['name'] = "jform_name";
+        $form->fields['abbr'] = "jform_abbr";
+        $form->fields['postcode'] = "jform_postcode";
+        $form->fields['latitude'] = "jform_latitude";
+        $form->fields['longitude'] = "jform_longitude";
+        $form->fields['gridref10'] = "jform_gridreference";
+        $form->fields['what3words'] = "jform_what3words";
+       
+        $form->editPlace();
+        ?>
 	<?php endif; ?>
 </div>

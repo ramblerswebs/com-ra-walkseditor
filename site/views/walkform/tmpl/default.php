@@ -28,7 +28,11 @@ $doc->addScript(Uri::base() . '/media/com_ra_walkseditor/js/form.js');
 
 $user    = Factory::getUser();
 $canEdit = Ra_walkseditorHelpersRa_walkseditor::canUserEdit($this->item, $user);
-
+$app = Factory::getApplication();
+$copy = $app->getUserState('com_ra_walkseditor.edit.walk.copy');
+if ($copy) {
+    $this->item->id = null;
+}
 
 ?>
 
@@ -60,13 +64,16 @@ $canEdit = Ra_walkseditorHelpersRa_walkseditor::canUserEdit($this->item, $user);
 
 				<?php echo $this->form->getInput('created_by'); ?>
 				<?php echo $this->form->getInput('modified_by'); ?>
-	<?php echo $this->form->renderField('date'); ?>
-
+	 <div style="display:none">
+             <?php echo $this->form->renderField('date'); ?>
+             <?php echo $this->form->renderField('content'); ?>
+         </div>
 	<?php echo $this->form->renderField('category'); ?>
 
-	<?php echo $this->form->renderField('content'); ?>
+	
 
 	<?php echo $this->form->renderField('status'); ?>
+         <?php if (true === false) { // remove this section CEV ?>
 				<div class="fltlft" <?php if (!JFactory::getUser()->authorise('core.admin','ra_walkseditor')): ?> style="display:none;" <?php endif; ?> >
                 <?php echo JHtml::_('sliders.start', 'permissions-sliders-'.$this->item->id, array('useCookie'=>1)); ?>
                 <?php echo JHtml::_('sliders.panel', JText::_('ACL Configuration'), 'access-rules'); ?>
@@ -89,8 +96,9 @@ $canEdit = Ra_walkseditorHelpersRa_walkseditor::canUserEdit($this->item, $user);
                     });
                 </script>
              <?php endif; ?>
+                <?php } ?>
 			<div class="control-group">
-				<div class="controls">
+				<div class="controls ra-move-controls">
 
 					<?php if ($this->canSave): ?>
 						<button type="submit" class="validate btn btn-primary">
@@ -110,5 +118,13 @@ $canEdit = Ra_walkseditorHelpersRa_walkseditor::canUserEdit($this->item, $user);
 				   value="walkform.save"/>
 			<?php echo HTMLHelper::_('form.token'); ?>
 		</form>
+                          <?php
+        $form = new RLeafletWalkseditor;
+        //       $form->cancel = Route::_('index.php?option=com_ra_draftgwem2&task=draftgwem2eventform.cancel');
+        $form->fields['submit'] = "js-submitbtn";
+        $form->fields['content'] = "jform_content";
+        $form->fields['date'] = "jform_date";
+        $form->editWalk();
+        ?>
 	<?php endif; ?>
 </div>

@@ -115,8 +115,7 @@ $document->addStyleSheet(Uri::root() . 'media/com_ra_walkseditor/css/list.css');
 				<?php if (isset($item->checked_out) && $item->checked_out) : ?>
 					<?php echo JHtml::_('jgrid.checkedout', $i, $item->uEditor, $item->checked_out_time, 'contacts.', $canCheckin); ?>
 				<?php endif; ?>
-				<a href="<?php echo JRoute::_('index.php?option=com_ra_walkseditor&view=contact&id='.(int) $item->id); ?>">
-				<?php echo $this->escape($item->contactname); ?></a>
+				<?php echo $this->escape($item->contactname); ?>
 				</td>
 				<td>
 
@@ -124,25 +123,25 @@ $document->addStyleSheet(Uri::root() . 'media/com_ra_walkseditor/css/list.css');
 				</td>
 				<td>
 
-					<?php echo $item->email; ?>
+					<?php echo obscureInfo($item->email, $canEdit); ?>
 				</td>
 				<td>
 
-					<?php echo $item->telephone1; ?>
+					<?php echo obscureInfo($item->telephone1, $canEdit); ?>
 				</td>
 				<td>
 
-					<?php echo $item->telephone2; ?>
+					<?php echo obscureInfo($item->telephone2, $canEdit); ?>
 				</td>
 
 
 								<?php if ($canEdit || $canDelete): ?>
 					<td class="center">
 						<?php if ($canEdit): ?>
-							<a href="<?php echo JRoute::_('index.php?option=com_ra_walkseditor&task=contact.edit&id=' . $item->id, false, 2); ?>" class="btn btn-mini" type="button"><i class="icon-edit" ></i></a>
+							<a href="<?php echo JRoute::_('index.php?option=com_ra_walkseditor&task=contact.edit&id=' . $item->id, false, 2); ?>" class="btn btn-mini" type="button">Edit</a>
 						<?php endif; ?>
 						<?php if ($canDelete): ?>
-							<a href="<?php echo JRoute::_('index.php?option=com_ra_walkseditor&task=contactform.remove&id=' . $item->id, false, 2); ?>" class="btn btn-mini delete-button" type="button"><i class="icon-trash" ></i></a>
+							<a href="<?php echo JRoute::_('index.php?option=com_ra_walkseditor&task=contactform.remove&id=' . $item->id, false, 2); ?>" class="btn btn-mini delete-button" type="button">Delete</a>
 						<?php endif; ?>
 					</td>
 				<?php endif; ?>
@@ -165,7 +164,29 @@ $document->addStyleSheet(Uri::root() . 'media/com_ra_walkseditor/css/list.css');
 	<input type="hidden" name="filter_order_Dir" value="<?php echo $listDirn; ?>"/>
 	<?php echo HTMLHelper::_('form.token'); ?>
 </form>
+<?php
 
+function obscureInfo($text, $canedit) {
+    if ($canedit) {
+        return $text;
+    } else {
+        $no = strlen($text);
+        If ($no < 5) {
+            return str_repeat("*", $no);
+        }
+        $out = $text;
+        for ($i = 0; $i <= $no - 5; $i++) {
+            $char = substr($out, $i, 1);
+            if ($char !== "@" and $char !== " ") {
+                $out = substr_replace($out, "*",$i, 1);
+            }
+        }
+
+        return $out;
+    }
+}
+
+?>
 <?php if($canDelete) : ?>
 <script type="text/javascript">
 

@@ -70,7 +70,7 @@ class Ra_walkseditorModelExports extends \Joomla\CMS\MVC\Model\ListModel
 		$ordering = $app->getUserStateFromRequest($this->context . '.filter_order', 'filter_order', $app->get('filter_order'));
 		if (!in_array($ordering, $this->filter_fields))
 		{
-		$ordering = '';
+		$ordering = 'category';
 		}
 		$this->setState('list.ordering', $ordering);
 		}
@@ -157,7 +157,7 @@ class Ra_walkseditorModelExports extends \Joomla\CMS\MVC\Model\ListModel
 			$item->category_name = !empty($result) ? implode(', ', $result) : '';
 		}
 
-			$item->status = JText::_('COM_RA_WALKSEDITOR_WALKS_STATUS_OPTION_' . strtoupper($item->status));
+			$item->status = JText::_('COM_RA_WALKSEDITOR_EVENTS_STATUS_OPTION_' . strtoupper($item->status));
 		}
 
 		return $items;

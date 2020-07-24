@@ -56,10 +56,19 @@ JHtmlSidebar::addEntry(
 		);
 
 JHtmlSidebar::addEntry(
-			JText::_('COM_RA_WALKSEDITOR_TITLE_WALKS'),
-			'index.php?option=com_ra_walkseditor&view=walks',
-			$vName == 'walks'
+			JText::_('COM_RA_WALKSEDITOR_TITLE_EVENTS'),
+			'index.php?option=com_ra_walkseditor&view=events',
+			$vName == 'events'
 		);
+
+		JHtmlSidebar::addEntry(
+			JText::_('JCATEGORIES') . ' (' . JText::_('COM_RA_WALKSEDITOR_TITLE_EVENTS') . ')',
+			"index.php?option=com_categories&extension=com_ra_walkseditor.events",
+			$vName == 'categories.events'
+		);
+		if ($vName=='categories') {
+			JToolBarHelper::title('RA Walks Editor: JCATEGORIES (COM_RA_WALKSEDITOR_TITLE_EVENTS)');
+		}
 
 		JHtmlSidebar::addEntry(
 			JText::_('COM_RA_WALKSEDITOR_TITLE_IMPORTS'),

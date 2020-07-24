@@ -41,7 +41,7 @@ class Ra_walkseditorModelImports extends \Joomla\CMS\MVC\Model\ListModel
 	protected function populateState($ordering = null, $direction = null)
 	{
         // List state information.
-        parent::populateState('', 'ASC');
+        parent::populateState('category', 'ASC');
 
         $context = $this->getUserStateFromRequest($this->context.'.filter.search', 'filter_search');
         $this->setState('filter.search', $context);
@@ -122,7 +122,7 @@ class Ra_walkseditorModelImports extends \Joomla\CMS\MVC\Model\ListModel
 
 				$oneItem->category = !empty($result) ? implode(', ', $result) : '';
 			}
-					$oneItem->status = JText::_('COM_RA_WALKSEDITOR_WALKS_STATUS_OPTION_' . strtoupper($oneItem->status));
+					$oneItem->status = JText::_('COM_RA_WALKSEDITOR_EVENTS_STATUS_OPTION_' . strtoupper($oneItem->status));
 		}
 
 		return $items;

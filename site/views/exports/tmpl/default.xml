@@ -15,7 +15,7 @@
 						type="modal_category"
 						label="JGLOBAL_CHOOSE_CATEGORY_LABEL"
 						description="JGLOBAL_CHOOSE_CATEGORY_DESC"
-						extension="com_ra_walkseditor.walks"
+						extension="com_ra_walkseditor.events"
 						select="true"
 						new="true"
 						edit="true"

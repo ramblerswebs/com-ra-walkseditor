@@ -33,7 +33,7 @@ class Ra_walkseditorWalksCategories extends Categories
 		parent::__construct($options);
 	}
 }
-class Ra_walkseditorWalksCategories extends Categories
+class Ra_walkseditorEventsCategories extends Categories
 {
 	/**
 	 * Class constructor
@@ -45,7 +45,7 @@ class Ra_walkseditorWalksCategories extends Categories
 	public function __construct($options = array())
 	{
 		$options['table'] = '#__ra_walkseditor_events';
-		$options['extension'] = 'com_ra_walkseditor.walks';
+		$options['extension'] = 'com_ra_walkseditor.events';
 		parent::__construct($options);
 	}
 }

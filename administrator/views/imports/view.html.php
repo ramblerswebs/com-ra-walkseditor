@@ -151,10 +151,10 @@ class Ra_walkseditorViewImports extends \Joomla\CMS\MVC\View\HtmlView
 		return array(
 			'a.`ordering`' => JText::_('JGRID_HEADING_ORDERING'),
 			'a.`state`' => JText::_('JSTATUS'),
-			'a.`date`' => JText::_('COM_RA_WALKSEDITOR_WALKS_DATE'),
-			'a.`category`' => JText::_('COM_RA_WALKSEDITOR_WALKS_CATEGORY'),
-			'a.`content`' => JText::_('COM_RA_WALKSEDITOR_WALKS_CONTENT'),
-			'a.`status`' => JText::_('COM_RA_WALKSEDITOR_WALKS_STATUS'),
+			'a.`date`' => JText::_('COM_RA_WALKSEDITOR_EVENTS_DATE'),
+			'a.`category`' => JText::_('COM_RA_WALKSEDITOR_EVENTS_CATEGORY'),
+			'a.`content`' => JText::_('COM_RA_WALKSEDITOR_EVENTS_CONTENT'),
+			'a.`status`' => JText::_('COM_RA_WALKSEDITOR_EVENTS_STATUS'),
 		);
 	}
 

@@ -52,15 +52,15 @@ class Ra_walkseditorRouter extends RouterView
 			$this->registerView($contact);
 			$contactform = new RouterViewConfiguration('contactform');
 			$contactform->setKey('id');
-			$this->registerView($contactform);$walks = new RouterViewConfiguration('walks');
-		$walks->setKey('id')->setNestable();
-		$this->registerView($walks);
-			$walk = new RouterViewConfiguration('walk');
-			$walk->setKey('id')->setParent($walks, 'catid');
-			$this->registerView($walk);
-			$walkform = new RouterViewConfiguration('walkform');
-			$walkform->setKey('id');
-			$this->registerView($walkform);
+			$this->registerView($contactform);$events = new RouterViewConfiguration('events');
+		$events->setKey('id')->setNestable();
+		$this->registerView($events);
+			$event = new RouterViewConfiguration('event');
+			$event->setKey('id')->setParent($events, 'catid');
+			$this->registerView($event);
+			$eventform = new RouterViewConfiguration('eventform');
+			$eventform->setKey('id');
+			$this->registerView($eventform);
 
 		parent::__construct($app, $menu);
 
@@ -191,9 +191,9 @@ class Ra_walkseditorRouter extends RouterView
 			 *
 			 * @return  array|string  The segments of this item
 			 */
-			public function getWalksSegment($id, $query)
+			public function getEventsSegment($id, $query)
 			{
-				$category = Categories::getInstance('ra_walkseditor.walks')->get($id);
+				$category = Categories::getInstance('ra_walkseditor.events')->get($id);
 
 				if ($category)
 				{
@@ -214,28 +214,28 @@ class Ra_walkseditorRouter extends RouterView
 				return array();
 			}
 		/**
-		 * Method to get the segment(s) for an walk
+		 * Method to get the segment(s) for an event
 		 *
-		 * @param   string  $id     ID of the walk to retrieve the segments for
+		 * @param   string  $id     ID of the event to retrieve the segments for
 		 * @param   array   $query  The request that is built right now
 		 *
 		 * @return  array|string  The segments of this item
 		 */
-		public function getWalkSegment($id, $query)
+		public function getEventSegment($id, $query)
 		{
 			return array((int) $id => $id);
 		}
 			/**
-			 * Method to get the segment(s) for an walkform
+			 * Method to get the segment(s) for an eventform
 			 *
-			 * @param   string  $id     ID of the walkform to retrieve the segments for
+			 * @param   string  $id     ID of the eventform to retrieve the segments for
 			 * @param   array   $query  The request that is built right now
 			 *
 			 * @return  array|string  The segments of this item
 			 */
-			public function getWalkformSegment($id, $query)
+			public function getEventformSegment($id, $query)
 			{
-				return $this->getWalkSegment($id, $query);
+				return $this->getEventSegment($id, $query);
 			}
 
 	
@@ -357,11 +357,11 @@ class Ra_walkseditorRouter extends RouterView
 			 *
 			 * @return  mixed   The id of this item or false
 			 */
-			public function getWalksId($segment, $query)
+			public function getEventsId($segment, $query)
 			{
 				if (isset($query['id']))
 				{
-					$category = Categories::getInstance('ra_walkseditor.walks', array('access' => false))->get($query['id']);
+					$category = Categories::getInstance('ra_walkseditor.events', array('access' => false))->get($query['id']);
 
 					if ($category)
 					{
@@ -388,27 +388,27 @@ class Ra_walkseditorRouter extends RouterView
 				return false;
 			}
 		/**
-		 * Method to get the segment(s) for an walk
+		 * Method to get the segment(s) for an event
 		 *
-		 * @param   string  $segment  Segment of the walk to retrieve the ID for
+		 * @param   string  $segment  Segment of the event to retrieve the ID for
 		 * @param   array   $query    The request that is parsed right now
 		 *
 		 * @return  mixed   The id of this item or false
 		 */
-		public function getWalkId($segment, $query)
+		public function getEventId($segment, $query)
 		{
 			return (int) $segment;
 		}
 			/**
-			 * Method to get the segment(s) for an walkform
+			 * Method to get the segment(s) for an eventform
 			 *
-			 * @param   string  $segment  Segment of the walkform to retrieve the ID for
+			 * @param   string  $segment  Segment of the eventform to retrieve the ID for
 			 * @param   array   $query    The request that is parsed right now
 			 *
 			 * @return  mixed   The id of this item or false
 			 */
-			public function getWalkformId($segment, $query)
+			public function getEventformId($segment, $query)
 			{
-				return $this->getWalkId($segment, $query);
+				return $this->getEventId($segment, $query);
 			}
 }

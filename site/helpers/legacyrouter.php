@@ -126,13 +126,13 @@ class Ra_walkseditorRulesLegacy implements RulesInterface
 				{
 					$segments[] = $query['id'];
 				}
-				if ($view == 'walk')
+				if ($view == 'event')
 				{
 					$segments[] = $query['id'];
 				}
-				if ($view == 'walks')
+				if ($view == 'events')
 				{
-					$category = Categories::getInstance('ra_walkseditor.walks')->get($query['id']);
+					$category = Categories::getInstance('ra_walkseditor.events')->get($query['id']);
 					$path = array_reverse($category->getPath(), true);
 					foreach ($path as $id)
 					{
@@ -140,7 +140,7 @@ class Ra_walkseditorRulesLegacy implements RulesInterface
 						$segments[] = $id;
 					}
 				}
-				if ($view == 'walkform')
+				if ($view == 'eventform')
 				{
 					$segments[] = $query['id'];
 				}
@@ -207,9 +207,9 @@ class Ra_walkseditorRulesLegacy implements RulesInterface
 				{
 					$vars['task'] = $vars['view'] . '.' . $segment;
 				}
-				if ($vars['view'] == 'walks')
+				if ($vars['view'] == 'events')
 				{
-					$category = Categories::getInstance('ra_walkseditor.walks', array('access' => false))->get('root');
+					$category = Categories::getInstance('ra_walkseditor.events', array('access' => false))->get('root');
 					if ($category)
 					{
 						foreach ($category->getChildren() as $child)

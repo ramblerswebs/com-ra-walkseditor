@@ -140,7 +140,7 @@ class Ra_walkseditorModelWalks extends \Joomla\CMS\MVC\Model\ListModel
                         )
                 );
 
-            $query->from('`#__ra_walkseditor_events` AS a');
+            $query->from('`#__ra_walkseditor_walks` AS a');
             
 		// Join over the users for the checked out user.
 		$query->select('uc.name AS uEditor');

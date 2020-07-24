@@ -261,7 +261,7 @@ class Ra_walkseditorModelWalk extends \Joomla\CMS\MVC\Model\AdminModel
 			if (@$table->ordering === '')
 			{
 				$db = Factory::getDbo();
-				$db->setQuery('SELECT MAX(ordering) FROM #__ra_walkseditor_events');
+				$db->setQuery('SELECT MAX(ordering) FROM #__ra_walkseditor_walks');
 				$max             = $db->loadResult();
 				$table->ordering = $max + 1;
 			}
