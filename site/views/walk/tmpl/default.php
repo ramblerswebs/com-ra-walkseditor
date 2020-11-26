@@ -52,7 +52,7 @@ if (!$canEdit && JFactory::getUser()->authorise('core.edit.own', 'com_ra_walksed
 
 
 <?php
-$form = new RWalkseditor;
+ require_once 'components/com_ra_walkseditor/walkseditor.php';
+        $form = new Walkseditor;
 $form->fields['content'] = 'js-contents';
 $form->viewWalk();
-?>

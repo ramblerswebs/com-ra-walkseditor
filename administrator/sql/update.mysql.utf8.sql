@@ -47,6 +47,19 @@ UPDATE `#__content_types` SET
 	`content_history_options` = '{"formFile":"administrator\/components\/com_ra_walkseditor\/models\/forms\/event.xml", "hideFields":["checked_out","checked_out_time","params","language"], "ignoreChanges":["modified_by", "modified", "checked_out", "checked_out_time"], "convertToInt":["publish_up", "publish_down"], "displayLookup":[{"sourceColumn":"catid","targetTable":"#__categories","targetColumn":"id","displayColumn":"title"},{"sourceColumn":"group_id","targetTable":"#__usergroups","targetColumn":"id","displayColumn":"title"},{"sourceColumn":"created_by","targetTable":"#__users","targetColumn":"id","displayColumn":"name"},{"sourceColumn":"access","targetTable":"#__viewlevels","targetColumn":"id","displayColumn":"title"},{"sourceColumn":"modified_by","targetTable":"#__users","targetColumn":"id","displayColumn":"name"}]}'
 WHERE (`type_alias` = 'com_ra_walkseditor.event');
 
+INSERT INTO `#__content_types` (`type_title`, `type_alias`, `table`, `content_history_options`)
+SELECT * FROM ( SELECT 'Grade','com_ra_walkseditor.grade','{"special":{"dbtable":"#__ra_walkseditor_grades","key":"id","type":"Grade","prefix":"Ra_walkseditorTable"}}', '{"formFile":"administrator\/components\/com_ra_walkseditor\/models\/forms\/grade.xml", "hideFields":["checked_out","checked_out_time","params","language"], "ignoreChanges":["modified_by", "modified", "checked_out", "checked_out_time"], "convertToInt":["publish_up", "publish_down"], "displayLookup":[{"sourceColumn":"catid","targetTable":"#__categories","targetColumn":"id","displayColumn":"title"},{"sourceColumn":"group_id","targetTable":"#__usergroups","targetColumn":"id","displayColumn":"title"},{"sourceColumn":"created_by","targetTable":"#__users","targetColumn":"id","displayColumn":"name"},{"sourceColumn":"access","targetTable":"#__viewlevels","targetColumn":"id","displayColumn":"title"},{"sourceColumn":"modified_by","targetTable":"#__users","targetColumn":"id","displayColumn":"name"}]}') AS tmp
+WHERE NOT EXISTS (
+	SELECT type_alias FROM `#__content_types` WHERE (`type_alias` = 'com_ra_walkseditor.grade')
+) LIMIT 1;
+
+UPDATE `#__content_types` SET
+	`type_title` = 'Grade', 
+	`table` = '{"special":{"dbtable":"#__ra_walkseditor_grades","key":"id","type":"Grade","prefix":"Ra_walkseditorTable"}}', 
+	`content_history_options` = '{"formFile":"administrator\/components\/com_ra_walkseditor\/models\/forms\/grade.xml", "hideFields":["checked_out","checked_out_time","params","language"], "ignoreChanges":["modified_by", "modified", "checked_out", "checked_out_time"], "convertToInt":["publish_up", "publish_down"], "displayLookup":[{"sourceColumn":"catid","targetTable":"#__categories","targetColumn":"id","displayColumn":"title"},{"sourceColumn":"group_id","targetTable":"#__usergroups","targetColumn":"id","displayColumn":"title"},{"sourceColumn":"created_by","targetTable":"#__users","targetColumn":"id","displayColumn":"name"},{"sourceColumn":"access","targetTable":"#__viewlevels","targetColumn":"id","displayColumn":"title"},{"sourceColumn":"modified_by","targetTable":"#__users","targetColumn":"id","displayColumn":"name"}]}'
+WHERE (`type_alias` = 'com_ra_walkseditor.grade');
+
+
 UPDATE `#__content_types` SET
 	`type_title` = 'Event Category', 
 	`table` = '{"special":{"dbtable":"#__categories","key":"id","type":"Category","prefix":"JTable","config":"array()"},"common":   {"dbtable":"#__ucm_content","key":"ucm_id","type":"Corecontent","prefix":"JTable","config":"array()"}}', 

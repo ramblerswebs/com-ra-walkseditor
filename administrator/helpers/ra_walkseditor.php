@@ -69,6 +69,11 @@ JHtmlSidebar::addEntry(
 		if ($vName=='categories') {
 			JToolBarHelper::title('RA Walks Editor: JCATEGORIES (COM_RA_WALKSEDITOR_TITLE_EVENTS)');
 		}
+		JHtmlSidebar::addEntry(
+			JText::_('COM_RA_WALKSEDITOR_TITLE_GRADES'),
+			'index.php?option=com_ra_walkseditor&view=grades',
+			$vName == 'grades'
+		);
 
 		JHtmlSidebar::addEntry(
 			JText::_('COM_RA_WALKSEDITOR_TITLE_IMPORTS'),

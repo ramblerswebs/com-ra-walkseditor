@@ -30,13 +30,6 @@ $document->addStyleSheet(Uri::root() . 'media/com_ra_walkseditor/css/form.css');
 	js = jQuery.noConflict();
 	js(document).ready(function () {
 		
-	js('input:hidden.category').each(function(){
-		var name = js(this).attr('name');
-		if(name.indexOf('categoryhidden')){
-			js('#jform_category option[value="'+js(this).val()+'"]').attr('selected',true);
-		}
-	});
-	js("#jform_category").trigger("liszt:updated");
 	});
 
 	Joomla.submitbutton = function (task) {

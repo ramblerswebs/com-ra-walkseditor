@@ -33,6 +33,8 @@
         <filename>ra_walkseditor.php</filename>
         <filename>controller.php</filename>
         <filename>router.php</filename>
+        <filename>walk.php</filename>
+        <filename>walkseditor.php</filename>
         <folder>views</folder>
         <folder>models</folder>
         <folder>controllers</folder>
@@ -61,6 +63,8 @@
 			<menu link="option=com_ra_walkseditor&amp;view=events" view="events" alt="Ra_walkseditor/Events">COM_RA_WALKSEDITOR_TITLE_EVENTS</menu>
 
 			<menu link="option=com_categories&amp;extension=com_ra_walkseditor.events" view="categories" alt="Ra_walkseditor/Categories">COM_RA_WALKSEDITOR_EVENTS_CATEGORY</menu>
+
+			<menu link="option=com_ra_walkseditor&amp;view=grades" view="grades" alt="Ra_walkseditor/Grades">COM_RA_WALKSEDITOR_TITLE_GRADES</menu>
 
 			<menu link="option=com_ra_walkseditor&amp;view=imports" view="imports" alt="Ra_walkseditor/Imports">COM_RA_WALKSEDITOR_TITLE_IMPORTS</menu>
 

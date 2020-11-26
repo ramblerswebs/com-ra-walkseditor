@@ -52,7 +52,10 @@ $document->addStyleSheet(Uri::root() . 'media/com_ra_walkseditor/css/list.css');
 							<th class=''>
 				<?php echo JHtml::_('grid.sort',  'COM_RA_WALKSEDITOR_PLACES_ID', 'a.id', $listDirn, $listOrder); ?>
 				</th>
-				<th class=''>
+                                <th class=''>
+                                    <?php echo JHtml::_('grid.sort', 'COM_RA_WALKSEDITOR_PLACES_GRIDREFERENCE', 'a.gridreference', $listDirn, $listOrder); ?>
+                                </th>
+                                <th class=''>
 				<?php echo JHtml::_('grid.sort',  'COM_RA_WALKSEDITOR_PLACES_NAME', 'a.name', $listDirn, $listOrder); ?>
 				</th>
 				<th class=''>
@@ -61,9 +64,7 @@ $document->addStyleSheet(Uri::root() . 'media/com_ra_walkseditor/css/list.css');
 				<th class=''>
 				<?php echo JHtml::_('grid.sort',  'COM_RA_WALKSEDITOR_PLACES_POSTCODE', 'a.postcode', $listDirn, $listOrder); ?>
 				</th>
-				<th class=''>
-				<?php echo JHtml::_('grid.sort',  'COM_RA_WALKSEDITOR_PLACES_GRIDREFERENCE', 'a.gridreference', $listDirn, $listOrder); ?>
-				</th>
+	
 				<th class=''>
 				<?php echo JHtml::_('grid.sort',  'COM_RA_WALKSEDITOR_PLACES_WHAT3WORDS', 'a.what3words', $listDirn, $listOrder); ?>
 				</th>
@@ -107,35 +108,18 @@ $document->addStyleSheet(Uri::root() . 'media/com_ra_walkseditor/css/list.css');
 </td>
 				<?php endif; ?>
 
-								<td>
-
-					<?php echo $item->id; ?>
-				</td>
-				<td>
+				<td><?php echo $item->id; ?></td>
+				<td><?php echo $item->gridreference; ?></td>
+                                <td>
 				<?php if (isset($item->checked_out) && $item->checked_out) : ?>
 					<?php echo JHtml::_('jgrid.checkedout', $i, $item->uEditor, $item->checked_out_time, 'places.', $canCheckin); ?>
 				<?php endif; ?>
 				<?php echo $this->escape($item->name); ?>
 				</td>
-				<td>
-
-					<?php echo $item->abbr; ?>
-				</td>
-				<td>
-
-					<?php echo $item->postcode; ?>
-				</td>
-				<td>
-
-					<?php echo $item->gridreference; ?>
-				</td>
-				<td>
-
-					<?php echo $item->what3words; ?>
-				</td>
-
-
-								<?php if ($canEdit || $canDelete): ?>
+				<td><?php echo $item->abbr; ?></td>
+				<td><?php echo $item->postcode; ?></td>
+				<td><?php echo $item->what3words; ?></td>
+				<?php if ($canEdit || $canDelete): ?>
 					<td class="center">
 						<?php if ($canEdit): ?>
 							<a href="<?php echo JRoute::_('index.php?option=com_ra_walkseditor&task=place.edit&id=' . $item->id, false, 2); ?>" class="btn btn-mini" type="button">Edit</a>

@@ -144,6 +144,18 @@ class Ra_walkseditorRulesLegacy implements RulesInterface
 				{
 					$segments[] = $query['id'];
 				}
+				if ($view == 'grade')
+				{
+					$segments[] = $query['id'];
+				}
+				if ($view == 'grades')
+				{
+					$segments[] = $query['id'];
+				}
+				if ($view == 'gradeform')
+				{
+					$segments[] = $query['id'];
+				}
             }
             else
             {
@@ -220,6 +232,11 @@ class Ra_walkseditorRulesLegacy implements RulesInterface
 							}
 						}
 					}
+							}
+				if ($vars['view'] == 'grades')
+				{
+					$vars['task'] = $vars['view'] . '.' . $segment;
+			
 				}
 				$id = null;
 				if (method_exists($model, 'getItemIdByAlias'))

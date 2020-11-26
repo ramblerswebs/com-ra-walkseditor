@@ -33,6 +33,7 @@ $canDelete = $user->authorise('core.delete', 'com_ra_walkseditor');
 // Import CSS
 $document = Factory::getDocument();
 $document->addStyleSheet(Uri::root() . 'media/com_ra_walkseditor/css/list.css');
+  require_once 'components/com_ra_walkseditor/walk.php';
 ?>
 
 <form action="<?php echo htmlspecialchars(Uri::getInstance()->toString()); ?>" method="post"
@@ -99,7 +100,7 @@ $document->addStyleSheet(Uri::root() . 'media/com_ra_walkseditor/css/list.css');
                                 </a>
                             </td>
                         <?php endif; ?>
-                        <?php $walk = new RWalkseditorWalk($item->content); ?>
+                        <?php $walk = new WalkseditorWalk($item->content); ?>
                         <td>
 
                             <?php

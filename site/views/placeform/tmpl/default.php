@@ -97,7 +97,8 @@ $canEdit = Ra_walkseditorHelpersRa_walkseditor::canUserEdit($this->item, $user);
 			<?php echo HTMLHelper::_('form.token'); ?>
 		</form>
                                                  <?php
-        $form = new RWalkseditor;
+        require_once 'components/com_ra_walkseditor/walkseditor.php';
+        $form = new Walkseditor;
         $form->fields=[];
   //      $form->cancel = Route::_('index.php?option=com_ra_draftgwem2&task=draftgwem2eventform.cancel');
         $form->fields['submit'] = "js-submitbtn";

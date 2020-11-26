@@ -61,6 +61,12 @@ class Ra_walkseditorRouter extends RouterView
 			$eventform = new RouterViewConfiguration('eventform');
 			$eventform->setKey('id');
 			$this->registerView($eventform);
+		$grades = new RouterViewConfiguration('grades');
+			$this->registerView($grades);
+			$gradeform = new RouterViewConfiguration('gradeform');
+			$gradeform->setKey('id');
+			$this->registerView($gradeform);
+
 
 		parent::__construct($app, $menu);
 
@@ -237,6 +243,30 @@ class Ra_walkseditorRouter extends RouterView
 			{
 				return $this->getEventSegment($id, $query);
 			}
+		/**
+		 * Method to get the segment(s) for an grade
+		 *
+		 * @param   string  $id     ID of the grade to retrieve the segments for
+		 * @param   array   $query  The request that is built right now
+		 *
+		 * @return  array|string  The segments of this item
+		 */
+		public function getGradeSegment($id, $query)
+		{
+			return array((int) $id => $id);
+		}
+			/**
+			 * Method to get the segment(s) for an gradeform
+			 *
+			 * @param   string  $id     ID of the gradeform to retrieve the segments for
+			 * @param   array   $query  The request that is built right now
+			 *
+			 * @return  array|string  The segments of this item
+			 */
+			public function getGradeformSegment($id, $query)
+			{
+				return $this->getGradeSegment($id, $query);
+			}
 
 	
 			/**
@@ -411,4 +441,31 @@ class Ra_walkseditorRouter extends RouterView
 			{
 				return $this->getEventId($segment, $query);
 			}
+			/**
+		 * Method to get the segment(s) for an grade
+		 *
+		 * @param   string  $segment  Segment of the grade to retrieve the ID for
+		 * @param   array   $query    The request that is parsed right now
+		 *
+		 * @return  mixed   The id of this item or false
+		 */
+		public function getGradeId($segment, $query)
+		{
+			return (int) $segment;
+		}
+			/**
+			 * Method to get the segment(s) for an gradeform
+			 *
+			 * @param   string  $segment  Segment of the gradeform to retrieve the ID for
+			 * @param   array   $query    The request that is parsed right now
+			 *
+			 * @return  mixed   The id of this item or false
+			 */
+			public function getGradeformId($segment, $query)
+			{
+				return $this->getGradeId($segment, $query);
+			}
+
+
+
 }

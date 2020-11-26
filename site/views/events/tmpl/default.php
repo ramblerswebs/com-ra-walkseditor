@@ -127,10 +127,10 @@ $document->addStyleSheet(Uri::root() . 'media/com_ra_walkseditor/css/list.css');
 								<?php if ($canEdit || $canDelete): ?>
 					<td class="center">
 						<?php if ($canEdit): ?>
-							<a href="<?php echo JRoute::_('index.php?option=com_ra_walkseditor&task=event.edit&id=' . $item->id, false, 2); ?>" class="btn btn-mini" type="button"><i class="icon-edit" ></i></a>
+							<a href="<?php echo JRoute::_('index.php?option=com_ra_walkseditor&task=event.edit&id=' . $item->id, false, 2); ?>" class="btn btn-mini" type="button">Edit</a>
 						<?php endif; ?>
 						<?php if ($canDelete): ?>
-							<a href="<?php echo JRoute::_('index.php?option=com_ra_walkseditor&task=eventform.remove&id=' . $item->id, false, 2); ?>" class="btn btn-mini delete-button" type="button"><i class="icon-trash" ></i></a>
+							<a href="<?php echo JRoute::_('index.php?option=com_ra_walkseditor&task=eventform.remove&id=' . $item->id, false, 2); ?>" class="btn btn-mini delete-button" type="button">Delete</a>
 						<?php endif; ?>
 					</td>
 				<?php endif; ?>

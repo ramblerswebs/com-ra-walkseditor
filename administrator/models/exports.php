@@ -41,7 +41,7 @@ class Ra_walkseditorModelExports extends \Joomla\CMS\MVC\Model\ListModel
 	protected function populateState($ordering = null, $direction = null)
 	{
         // List state information.
-        parent::populateState('category', 'ASC');
+        parent::populateState('id', 'ASC');
 
         $context = $this->getUserStateFromRequest($this->context.'.filter.search', 'filter_search');
         $this->setState('filter.search', $context);
@@ -104,26 +104,6 @@ class Ra_walkseditorModelExports extends \Joomla\CMS\MVC\Model\ListModel
 	{
 		$items = parent::getItems();
                 
-		foreach ($items as $oneItem)
-		{
-
-			if (isset($oneItem->category))
-			{
-				$db    = JFactory::getDbo();
-				$query = $db->getQuery(true);
-
-				$query
-					->select($db->quoteName('title'))
-					->from($db->quoteName('#__categories'))
-					->where('FIND_IN_SET(' . $db->quoteName('id') . ', ' . $db->quote($oneItem->category) . ')');
-
-				$db->setQuery($query);
-				$result = $db->loadColumn();
-
-				$oneItem->category = !empty($result) ? implode(', ', $result) : '';
-			}
-					$oneItem->status = JText::_('COM_RA_WALKSEDITOR_EVENTS_STATUS_OPTION_' . strtoupper($oneItem->status));
-		}
 
 		return $items;
 	}
