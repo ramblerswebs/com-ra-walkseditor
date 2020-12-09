@@ -27,7 +27,7 @@ function walkeditor(data) {
         optionsDiv.setAttribute('class', 'section meeting');
         form.appendChild(optionsDiv);
 
-        input.addHeader(optionsDiv, "h2", "Meeting: Travelling to the Walk");
+        input.addHeader(optionsDiv, "h2", "Meeting: Travel together to the walk");
         this.addMeetingType(optionsDiv);
 
         // Start Section
@@ -243,7 +243,7 @@ function walkeditor(data) {
         var options = {
             undefined: "Please Select...",
             start: "You can meet at the start of the walk",
-            area: "You CANNOT meet at the start of the walk"
+            area: "We will meet up and travel together to the walk"
         };
         if (!ramblers.walk.hasOwnProperty('start')) {
             ramblers.walk.start = {};
@@ -283,7 +283,7 @@ function walkeditor(data) {
                 break;
             case 'area':
                 input.addHeader(tag, "h3", "General area in which the walk will be held");
-                input.addHeader(tag, "p", "Walkers, who wish to go to start of walk, will need to contact group");
+                input.addHeader(tag, "p", "Walkers, who wish to go to start of walk, will need to contact the walk organiser/contact");
                 var editor = new walkeditor();
                 editor.addArea(tag);
                 break;
