@@ -96,6 +96,7 @@ class Ra_walkseditorModelWalks extends \Joomla\CMS\MVC\Model\ListModel
 		$list['start']     = $app->input->getInt('start', 0);
 		$list['ordering']  = $ordering;
 		$list['direction'] = $direction;
+                $list['limit']=10000;
 
 		$app->setUserState($this->context . '.list', $list);
 		$app->input->set('list', null);

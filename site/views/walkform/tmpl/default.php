@@ -25,6 +25,8 @@ $lang = Factory::getLanguage();
 $lang->load('com_ra_walkseditor', JPATH_SITE);
 $doc = Factory::getDocument();
 $doc->addScript(Uri::base() . '/media/com_ra_walkseditor/js/form.js');
+$doc->addScript("https://cdn.quilljs.com/1.3.6/quill.js");
+$doc->addStyleSheet("https://cdn.quilljs.com/1.3.6/quill.snow.css", "text/css");
 
 $user = Factory::getUser();
 $canEdit = Ra_walkseditorHelpersRa_walkseditor::canUserEdit($this->item, $user);
@@ -33,6 +35,7 @@ $copy = $app->getUserState('com_ra_walkseditor.edit.walk.copy');
 if ($copy) {
     $this->item->id = null;
 }
+$walkdate = $app->getUserState('com_ra_walkseditor.edit.walk.date');
 ?>
 
 <div class="walk-edit front-end-edit">
@@ -66,13 +69,14 @@ if ($copy) {
             <div style="display:none">
                 <?php echo $this->form->renderField('date'); ?>
                 <?php echo $this->form->renderField('content'); ?>
-            </div>
-            <?php echo $this->form->renderField('category'); ?>
+
+                <?php echo $this->form->renderField('category'); ?>
 
 
 
-            <?php echo $this->form->renderField('status'); ?>
-            <?php if (true === false) { // remove this section CEV ?>
+                <?php echo $this->form->renderField('status'); ?>
+            </div>        
+            <?php if (true === false) { // remove this section CEV  ?>
                 <div class="fltlft" <?php if (!JFactory::getUser()->authorise('core.admin', 'ra_walkseditor')): ?> style="display:none;" <?php endif; ?> >
                     <?php echo JHtml::_('sliders.start', 'permissions-sliders-' . $this->item->id, array('useCookie' => 1)); ?>
                     <?php echo JHtml::_('sliders.panel', JText::_('ACL Configuration'), 'access-rules'); ?>
@@ -95,9 +99,9 @@ if ($copy) {
                         });
                     </script>
                 <?php endif; ?>
-            <?php } ?>
-            <div class="control-group">
-                <div class="controls ra-move-controls">
+            <?php } ?> <div style="display:none">
+                <div class="control-group">
+
 
                     <?php if ($this->canSave): ?>
                         <button id="js-submitbtn" type="submit" class="validate btn btn-primary">
@@ -109,6 +113,7 @@ if ($copy) {
                        title="<?php echo Text::_('JCANCEL'); ?>">
                            <?php echo Text::_('JCANCEL'); ?>
                     </a>
+
                 </div>
             </div>
 
@@ -118,13 +123,19 @@ if ($copy) {
                    <?php echo HTMLHelper::_('form.token'); ?>
         </form>
         <?php
+        //     use Joomla\CMS\Factory;
+
+
         require_once 'components/com_ra_walkseditor/walkseditor.php';
         $form = new Walkseditor;
         //       $form->cancel = Route::_('index.php?option=com_ra_draftgwem2&task=draftgwem2eventform.cancel');
         $form->fields['submit'] = "js-submitbtn";
         $form->fields['content'] = "jform_content";
         $form->fields['date'] = "jform_date";
-        $form->editWalk();
+        $form->fields['status'] = "jform_status";
+        $form->fields['category'] = "jform_category";
+        $form->fields['cancel'] = Route::_('index.php?option=com_ra_walkseditor&task=walkform.cancel');
+        $form->editWalk($walkdate);
         ?>
     <?php endif; ?>
 </div>

@@ -1,7 +1,8 @@
 var OsGridRef, ra;
-
-function mapLocationInput(tag, raobject, location) { // constructor function
-
+maplocation = function (tag, raobject, location = '') {
+    
+    static Point = 'Point';
+    static Area = 'Area';
     this.input = new raInputFields;
     this.tag = tag;
     this.raobject = raobject;
@@ -19,20 +20,12 @@ function mapLocationInput(tag, raobject, location) { // constructor function
                 }
             }
         }
-        switch (this.location) {
-            case mapLocationInput.AREA :
-                this.fields.name = this.input.addText(this.tag, 'location', "Name of General Area:", this.raobject, 'name', 'Name of general area for the walk', ra.walkseditor.help.startArea);
-                break;
-            case mapLocationInput.START :
-                this.fields.name = this.input.addText(this.tag, 'location', "Name of start place:", this.raobject, 'name', 'A name of the location so people can find it', ra.walkseditor.help.startName);
-                break;
-            case mapLocationInput.MEETING :
-                this.fields.name = this.input.addText(this.tag, 'location', "Name of meeting place:", this.raobject, 'name', 'A name of the location so people can find it', ra.walkseditor.help.meetName);
-                break;
-            default:
-                alert("Program error: Invalid place type");
-        }
 
+        if (this.location !== 'area') {
+            this.fields.name = this.input.addText(this.tag, 'location', "Place name:", this.raobject, 'name', 'A name of the location so people can find it');
+        } else {
+            this.fields.name = this.input.addText(this.tag, 'location', "Name of Area:", this.raobject, 'name', 'Name of general area for the walk');
+        }
         this.details = document.createElement('details');
         tag.appendChild(this.details);
         this.summary = document.createElement('summary');
@@ -79,12 +72,8 @@ function mapLocationInput(tag, raobject, location) { // constructor function
             {name: 'drag', parent: 'root', tag: 'p'},
             {name: 'buttons', parent: 'root', tag: 'div'},
             {name: 'search', parent: 'buttons', tag: 'div'},
-            {name: 'pc', parent: 'buttons', tag: 'div'},
-            {name: 'pcTitle', parent: 'pc', tag: 'h5'},
-            {name: 'addDelPC', parent: 'pc', tag: 'div'},
-            {name: 'places', parent: 'buttons', tag: 'div'},
-            {name: 'ptitle', parent: 'places', tag: 'h5'},
-            {name: 'addremove', parent: 'places', tag: 'div'}
+            {name: 'addPC', parent: 'buttons', tag: 'div'},
+            {name: 'delPC', parent: 'buttons', tag: 'div'}
         ];
         this.elements = ra.html.generateTags(left, tags);
         this.elements.drag.innerHTML = "Drag marker to correct location";
@@ -93,19 +82,8 @@ function mapLocationInput(tag, raobject, location) { // constructor function
         comment.innerHTML = '';
         left.appendChild(comment);
         this.findButton = this.addMapFindLocationButton(this.elements.search);
-        switch (this.location) {
-            case mapLocationInput.MEETING :
-            case mapLocationInput.START :
-                this.elements.pcTitle.innerHTML = "Postcode";
-                new ra.help(this.elements.pcTitle, ra.walkseditor.help.locationPostcode).add();
-                this.addPostcode = this.addPostcodeButton(this.elements.addDelPC);
-                this.deletePostcode = this.deletePostcodeButton(this.elements.addDelPC);
-                this.elements.ptitle.innerHTML = "Previously used Meeting/Starting places";
-                new ra.help(this.elements.ptitle, ra.walkseditor.help.locationStart).add();
-                this.displayPlacesButton(this.elements.addremove);
-                this.removePlacesButton(this.elements.addremove);
-                break;
-        }
+        this.addPostcode = this.addPostcodeButton(this.elements.addPC);
+        this.deletePostcode = this.deletePostcodeButton(this.elements.delPC);
         var right = document.createElement('td');
         right.style.width = '70%';
         tr.appendChild(right);
@@ -115,7 +93,6 @@ function mapLocationInput(tag, raobject, location) { // constructor function
         this.map = this.lmap.map;
         this.layer = L.featureGroup().addTo(this.map);
         this.postcodeLayer = L.featureGroup().addTo(this.map);
-        this.placesLayer = L.featureGroup().addTo(this.map);
 
         this.updateMapMarker();
         tag.addEventListener('toggle', function () {
@@ -159,30 +136,18 @@ function mapLocationInput(tag, raobject, location) { // constructor function
         if (this.raobject.isLatLongSet) {
             var latlgn = 'Lat ' + this.raobject.latitude.toFixed(4) + '/ Long ' + this.raobject.longitude.toFixed(4);
             if (this.raobject.gridref8 === "") {
-                this.summary.innerHTML = '<h4>Location: Outside UK: ' + latlgn + "</h4>";
+                this.summary.innerHTML = '<h5>Location: Outside UK: ' + latlgn + "</h5>";
             } else {
-                this.summary.innerHTML = '<h4>Location: ' + latlgn + ' Grid Ref: ' + this.raobject.gridref8 + "</h4>";
+                this.summary.innerHTML = '<h5>Location: ' + latlgn + ' Grid Ref: ' + this.raobject.gridref8 + "</h5>";
             }
         } else {
-            this.summary.innerHTML = '<h4 style="color:red">Location not defined: Drag marker to correct position</h4>';
+            this.summary.innerHTML = '<h5 style="color:red">Location not defined: Drag marker to correct position</h5>';
         }
     };
     this.updateMapMarker = function () {
         this.layer.clearLayers();
-        var img;
-        switch (this.location) {
-            case mapLocationInput.AREA :
-                img = ra.baseDirectory() + "libraries/ramblers/images/marker-area.png";
-                break;
-            case mapLocationInput.START :
-                img = ra.baseDirectory() + "libraries/ramblers/images/marker-start.png";
-                break;
-            default:
-                img = ra.baseDirectory() + "libraries/ramblers/images/marker-route.png";
-        }
-
         var icon = L.icon({
-            iconUrl: img,
+            iconUrl: ra.baseDirectory() + "libraries/ramblers/images/marker-start.png",
             iconSize: [35, 35],
             iconAnchor: [16, 16],
             popupAnchor: [0, 0]
@@ -233,7 +198,6 @@ function mapLocationInput(tag, raobject, location) { // constructor function
         findButton.setAttribute('class', 'actionbutton');
         findButton.textContent = "Location search";
         tag.appendChild(findButton);
-        new ra.help(tag, ra.walkseditor.help.locationSearch).add();
         var feed = new feeds();
         findButton.feedhelper = feed;
         findButton.addEventListener("click", function (e) {
@@ -300,14 +264,13 @@ function mapLocationInput(tag, raobject, location) { // constructor function
         var east = Math.round(grid.easting);
         var north = Math.round(grid.northing);
         var _this = this;
-        alert("The nearest postcodes will be displayed. \nYou can then select the appropriate one for SatNav. \nJust click the correct postcode");
         var url = "https://postcodes.theramblers.org.uk/index.php?easting=" + east + "&northing=" + north + "&dist=20&maxpoints=20";
         ra.ajax.getJSON(url, function (err, pcs) {
             if (err !== null) {
 
             } else {
                 if (pcs.length !== 0) {
-                    pcs.forEach(function (pc) { 
+                    pcs.forEach(function (pc) {
                         var gr = new OsGridRef(pc.Easting, pc.Northing);
                         var latlong = OsGridRef.osGridToLatLon(gr);
                         var icon = L.icon({
@@ -331,55 +294,9 @@ function mapLocationInput(tag, raobject, location) { // constructor function
                             _this.updateStatusPanel();
                         });
                     });
-
+                    alert("Click Postcode to select appropriate one for SatNav");
                 }
             }
         });
     };
-    this.displayPlacesButton = function (tag) {
-        var button = document.createElement('button');
-        button.setAttribute('type', 'button');
-        button.setAttribute('class', 'actionbutton');
-        button.innerHTML = "Display";
-        tag.appendChild(button);
-        var _this = this;
-        button.addEventListener("click", function (e) {
-            _this.placesLayer.clearLayers();
-            if (_this.raobject.isLatLongSet) {
-                 alert("The nearest places used by Ramblers' Groups will be displayed");
-                var latlng = new LatLon(_this.raobject.latitude, _this.raobject.longitude);
-                ra.map.displayStartingPlaces(latlng, _this.placesLayer, 20, 30);
-            } else {
-                alert("Marker position not set");
-            }
-        });
-        return button;
-    };
-    this.removePlacesButton = function (tag) {
-        var button = document.createElement('button');
-        button.setAttribute('type', 'button');
-        button.setAttribute('class', 'actionbutton');
-        button.innerHTML = "Remove";
-        tag.appendChild(button);
-        var _this = this;
-        button.addEventListener("click", function (e) {
-            _this.placesLayer.clearLayers();
-
-        });
-        return button;
-    };
-
-}
-;
-
-
-// Instance method will be available to all instances but only load once in memory 
-mapLocationInput.prototype.publicMethod = function () {
-    alert(this.publicVariable);
 };
-
-// Static variable shared by all instances
-mapLocationInput.AREA = "Area";
-mapLocationInput.POINT = "Point";
-mapLocationInput.MEETING = "Meet";
-

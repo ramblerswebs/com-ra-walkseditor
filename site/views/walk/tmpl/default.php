@@ -20,7 +20,9 @@ if (!$canEdit && JFactory::getUser()->authorise('core.edit.own', 'com_ra_walksed
 
 </form>
 <div class="controls ra-move-controls">
-        <a class="btn" href="<?php echo JRoute::_('index.php?option=com_ra_walkseditor&task=walks'); ?>"><?php echo JText::_("COM_RA_WALKSEDITOR_WALKS_LIST"); ?></a>
+        <a class="btn" href="<?php 
+        echo JRoute::_('index.php?option=com_ra_walkseditor&task=walks'); 
+        ?>"><?php echo JText::_("COM_RA_WALKSEDITOR_WALKS_LIST"); ?></a>
     <?php if ($canEdit && $this->item->checked_out == 0): ?>
         <a class="btn" href="<?php echo JRoute::_('index.php?option=com_ra_walkseditor&task=walk.edit&id=' . $this->item->id); ?>"><?php echo JText::_("COM_RA_WALKSEDITOR_EDIT_ITEM"); ?></a>
     <?php endif; ?>

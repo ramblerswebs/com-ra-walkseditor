@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension type="component" version="3.0" method="upgrade">
     <name>com_ra_walkseditor</name>
-    <creationDate>2020-07-21</creationDate>
-    <copyright>2020 webmaster@ramblers-webs.org.uk</copyright>
+    <creationDate>2021-12-29</creationDate>
+    <copyright>2021 webmaster@ramblers-webs.org.uk</copyright>
     <license>GNU General Public License version 2 or later; see LICENSE.txt</license>
     <author>Chris Vaughan Derby &amp; South Derbyshire Ramblers</author>
     <authorEmail>webmaster@ramblers-webs.org.uk</authorEmail>
     <authorUrl>http://ramblers-webs.org.uk</authorUrl>
-    <version>CVS: 0.0.1</version>
+    <version>0.0.2</version>
     <description>COM_RA_WALKSEDITOR_XML_DESCRIPTION</description>
     
     <scriptfile>script.php</scriptfile>
@@ -33,7 +33,6 @@
         <filename>ra_walkseditor.php</filename>
         <filename>controller.php</filename>
         <filename>router.php</filename>
-        <filename>walk.php</filename>
         <filename>walkseditor.php</filename>
         <folder>views</folder>
         <folder>models</folder>
@@ -46,29 +45,29 @@
     </media>
     <languages folder="site/languages">
         
-			<language tag="en-GB">en-GB/en-GB.com_ra_walkseditor.ini</language>
+        <language tag="en-GB">en-GB/en-GB.com_ra_walkseditor.ini</language>
     </languages>
     <administration>
         <menu>COM_RA_WALKSEDITOR</menu>
         <submenu>
             
-			<menu link="option=com_ra_walkseditor&amp;view=walks" view="walks" alt="Ra_walkseditor/Walks">COM_RA_WALKSEDITOR_TITLE_WALKS</menu>
+            <menu link="option=com_ra_walkseditor&amp;view=walks" view="walks" alt="Ra_walkseditor/Walks">COM_RA_WALKSEDITOR_TITLE_WALKS</menu>
 
-			<menu link="option=com_categories&amp;extension=com_ra_walkseditor.walks" view="categories" alt="Ra_walkseditor/Categories">COM_RA_WALKSEDITOR_WALKS_CATEGORY</menu>
+            <menu link="option=com_categories&amp;extension=com_ra_walkseditor.walks" view="categories" alt="Ra_walkseditor/Categories">COM_RA_WALKSEDITOR_WALKS_CATEGORY</menu>
 
-			<menu link="option=com_ra_walkseditor&amp;view=places" view="places" alt="Ra_walkseditor/Places">COM_RA_WALKSEDITOR_TITLE_PLACES</menu>
+            <menu link="option=com_ra_walkseditor&amp;view=places" view="places" alt="Ra_walkseditor/Places">COM_RA_WALKSEDITOR_TITLE_PLACES</menu>
 
-			<menu link="option=com_ra_walkseditor&amp;view=contacts" view="contacts" alt="Ra_walkseditor/Contacts">COM_RA_WALKSEDITOR_TITLE_CONTACTS</menu>
+            <menu link="option=com_ra_walkseditor&amp;view=contacts" view="contacts" alt="Ra_walkseditor/Contacts">COM_RA_WALKSEDITOR_TITLE_CONTACTS</menu>
 
-			<menu link="option=com_ra_walkseditor&amp;view=events" view="events" alt="Ra_walkseditor/Events">COM_RA_WALKSEDITOR_TITLE_EVENTS</menu>
+            <menu link="option=com_ra_walkseditor&amp;view=events" view="events" alt="Ra_walkseditor/Events">COM_RA_WALKSEDITOR_TITLE_EVENTS</menu>
 
-			<menu link="option=com_categories&amp;extension=com_ra_walkseditor.events" view="categories" alt="Ra_walkseditor/Categories">COM_RA_WALKSEDITOR_EVENTS_CATEGORY</menu>
+            <menu link="option=com_categories&amp;extension=com_ra_walkseditor.events" view="categories" alt="Ra_walkseditor/Categories">COM_RA_WALKSEDITOR_EVENTS_CATEGORY</menu>
 
-			<menu link="option=com_ra_walkseditor&amp;view=grades" view="grades" alt="Ra_walkseditor/Grades">COM_RA_WALKSEDITOR_TITLE_GRADES</menu>
+            <menu link="option=com_ra_walkseditor&amp;view=grades" view="grades" alt="Ra_walkseditor/Grades">COM_RA_WALKSEDITOR_TITLE_GRADES</menu>
 
-			<menu link="option=com_ra_walkseditor&amp;view=imports" view="imports" alt="Ra_walkseditor/Imports">COM_RA_WALKSEDITOR_TITLE_IMPORTS</menu>
+            <menu link="option=com_ra_walkseditor&amp;view=imports" view="imports" alt="Ra_walkseditor/Imports">COM_RA_WALKSEDITOR_TITLE_IMPORTS</menu>
 
-			<menu link="option=com_ra_walkseditor&amp;view=exports" view="exports" alt="Ra_walkseditor/Exports">COM_RA_WALKSEDITOR_TITLE_EXPORTS</menu>
+            <menu link="option=com_ra_walkseditor&amp;view=exports" view="exports" alt="Ra_walkseditor/Exports">COM_RA_WALKSEDITOR_TITLE_EXPORTS</menu>
 
         </submenu>
         <files folder="administrator">
@@ -87,8 +86,8 @@
         </files>
         <languages folder="administrator/languages">
             
-			<language tag="en-GB">en-GB/en-GB.com_ra_walkseditor.ini</language>
-			<language tag="en-GB">en-GB/en-GB.com_ra_walkseditor.sys.ini</language>
+            <language tag="en-GB">en-GB/en-GB.com_ra_walkseditor.ini</language>
+            <language tag="en-GB">en-GB/en-GB.com_ra_walkseditor.sys.ini</language>
         </languages>
     </administration>
     <config>

@@ -1,18 +1,7 @@
-var ra, mapLocationInput;
+//var ramblers;
 function walkeditor(walk) {
     this.walk = walk;
 
-    this.addAdmin = function () {
-        if (!this.walk.hasOwnProperty('admin')) {
-            var admin = {};
-            this.walk.admin = admin;
-            admin.version = '1.0';
-            admin.created = new Date();
-            admin.updated = null;
-        }
-    };
-
-    this.addAdmin();
     this.addEditForm = function (editDiv) {
         // first clear any old form from div
         editDiv.innerHTML = "";
@@ -41,17 +30,9 @@ function walkeditor(walk) {
         form.appendChild(walksDiv);
 
         input.addHeader(walksDiv, "summary", "Walk");
-        var walkItems = new raItems({
-            editor: this,
-            tag: walksDiv,
-            many: true,
-            dataClass: 'js-Walk',
-            dataObject: this.walk,
-            arrayProperty: 'walks',
-            createFunction: this.addWalk,
-            sortFunction: this.sortWalks
-        });
-        walkItems.display();
+        var walks = new raWalkItems(this.walk);
+        walks.add(walksDiv, 'js-Walk', true);
+
 
         // Meeting type section
 
@@ -76,12 +57,31 @@ function walkeditor(walk) {
         // Contacts Section
 
         var contactDiv = document.createElement('details');
-        contactDiv.setAttribute('class', 'section contact');
+        contactDiv.setAttribute('class', 'section ');
         contactDiv.setAttribute('open', true);
         form.appendChild(contactDiv);
 
         input.addHeader(contactDiv, "summary", "Contact");
         this.addContact(contactDiv);
+
+
+        // Booking  section
+
+        var bookingDiv = document.createElement('details');
+        bookingDiv.setAttribute('class', 'section booking');
+        form.appendChild(bookingDiv);
+
+        input.addHeader(bookingDiv, "summary", "Booking");
+        this.addBooking(bookingDiv);
+
+        // Publicity  section
+
+        var publicityDiv = document.createElement('details');
+        publicityDiv.setAttribute('class', 'section publicity');
+        form.appendChild(publicityDiv);
+
+        input.addHeader(publicityDiv, "summary", "Sundries?");
+        this.addPublicity(publicityDiv);
 
         // Editors notes
 
@@ -89,7 +89,7 @@ function walkeditor(walk) {
         notesDiv.setAttribute('class', 'section notes');
         form.appendChild(notesDiv);
 
-        input.addHeader(notesDiv, "summary", "Editor's Notes", ra.walkseditor.help.editorNotes);
+        input.addHeader(notesDiv, "summary", "Editor's Notes");
         this.addNotes(notesDiv);
 
     };
@@ -108,13 +108,19 @@ function walkeditor(walk) {
         var input = new raInputFields;
         var itemDiv = input.itemsItemDivs(tag);
 
-        this._date = input.addDate(itemDiv, 'date', 'Date of walk', basics, 'date', ra.walkseditor.help.basicDate);
+        this._date = input.addDate(itemDiv, 'date', 'Date of walk', basics, 'date');
+        this._title = input.addText(itemDiv, 'walktitle', "Title:", basics, 'title', 'Enter descriptive title of the walk');
+        this._desc = input.addTextArea(itemDiv, 'desc', "Description:", 4, basics, 'description', 'Add a description of walk so walkers know what to expect');
+        this._notes = input.addTextAreaSummary(itemDiv, 'notes', "Additional Notes:", 2, basics, 'notes');
+        this._repeat = input.addDUMMYSummary(itemDiv, 'repeat', "Repeating Event:", 2, basics, 'repeat');
+        this._repeat = input.addDUMMYSummary(itemDiv, 'images', "Photos/Images", 2, basics, 'images');
 
-        this._title = input.addText(itemDiv, 'walktitle', "Title:", basics, 'title', 'Enter descriptive title of the walk', ra.walkseditor.help.basicTitle);
-
-        this._desc = input.addHtmlArea(itemDiv, 'desc', "Description:", 4, basics, 'description', 'Add a description of walk so walkers know what to expect', ra.walkseditor.help.basicDesc);
-
-        this._notes = input.addTextAreaSummary(itemDiv, 'notes', "Additional Notes:", 2, basics, 'notes', '', ra.walkseditor.help.basicNotes);
+//     var options = {
+//            public: "Public",
+//            member: "Member Only",
+//            print: "Print Only"
+//        };
+        //        this._restrictions = input.addSelect(itemDiv, 'moptions', 'Restrictions (viewable by) ', options, basics, 'restriction');
 
         return;
 
@@ -136,112 +142,129 @@ function walkeditor(walk) {
             public: 'We meet and use public transport to the walk (Bus, Tram, Train)'
         };
         var input = new raInputFields;
-        this._option = input.addSelect(tag, 'moptions', 'How do you get to the walk? ', options, meeting, 'type', ra.walkseditor.help.meetType);
+        this._option = input.addSelect(tag, 'moptions', 'How do you get to the walk? ', options, meeting, 'type');
         var _this = this;
-
+        this._option.addEventListener("change", function () {
+            //  var editor = new walkeditor(this.walk);
+            _this.setMeetingType(this.value);
+        });
         this._meetingsDiv = document.createElement('div');
         this._meetingsDiv.setAttribute('class', 'ra_meetings');
+        this._meetingsDiv.setAttribute('id', 'ra_meetings');
         tag.appendChild(this._meetingsDiv);
-        this.setMeetingType(this._meetingsDiv, this._option.value);
-        this._option.addEventListener("change", function () {
-            _this.setMeetingType(_this._meetingsDiv, this.value, true);
-        });
+        this.setMeetingType(this._option.value);
+
         return;
     };
-    this.setMeetingType = function (tag, type, change = false) {
-        //    var tag = document.getElementById("ra_meetings");
+    this.setMeetingType = function (type) {
+        var tag = document.getElementById("ra_meetings");
         tag.innerHTML = "";
-        var meeting = this.walk.meeting;
-        meeting.type = type;
+        // ramblers.walk.meeting = {};
+        this.walk.meeting.type = type;
         var input = new raInputFields;
-        var options = {
-            editor: this,
-            tag: tag,
-            many: true,
-            dataClass: 'invalid',
-            dataObject: this.walk.meeting,
-            arrayProperty: 'locations',
-            createFunction: this.addMeetingLocation,
-            sortFunction: this.sortMeetingLocation
-        };
         switch (type) {
             case 'undefined':
-                if (change) {
-                    meeting.locations = [];
-                }
                 break;
             case 'none':
+                //  input.addHeader(tag, "h3", "Meeting at start of walk");
                 input.addHeader(tag, "p", "Walkers travel independently to start of walk.");
-                if (change) {
-                    meeting.locations = [];
-                }
                 break;
             case 'car':
-                options.many = false;
-                options.dataClass = 'js-CarShare';
-                if (change) {
-                    meeting.locations = [];
-                    meeting.locations[0] = {};
-                }
-                var locations = new raItems(options);
-                locations.display();
+                //  input.addHeader(tag, "h3", "Car Share to start of Walk");
+                var items = new raWalkItems(this.walk);
+                items.add(tag, 'js-CarShare', false);
                 break;
             case 'coach':
-                options.dataClass = 'js-Pickup';
-                if (change) {
-                    meeting.locations = [];
-                    meeting.locations[0] = {};
-                }
-                var locations = new raItems(options);
-                locations.display();
+                //   input.addHeader(tag, "h3", "Coach pick up locations");
+                var items = new raWalkItems(this.walk);
+                items.add(tag, 'js-Pickup', true);
                 break;
             case 'public':
-                options.dataClass = 'js-PublicTrans';
-                if (change) {
-                    meeting.locations = [];
-                    meeting.locations[0] = {};
-                }
-                var locations = new raItems(options);
-                locations.display();
+                //   input.addHeader(tag, "h3", "Public transport details");
+                var items = new raWalkItems(this.walk);
+                items.add(tag, 'js-PublicTrans', true);
                 break;
             default:
                 alert("Type error - please report this issue");
-    }
-    };
-    this.addMeetingLocation = function (editor, tag, no) {
-
-        var meeting = editor.walk.meeting;
-        if (!meeting.hasOwnProperty('locations')) {
-            meeting.locations = [];
         }
-        var locations = meeting.locations;
-        if (no === locations.length) {
+    };
+
+    this.addCarShare = function (tag) {
+
+        if (tag === null) {
+            throw new Error("js-CarShare container is null");
+        }
+
+        if (!this.walk.meeting.hasOwnProperty('locations')) {
+            this.walk.meeting.locations = [];
+        }
+        var locations = this.walk.meeting.locations;
+
+        var no = findItemNumber(tag);
+        if (locations.length - 1 < no) {
             locations[no] = {};
         }
-
         var input = new raInputFields;
-        this._time = input.addTime(tag, 'time', 'Meeting Time', locations[no], 'time', ra.walkseditor.help.meetTime);
+        this._time = input.addTime(tag, 'time', 'Meeting Time', locations[no], 'time');
         var itemsDiv = document.createElement('div');
         itemsDiv.setAttribute('class', 'location-group');
         tag.appendChild(itemsDiv);
-        var location = new mapLocationInput(itemsDiv, locations[no], mapLocationInput.MEETING);
+        var location = new maplocation(itemsDiv, locations[no]);
         location.addLocation();
-        if (false) {
-            input.addPredefinedLocationButton(itemsDiv, location, ra.walkseditor.help.meetPredefined);
-            var _this = this;
-            itemsDiv.addEventListener("predefinedLocation", function (e) {
-                var item = e.raData.item;
-                location.updateDetails(item);
-                //  alert('predefinedLocation');
-                _this.name.value = item.name;
-                _this.gridref10.value = item.gridreference;
-                _this.latitude.value = item.latitude;
-                _this.longitude.value = item.longitude;
-            });
+        //  this._info = input.addText(tag, 'locations', "Car Share Info:", locations[no], 'info');
+        return;
+
+    };
+    this.addPickUp = function (tag) {
+
+        if (tag === null) {
+            throw new Error("raWalkType container is null");
         }
+        if (!this.walk.meeting.hasOwnProperty('locations')) {
+            this.walk.meeting.locations = [];
+        }
+        var locations = this.walk.meeting.locations;
+        var no = findItemNumber(tag);
+        if (locations.length - 1 < no) {
+            locations[no] = {};
+        }
+        var input = new raInputFields;
+        this._time = input.addTime(tag, 'time', 'Pickup Time', locations[no], 'time');
+        var itemsDiv = document.createElement('div');
+        itemsDiv.setAttribute('class', 'location-group');
+        tag.appendChild(itemsDiv);
+        var location = new maplocation(itemsDiv, locations[no]);
+        location.addLocation();
+        //      selectLocationItem(itemsDiv, locations, false);
+        return;
 
     };
 
+    this.addPublicTrans = function (tag) {
+
+        if (tag === null) {
+            throw new Error("raWalkType container is null");
+        }
+        if (!this.walk.meeting.hasOwnProperty('locations')) {
+            this.walk.meeting.locations = [];
+        }
+        var locations = this.walk.meeting.locations;
+        var no = findItemNumber(tag);
+        if (locations.length - 1 < no) {
+            locations[no] = {};
+        }
+        var input = new raInputFields;
+        this._time = input.addTime(tag, 'time', 'Service Time: ', locations[no], 'time');
+        this._servicename = input.addText(tag, 'name', "Service Name:", locations[no], 'servicename');
+        var itemsDiv = document.createElement('div');
+        itemsDiv.setAttribute('class', 'location-group');
+        tag.appendChild(itemsDiv);
+        var location = new maplocation(itemsDiv, locations[no]);
+        location.addLocation();
+        //    selectLocationItem(itemsDiv, locations, false);
+        return;
+
+    };
     this.addStartType = function (tag) {
         var startingsDiv;
         if (tag === null) {
@@ -258,7 +281,7 @@ function walkeditor(walk) {
         var start = this.walk.start;
         var input = new raInputFields;
 
-        this._option = input.addSelect(tag, 'moptions', 'Publish: ', options, start, 'type', ra.walkseditor.help.startType);
+        this._option = input.addSelect(tag, 'moptions', 'Publish: ', options, start, 'type');
 
         startingsDiv = document.createElement('div');
         startingsDiv.setAttribute('class', 'js-start');
@@ -268,6 +291,7 @@ function walkeditor(walk) {
         this.setStartTypeOption(this._option.value);
         var _this = this;
         this._option.addEventListener("change", function () {
+            // var editor = new walkeditor(this.walk);
             _this.setStartTypeOption(this.value);
         });
         return;
@@ -282,13 +306,17 @@ function walkeditor(walk) {
             case 'undefined':
                 break;
             case 'start':
+                // input.addHeader(tag, "h3", "Details of the starting location");
                 input.addHeader(tag, "p", "Walkers can travel independently to start of walk");
                 var _this = this;
+                // var editor = new walkeditor(this.walk);
                 _this.addStart(tag);
                 break;
             case 'area':
+                //  input.addHeader(tag, "h3", "General area in which the walk will be held");
                 input.addHeader(tag, "p", "Walkers, who wish to go to start of walk, will need to contact the walk organiser/contact");
                 var _this = this;
+                //var editor = new walkeditor(this.walk);
                 _this.addArea(tag);
                 break;
             default:
@@ -307,12 +335,14 @@ function walkeditor(walk) {
         var location = this.walk.start.location;
         var input = new raInputFields;
         var itemDiv = input.itemsItemDivs(tag);
-        this._time = input.addTime(itemDiv, 'time', 'Start Time', location, 'time', ra.walkseditor.help.startTime);
+        this._time = input.addTime(itemDiv, 'time', 'Start Time', location, 'time');
         var itemsDiv2 = document.createElement('div');
         itemsDiv2.setAttribute('class', 'location-group');
         itemDiv.appendChild(itemsDiv2);
-        var location = new mapLocationInput(itemsDiv2, location, mapLocationInput.START);
+        var location = new maplocation(itemsDiv2, location);
         location.addLocation();
+        //    selectLocationItem(itemsDiv2, location,true);
+        //    this._returntime = input.addTime(itemDiv, 'returntime', 'Approx Return Time', data.walk.start, 'returntime');
     };
 
 
@@ -321,20 +351,19 @@ function walkeditor(walk) {
         if (tag === null) {
             throw new Error("raWalkType container is null");
         }
-        if (!this.walk.start.hasOwnProperty('location')) {
-            this.walk.start.location = {};
+        if (!this.walk.start.hasOwnProperty('area')) {
+            this.walk.start.area = {};
         }
-        var location = this.walk.start.location;
+        delete  this.walk.start.area.nearestpostcode;
+        var startArea = this.walk.start.area;
         var input = new raInputFields;
         var itemDiv = input.itemsItemDivs(tag);
-        this._time = input.addTime(itemDiv, 'time', 'Start Time (Optional)', location, 'time', ra.walkseditor.help.areaTime);
-        var itemsDiv2 = document.createElement('div');
-        itemsDiv2.setAttribute('class', 'location-group');
-        itemDiv.appendChild(itemsDiv2);
-        var location = new mapLocationInput(itemsDiv2, location, mapLocationInput.AREA);
+        var location = new maplocation(itemDiv, startArea, 'area');
         location.addLocation();
+        //    this._returntime = input.addTime(itemDiv, 'returntime', 'Approx Return Time', data.walk.start, 'returntime');
+
     };
-    this.addWalk = function (editor, tag, no) {
+    this.addWalk = function (tag) {
 
         if (tag === null) {
             throw new Error("js-Walk container is null");
@@ -346,7 +375,6 @@ function walkeditor(walk) {
             fast: "Fast"
         };
         var mWalk = {
-            undefined: "Please Select...",
             circular: "Circular",
             linear: "Linear",
             figure: "Figure of Eight"
@@ -358,37 +386,36 @@ function walkeditor(walk) {
         };
         var mNatGrades = {
             undefined: "Please Select...",
-            'Easy Access': "Easy Access",
-            'Easy': "Easy",
-            'Leisurely': 'Leisurely',
-            'Moderate': 'Moderate',
-            'Strenuous': 'Strenuous',
-            'Technical': 'Technical'
+            easyaccess: "Easy Access",
+            easy: "Easy",
+            leisurely: 'Leisurely',
+            moderate: 'Moderate',
+            strenuous: 'Strenuous',
+            technical: 'Technical'
         };
-        if (!editor.walk.hasOwnProperty('walks')) {
-            editor.walk.walks = [];
+        if (!this.walk.hasOwnProperty('walks')) {
+            this.walk.walks = [];
         }
-        var walks = editor.walk.walks;
-        if (no === walks.length) {
+        var walks = this.walk.walks;
+        var no = findItemNumber(tag);
+        if (walks.length - 1 < no) {
             walks[no] = {};
         }
-
         var input = new raInputFields;
-        editor._dist = input.addNumber(tag, 'dist', "Distance:", walks[no], 'distance', ra.walkseditor.help.walkDistance);
-        editor._dist.setAttribute('type', 'number');
-        editor._dist.setAttribute('min', 0);
+        this._dist = input.addNumber(tag, 'dist', "Distance:", walks[no], 'distance');
+        this._dist.setAttribute('type', 'number');
+        this._dist.setAttribute('min', 0);
 
-        editor._unit = input.addSelect(tag, 'distanceunits', 'Distance is in ', mUnits, walks[no], 'units', ra.walkseditor.help.walkUnits);
-        editor._type = input.addSelect(tag, 'walktype', 'The walk is ', mWalk, walks[no], 'type', ra.walkseditor.help.walkType);
-        editor._natgrade = input.addSelect(tag, 'natgrade', 'National Grade ', mNatGrades, walks[no], 'natgrade', ra.walkseditor.help.walkNatGrade);
+        this._unit = input.addSelect(tag, 'distanceunits', 'Distance is in ', mUnits, walks[no], 'units');
+        this._type = input.addSelect(tag, 'walktype', 'The walk is ', mWalk, walks[no], 'type');
+        this._natgrade = input.addSelect(tag, 'natgrade', 'National Grade ', mNatGrades, walks[no], 'natgrade');
 
         var detailTags = input.addDetailsTag(tag);
         detailTags.summary.innerHTML = 'Additional details';
-        editor._leader = input.addText(detailTags.details, 'leader', 'Walk Leader Name', walks[no], 'leader', 'Walk leader(s) if different from contact', ra.walkseditor.help.walkLeader);
-        editor._localgrade = input.addLocalGradeSelect(detailTags.details, 'localgrade', "Local Grade:", walks[no], 'localgrade', ra.walkseditor.help.walkLocalGrade);
-        editor._pace = input.addText(detailTags.details, 'pace', 'Pace ', mPace, walks[no], 'pace', ra.walkseditor.help.walkPace);
-        editor._ascent = input.addText(detailTags.details, 'ascent', "Ascent:", walks[no], 'ascent', '', ra.walkseditor.help.walkAscent);
-        editor._duration = input.addText(detailTags.details, 'duration', "Duration:", walks[no], 'duration', '', ra.walkseditor.help.walkDuration);
+        this._localgrade = input.addLocalGradeSelect(detailTags.details, 'localgrade', "Local Grade:", walks[no], 'localgrade');
+        this._pace = input.addText(detailTags.details, 'pace', 'Pace ', mPace, walks[no], 'pace');
+        this._ascent = input.addText(detailTags.details, 'ascent', "Ascent:", walks[no], 'ascent');
+        this._duration = input.addText(detailTags.details, 'duration', "Duration:", walks[no], 'duration');
 
     };
 
@@ -409,20 +436,12 @@ function walkeditor(walk) {
         var input = new raInputFields;
         var itemDiv = input.itemsItemDivs(tag);
         //  selectContactItem(itemDiv, contact);
-        this._displayName = input.addText(itemDiv, 'name', "Display Name:", contact, 'displayName', '', ra.walkseditor.help.contactName);
-        this._email = input.addEmail(itemDiv, 'email', "Email Address:", contact, 'email', ra.walkseditor.help.contactEmail);
-        this._tel1 = input.addText(itemDiv, 'tel1', "Contact Telephone 1:", contact, 'telephone1', '', ra.walkseditor.help.contactTel1);
-        this._tel2 = input.addText(itemDiv, 'tel2', "Contact Telephone 2:", contact, 'telephone2', '', ra.walkseditor.help.contactTel2);
-        this._option = input.addSelect(itemDiv, 'moptions', 'Contact is walks Leader ', options, contact, 'contactType', ra.walkseditor.help.contactType);
-        input.addPredefinedContactButton(itemDiv, contact, ra.walkseditor.help.contactPredefined);
-        var _this = this;
-        itemDiv.addEventListener("predefinedContact", function (e) {
-            var item = e.raData.item;
-            _this._displayName.value = item.displayname;
-            _this._email.value = item.email;
-            _this._tel1.value = item.telephone1;
-            _this._tel2.value = item.telephone2;
-        });
+        this._displayName = input.addText(itemDiv, 'name', "Display Name:", contact, 'displayName');
+        this._email = input.addEmail(itemDiv, 'email', "Email Address:", contact, 'email');
+        this._tel1 = input.addText(itemDiv, 'tel1', "Contact Telephone 1:", contact, 'telephone1');
+        this._tel2 = input.addText(itemDiv, 'tel2', "Contact Telephone 2:", contact, 'telephone2');
+        this._option = input.addSelect(itemDiv, 'moptions', 'Contact is walks Leader ', options, contact, 'contactType');
+        //    input.addPredefinedContactButton(itemDiv, contact);
         return;
     };
 
@@ -526,41 +545,34 @@ function walkeditor(walk) {
         comment.textContent = 'Record any future changes that will be required or additional information required, before the walk can be published';
         itemDiv.appendChild(comment);
         this._comments = input.addTextArea(itemDiv, 'comments', "Editor Comments:", 4, notes, 'comments', 'Record any comments about future changes that are required');
-        if (notes.comments.length > 0) {
-            tag.setAttribute('open', true);
-        }
+
         return;
 
     };
 }
 ;
+function raWalkItems(walk) {
+    this.walk = walk;
 
+    this.add = function (tag, itemName, many) {
 
-function raItems(options) {
-    this.options = options;
-    if (options.tag === null) {
-        throw new Error("raWalkItems container is null");
-    }
-    this.display = function ( ) {
-
-        var tag = this.options.tag;
-        var many = this.options.many;
-        var itemName = this.options.dataClass;
+        if (tag === null) {
+            throw new Error("raWalkItems container is null");
+        }
 
         var itemsDiv = document.createElement('div');
-        this.itemsDiv = itemsDiv;
         itemsDiv.setAttribute('class', 'js-items');
         tag.appendChild(itemsDiv);
 
         if (many) {
+
             this._addItem = document.createElement('button');
             this._addItem.setAttribute('type', 'button');
             this._addItem.setAttribute('class', 'actionbutton right');
             this._addItem.setAttribute('data-object', itemName);
             this._addItem.textContent = "Add";
             this._addItem.ra = {};
-            //   this._addItem.ra.walk = this.walk;
-            this._addItem.ra.raItems = this;
+            this._addItem.ra.walk = this.walk;
             tag.appendChild(this._addItem);
             this._addItem.addEventListener("click", this.addButton);
             this._sortItems = document.createElement('button');
@@ -568,91 +580,131 @@ function raItems(options) {
             this._sortItems.setAttribute('class', 'actionbutton right');
             this._sortItems.textContent = "Sort";
             this._sortItems.ra = {};
-            //   this._sortItems.ra.walk = this.walk;
-            this._addItem.ra.raItems = this;
+            this._sortItems.ra.walk = this.walk;
             tag.appendChild(this._sortItems);
             this._sortItems.addEventListener("click", function (e) {
                 alert('sort');
-                //         ramblers.controller.clickEditButton();
+                ramblers.controller.clickEditButton();
             });
             var p = document.createElement('div');
             p.style.height = "35px";
             tag.appendChild(p);
         }
         // add extra items if they are in the input already
-        var howmany;
+        var howmany = 1;
+        if (!this.walk.hasOwnProperty('walks')) {
+            this.walk.walks = [];
+        }
+        if (!this.walk.meeting.hasOwnProperty('locations')) {
+            this.walk.meeting.locations = [];
+        }
 
-
-        var arr = this.options.dataObject[this.options.arrayProperty];
-
+        var arr = [];
+        switch (itemName) {
+            case 'js-Walk':
+                arr = this.walk.walks;
+                break;
+            case 'js-CarShare':
+                arr = this.walk.meeting.locations;
+                break;
+            case 'js-Pickup':
+                arr = this.walk.meeting.locations;
+                break;
+            case 'js-PublicTrans':
+                arr = this.walk.meeting.locations;
+                break;
+            default:
+            // code block
+        }
         howmany = arr.length;
         var i = 0;
         do {
-            this.addItem(itemsDiv, itemName, i);
+            var itemDiv = document.createElement('div');
+            itemDiv.setAttribute('class', 'js-item');
+            itemsDiv.appendChild(itemDiv);
+            this.addItem(itemDiv, itemName);
             i += 1;
         } while (i < howmany);
         return;
 
     };
-    this.addItem = function (itemsDiv, type, no) {
-        var itemDiv = document.createElement('div');
-        itemDiv.setAttribute('class', 'js-item');
-        itemsDiv.appendChild(itemDiv);
+    this.addItem = function (itemDiv, type) {
         this._deleteItem = document.createElement('button');
         this._deleteItem.setAttribute('type', 'button');
         this._deleteItem.setAttribute('class', 'actionbutton delete');
         this._deleteItem.setAttribute('data-object', type);
         this._deleteItem.textContent = "Delete";
-        this._deleteItem.ra = {};
-        this._deleteItem.ra.raItems = this;
-        this._deleteItem.ra.itemDiv = itemDiv;
         itemDiv.appendChild(this._deleteItem);
-        this.options.createFunction(this.options.editor, itemDiv, no);
+        switch (type) {
+            case 'js-Walk':
+                var editor = new walkeditor(this.walk);
+                editor.addWalk(itemDiv);
+                break;
+            case 'js-CarShare':
+                var editor = new walkeditor(this.walk);
+                editor.addCarShare(itemDiv);
+                break;
+            case 'js-Pickup':
+                var editor = new walkeditor(this.walk);
+                editor.addPickUp(itemDiv);
+                break;
+            case 'js-PublicTrans':
+                var editor = new walkeditor(this.walk);
+                editor.addPublicTrans(itemDiv);
+                break;
+            default:
+            // code block
+        }
+
+
         this._deleteItem.addEventListener("click", this.deleteButton);
     };
     this.addButton = function () {
-        var _raItems = this.ra.raItems;
-        var itemsDiv = _raItems.itemsDiv;
-        var itemName = _raItems.options.dataClass;
-        var arr = _raItems.options.dataObject[_raItems.options.arrayProperty];
-        var no = arr.length;
-        _raItems.addItem(itemsDiv, itemName, no);
-
+        var type = this.getAttribute("data-object");
+        var itemsDiv = this.previousSibling;
+        var itemDiv = document.createElement('div');
+        itemDiv.setAttribute('class', 'js-item');
+        itemsDiv.appendChild(itemDiv);
+        var items = new raWalkItems(this.ra.walk);
+        items.addItem(itemDiv, type);
     };
     this.deleteButton = function () {
-        var _raItems = this.ra.raItems;
-        var options = _raItems.options;
-        var itemDiv = this.ra.itemDiv;
-        var itemsDiv = _raItems.itemsDiv;
-        var no = _raItems.findNo(itemsDiv, itemDiv);
-        // remove item from data object
-        options.dataObject[options.arrayProperty] = _raItems.removeElement(options.dataObject[options.arrayProperty], no);
-        // remove from web page
-        itemsDiv.removeChild(itemDiv);
-// no needs to be worked out from the possition of itenDiv in itemDivs
-    };
-    this.removeElement = function (array, no) {
-        var newArray = [];
-        var i;
-        var l = array.length;
-        for (i = 0; i < l; i++) {
-            if (i !== no) {
-                var item = array[i];
-                newArray.push(item);
-            }
+        var tag = this;
+        var no = findItemNumber(tag);
+        var parent = this.parentNode;
+        if (parent.className === "js-item") {
+            parent.parentNode.removeChild(parent);
+        } else {
+            alert("Remove: Invalid parent node - please report issue");
         }
-        return newArray;
-    };
-    this.findNo = function (itemsDiv, itemDiv) {
-        var children = itemsDiv.children;
-        var i;
-        var l = children.length;
-        for (i = 0; i < l; i++) {
-            if (children[i] === itemDiv) {
-                return i;
-            }
-        }
-        return 0;
-    };
+        //  remove item from walk object
+        var type = tag.getAttribute("data-object");
+        switch (type) {
+            case 'js-Walk':
+                delete  this.walk.walks[no];
 
+                var arr = this.walk.walks.filter(function (val) {
+                    return val;
+                });
+                this.walk.walks = arr;
+                break;
+            case 'js-Pickup':
+                delete  this.walk.meeting.locations[no];
+                var arr = this.walk.meeting.locations.filter(function (val) {
+                    return val;
+                });
+                this.walk.meeting.locations = arr;
+                break;
+            case 'js-PublicTrans':
+                delete  this.walk.meeting.locations[no];
+                var arr = this.walk.meeting.locations.filter(function (val) {
+                    return val;
+                });
+                this.walk.meeting.locations = arr;
+                break;
+            default:
+                alert("Delete item program error");
+        }
+    };
 }
+;

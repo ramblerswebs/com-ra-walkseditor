@@ -80,7 +80,7 @@ $canEdit = Ra_walkseditorHelpersRa_walkseditor::canUserEdit($this->item, $user);
 
 					<?php if ($this->canSave): ?>
 						<button id="js-submitbtn" type="submit" class="validate btn btn-primary">
-							<?php echo Text::_('JSUBMIT'); ?>
+							Save
 						</button>
 					<?php endif; ?>
 					<a class="btn"

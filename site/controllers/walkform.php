@@ -38,10 +38,12 @@ class Ra_walkseditorControllerWalkForm extends \Joomla\CMS\MVC\Controller\FormCo
         $previousId = (int) $app->getUserState('com_ra_walkseditor.edit.walk.id');
         $editId = $app->input->getInt('id', 0);
         $copy = $app->input->getInt('copy', 0);
+        $date = $app->input->getString('date', '');
 
         // Set the user id for the user to edit in the session.
         $app->setUserState('com_ra_walkseditor.edit.walk.id', $editId);
         $app->setUserState('com_ra_walkseditor.edit.walk.copy', $copy);
+        $app->setUserState('com_ra_walkseditor.edit.walk.date', $date);
         // Get the model.
         $model = $this->getModel('WalkForm', 'Ra_walkseditorModel');
 

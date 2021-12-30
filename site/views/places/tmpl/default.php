@@ -59,16 +59,13 @@ $document->addStyleSheet(Uri::root() . 'media/com_ra_walkseditor/css/list.css');
 				<?php echo JHtml::_('grid.sort',  'COM_RA_WALKSEDITOR_PLACES_NAME', 'a.name', $listDirn, $listOrder); ?>
 				</th>
 				<th class=''>
-				<?php echo JHtml::_('grid.sort',  'COM_RA_WALKSEDITOR_PLACES_ABBR', 'a.abbr', $listDirn, $listOrder); ?>
-				</th>
-				<th class=''>
 				<?php echo JHtml::_('grid.sort',  'COM_RA_WALKSEDITOR_PLACES_POSTCODE', 'a.postcode', $listDirn, $listOrder); ?>
 				</th>
-	
-				<th class=''>
-				<?php echo JHtml::_('grid.sort',  'COM_RA_WALKSEDITOR_PLACES_WHAT3WORDS', 'a.what3words', $listDirn, $listOrder); ?>
-				</th>
-
+	<?php
+		//		echo "<th class=''>";
+		//		 echo JHtml::_('grid.sort',  'COM_RA_WALKSEDITOR_PLACES_WHAT3WORDS', 'a.what3words', $listDirn, $listOrder); 
+		//	echo	"</th>";
+?>
 
 							<?php if ($canEdit || $canDelete): ?>
 					<th class="center">
@@ -116,9 +113,13 @@ $document->addStyleSheet(Uri::root() . 'media/com_ra_walkseditor/css/list.css');
 				<?php endif; ?>
 				<?php echo $this->escape($item->name); ?>
 				</td>
-				<td><?php echo $item->abbr; ?></td>
+				
 				<td><?php echo $item->postcode; ?></td>
-				<td><?php echo $item->what3words; ?></td>
+				<?php
+                            //    echo "<td>";
+                            //    echo $item->what3words;
+                             //   echo "</td>"
+                                ?>
 				<?php if ($canEdit || $canDelete): ?>
 					<td class="center">
 						<?php if ($canEdit): ?>

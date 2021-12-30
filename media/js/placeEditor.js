@@ -1,28 +1,29 @@
-var document, ramblers;
+var document;
 function placeEditor() {
 
-    this.addPlace = function (tag) {
+    this.addPlace = function (tag,data) {
         var itemsDiv = document.createElement('div');
         itemsDiv.setAttribute('class', 'location-group');
         tag.appendChild(itemsDiv);
-        var input = new raInputFields;
-        this._place = input.addLocation(itemsDiv, ramblers.record, 'place');
+        //     var input = new raInputFields;
+        //    input.addLocation(itemsDiv, ramblers.record, 'place');
+        var location = new mapLocationInput(itemsDiv, data.record, mapLocationInput.MEETING);
+        this._place = location.addLocation();
     };
 }
 ;
-placecontroller = function (tagContainer) {
+placecontroller = function (tagContainer, data) {
     this.tagContainer = tagContainer;
+    this.data = data;
 
     this.placeEditor = function () {
         var placeDiv = document.createElement('div');
         placeDiv.setAttribute('id', 'js-place-editor');
         this.tagContainer.appendChild(placeDiv);
         var place = new placeEditor();
-        var display = new mapdisplay();
-        place.addPlace(placeDiv);
-        display.add(this.tagContainer);
-        display.redisplay();
-        display.displayLocationOnMap();
+
+        place.addPlace(placeDiv,this.data);
+
         document.addEventListener("postcodeupdate", function (e) {
             var tag = document.getElementById('js-place-editor');
             tag.innerHTML = "";
@@ -30,37 +31,38 @@ placecontroller = function (tagContainer) {
             place.addPlace(tag);
         });
     };
-    this.clickMapButton = function () {
-        var display = new mapdisplay();
-        display.redisplay();
-        display.displayLocationOnMap();
-        var elmnt = document.getElementById("leafletmap");
-        elmnt.scrollIntoView();
-    };
-    this.displayMarkersOnMap = function () {
-        var display = new mapdisplay();
-        display.displayLocationOnMap();
-    };
+//    this.clickMapButton = function () {
+//        var display = new mapdisplay();
+//        display.redisplay();
+//        display.displayLocationOnMap();
+//        var elmnt = document.getElementById("leafletmap");
+//        elmnt.scrollIntoView();
+//    };
+//    this.displayMarkersOnMap = function () {
+//        var display = new mapdisplay();
+//        display.displayLocationOnMap();
+//    };
     this.setSubmitButton = function () {
-        var submitButton = document.getElementById(ramblers.fields.submit);
+        var _this=this;
+        var submitButton = document.getElementById(this.data.fields.submit);
         submitButton.addEventListener("mouseover", function () {
-            ramblers.controller.setInputValue('abbr', 'abbr');
-            ramblers.controller.setInputValue('name', 'name');
-            ramblers.controller.setInputValue('latitude', 'latitude');
-            ramblers.controller.setInputValue('longitude', 'longitude');
-            ramblers.controller.setInputValue('gridref10', 'gridref10');
-            ramblers.controller.setInputValue('postcode', 'satnavpostcode');
-            ramblers.controller.setInputValue('what3words', 'what3words_words');
+            _this.setInputValue('abbr', 'abbr');
+            _this.setInputValue('name', 'name');
+            _this.setInputValue('latitude', 'latitude');
+            _this.setInputValue('longitude', 'longitude');
+            _this.setInputValue('gridref10', 'gridref10');
+            _this.setInputValue('postcode', 'postcode');
+            //       ramblers.controller.setInputValue('what3words', 'what3words_words');
         });
     };
     this.setInputValue = function (field, name) {
-        var fieldtag = document.getElementById(ramblers.fields[field]);
+        var fieldtag = document.getElementById(this.data.fields[field]);
         if (fieldtag === null) {
             alert("Program error setting field: " + field);
             return "";
         }
-        if (ramblers.record.hasOwnProperty(name)) {  // Initialise value
-            fieldtag.value = ramblers.record[name];
+        if (this.data.record.hasOwnProperty(name)) {  // Initialise value
+            fieldtag.value = this.data.record[name];
         } else {
             fieldtag.value = "";
         }

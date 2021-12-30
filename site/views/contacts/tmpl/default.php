@@ -80,7 +80,9 @@ $document->addStyleSheet(Uri::root() . 'media/com_ra_walkseditor/css/list.css');
 		<tfoot>
 		<tr>
 			<td colspan="<?php echo isset($this->items[0]) ? count(get_object_vars($this->items[0])) : 10; ?>">
-				<?php echo $this->pagination->getListFooter(); ?>
+				<?php 
+                                echo $this->pagination->getListFooter(); 
+                                ?>
 			</td>
 		</tr>
 		</tfoot>
