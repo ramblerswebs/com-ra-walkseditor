@@ -23,7 +23,7 @@ ra.walks_editor.viewAllwalks = function (mapOptions, data) {
         var status = item.status;
         var category = item.category_name;
         item.walk = new ra.draftWalk();
-        item.walk,init(status, category, this.loggedOn);
+        item.walk.init(status, category, this.loggedOn);
         item.walk.createFromJson(json);
         var buttons = {
             delete: item.deleteUrl,
