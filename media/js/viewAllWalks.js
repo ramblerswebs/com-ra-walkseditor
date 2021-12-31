@@ -22,7 +22,8 @@ ra.walks_editor.viewAllwalks = function (mapOptions, data) {
         var json = item.content;
         var status = item.status;
         var category = item.category_name;
-        item.walk = new ra.draftWalk(status, category, this.loggedOn);
+        item.walk = new ra.draftWalk();
+        item.walk,init(status, category, this.loggedOn);
         item.walk.createFromJson(json);
         var buttons = {
             delete: item.deleteUrl,
@@ -33,26 +34,24 @@ ra.walks_editor.viewAllwalks = function (mapOptions, data) {
         item.content = '';
     }
     // sort data into date order
+    this.data.items.sort(function (a, b) {
+        var da = a.walk.data.basics.date;
+        var db = b.walk.data.basics.date;
+        if (!ra.date.isValidString(da)) {
+            da = '';
+        }
+        if (!ra.date.isValidString(db)) {
+            db = '';
+        }
 
-
-//    this.data.items.sort(function (a, b) {
-//        var da = a.walk.data.basics.date;
-//        var db = b.walk.data.basics.date;
-//        if (!ra.date.isValidString(da)) {
-//            da = '';
-//        }
-//        if (!ra.date.isValidString(db)) {
-//            db = '';
-//        }
-//
-//        if (da < db) {
-//            return -1;
-//        }
-//        if (da > db) {
-//            return 1;
-//        }
-//        return 0;
-//    });
+        if (da < db) {
+            return -1;
+        }
+        if (da > db) {
+            return 1;
+        }
+        return 0;
+    });
     this.masterdiv = document.getElementById(this.mapOptions.divId);
     this.jplistGroup = ra.uniqueID();
     this.myjplist = new ra.jplist(this.jplistGroup);
@@ -303,7 +302,7 @@ ra.walks_editor.viewAllwalks = function (mapOptions, data) {
             selectable: true,
             displayEventTime: false,
             eventTextColor: '#000000',
-            headerToolbar: {center: 'dayGridMonth,timeGridWeek,listMonth'}, // buttons for switching between views
+            headerToolbar: {center: 'dayGridMonth,listMonth'}, // buttons for switching between views
             events: events,
 
             views: {
@@ -336,7 +335,7 @@ ra.walks_editor.viewAllwalks = function (mapOptions, data) {
             },
             select: function (info) {
                 var option;
-                ;
+                alert('check date is in the future');
                 if (_this.data.newUrl !== null) {
                     if (_this.data.newUrl.includes('?')) { // allow for SEO
                         option = "&";
@@ -377,47 +376,13 @@ ra.walks_editor.viewAllwalks = function (mapOptions, data) {
             var th = document.createElement('th');
             th.innerHTML = col.name;
             if (typeof (col.sort) !== "undefined") {
-                this.myjplist.sortButton(th, col.sort.colname, col.sort.type, "asc", "▲");
-                this.myjplist.sortButton(th, col.sort.colname, col.sort.type, "desc", "▼");
+               // this.myjplist.sortButton(th, col.sort.colname, col.sort.type, "asc", "▲");
+               // this.myjplist.sortButton(th, col.sort.colname, col.sort.type, "desc", "▼");
             }
             tr.appendChild(th);
         }
     };
-//    this.displayStatusHeader = function (table) {
-//
-//        var thead = document.createElement('thead');
-//        table.appendChild(thead);
-//        var tr = document.createElement('tr');
-//        thead.appendChild(tr);
-//        var index, len, col;
-//        for (index = 0, len = this.statusColumns.length; index < len; ++index) {
-//            col = this.statusColumns[index];
-//            var th = document.createElement('th');
-//            th.innerHTML = col.name;
-//            if (typeof (col.sort) !== "undefined") {
-//                this.myjplist.sortButton(th, col.sort.colname, col.sort.type, "asc", "▲");
-//                this.myjplist.sortButton(th, col.sort.colname, col.sort.type, "desc", "▼");
-//            }
-//            tr.appendChild(th);
-//        }
-//    };
-//    this.displayIssuesHeader = function (table) {
-//        var thead = document.createElement('thead');
-//        table.appendChild(thead);
-//        var tr = document.createElement('tr');
-//        thead.appendChild(tr);
-//        var index, len, col;
-//        for (index = 0, len = this.issueColumns.length; index < len; ++index) {
-//            col = this.issueColumns[index];
-//            var th = document.createElement('th');
-//            th.innerHTML = col.name;
-//            if (typeof (col.sort) !== "undefined") {
-//                this.myjplist.sortButton(th, col.sort.colname, col.sort.type, "asc", "▲");
-//                this.myjplist.sortButton(th, col.sort.colname, col.sort.type, "desc", "▼");
-//            }
-//            tr.appendChild(th);
-//        }
-//    };
+
 
     this.addButton = function (div, name, url) {
         var button = document.createElement('button');
@@ -444,7 +409,7 @@ ra.walks_editor.viewAllwalks = function (mapOptions, data) {
             var td = document.createElement('td');
             td.innerHTML = this.tableValue(walk, col.name);
             if (typeof (col.sort) !== "undefined") {
-                td.setAttribute('class', col.sort.colname);
+              //  td.setAttribute('class', col.sort.colname);
             }
             td.classList.add('pointer');
             td.addEventListener('click', function () {
@@ -455,43 +420,14 @@ ra.walks_editor.viewAllwalks = function (mapOptions, data) {
         }
 
     };
-//    this.displayIssuesRow = function (table, item) {
-//        var walk = item.walk;
-//
-//        var tr = document.createElement('tr');
-//        tr.setAttribute('data-jplist-item', '');
-//        var errors = walk.getNoWalkIssues();
-//        if (errors === 0) {
-//            tr.classList.add("walk-noissues");
-//        } else {
-//            tr.classList.add("walk-issues");
-//        }
-//        table.appendChild(tr);
-//        var index, len, col;
-//        for (index = 0, len = this.issueColumns.length; index < len; ++index) {
-//            col = this.issueColumns[index];
-//            var td = document.createElement('td');
-//
-//            td.innerHTML = this.tableValue(walk, col.name);
-//            if (typeof (col.sort) !== "undefined") {
-//                td.setAttribute('class', col.sort.colname);
-//            }
-//            td.classList.add('pointer');
-//            td.addEventListener('click', function () {
-//                walk.displayDetails();
-//            });
-//
-//            tr.appendChild(td);
-//        }
-//
-//    };
+
     this.tableValue = function (walk, name) {
         switch (name) {
             case "State":
-                return   walk.getWalkStatus('table');
+                return   walk.getWalkStatus();
                 break;
             case "Category":
-                return   walk.getWalkCategory('table');
+                return   walk.getWalkCategory();
                 break;
             case "Date":
                 return   walk.getWalkDate('table');

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-var  document;
+var document;
 var L, ra;
 if (typeof (ra) === "undefined") {
     ra = {};
@@ -15,14 +15,14 @@ if (typeof (ra.walkseditor) === "undefined") {
 ra.walkseditor.editplace = function (options, data) {
 
     this.data = data;
-   this.options = options;
+    this.options = options;
     //   var masterdiv = document.getElementById(options.divId);
     //   this.lmap = new leafletMap(masterdiv, options);
     this.load = function () {
 
         var data = this.data;
-      
-     //   this.fields = data.fields;
+
+        //   this.fields = data.fields;
         data.editMode = true;
         data.record = {};
         var fields = data.fields;
@@ -51,7 +51,7 @@ ra.walkseditor.editplace = function (options, data) {
         }
 
         var tag = document.getElementById(this.options.divId);
-        this.controller = new placecontroller(tag,data);
+        this.controller = new placecontroller(tag, data);
         this.controller.placeEditor();
         this.controller.setSubmitButton();
 
@@ -63,8 +63,7 @@ ra.walkseditor.editplace = function (options, data) {
 ra.walkseditor.editwalk = function (options, data) {
 
     this.data = data;
-    //   var masterdiv = document.getElementById(options.divId);
-    //   this.lmap = new leafletMap(masterdiv, options);
+    
     this.load = function () {
         var data = this.data;
         // data.editMode = true;
@@ -103,6 +102,16 @@ ra.walkseditor.editwalk = function (options, data) {
             var draftwalk = _this.data.walk;
             var errors = draftwalk.getNoWalkIssues();
             _this.resetStatusButton(errors);
+        });
+        this.statusSelect.addEventListener("change", function (e) {
+            var draftwalk = _this.data.walk;
+            var reason = '';
+            var ele = e.target;
+            var option = ele.options[ele.selectedIndex].text;
+            if (option === "Cancelled") {
+                reason = prompt("Please say why the walk is being cancelled");
+            }
+            draftwalk.setStatus(option, reason);
         });
 
         var editorDiv = document.createElement('div');
@@ -230,7 +239,6 @@ ra.walkseditor.editwalk = function (options, data) {
                     child.disabled = true;
                 } else {
                     child.disabled = false;
-                  //  child.selected = false;
                 }
             }
         }

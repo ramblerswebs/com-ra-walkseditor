@@ -467,12 +467,27 @@ div.gwem.quill  div.ql-container.ql-snow{
 
     color:#121212;
 }
-.errors{
-    border-right: 6px solid var(--sunset)!important;
+button.topbutton {
+  display: none;
+  position: fixed;
+  bottom: 20px;
+  right: 30px;
+  z-index: 99;
+  font-size: 18px;
+  border: none;
+  outline: none;
+  background-color: var(--sunrise);
+  color: white;
+  cursor: pointer;
+  padding: 15px;
+  border-radius: 4px;
 }
-.noerrors{
-    border-right: 6px solid var(--mintCake)!important;
+
+button.topbutton:hover {
+  background-color: #555;
 }
+
+
 .clocklet-tick--minute[data-clocklet-tick-value='1'],
 .clocklet-tick--minute[data-clocklet-tick-value='2'],
 .clocklet-tick--minute[data-clocklet-tick-value='3'],

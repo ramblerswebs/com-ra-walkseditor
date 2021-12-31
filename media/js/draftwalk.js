@@ -5,13 +5,13 @@ if (typeof (ra) === "undefined") {
 if (typeof (ra.draftWalk) === "undefined") {
     ra.draftWalk = {};
 }
-ra.draftWalk = function (status, category, loggedOn) {
+ra.draftWalk = function (  ) {
     const isERROR = 'error';
     const isWarning = 'warning';
     const isInformation = 'warning';
-    this.status = status;
-    this.category = category;
-    this.loggedOn = loggedOn;
+    this.status = "None";
+    this.category = "None";
+    this.loggedOn = false;
     this.displayWalk = true;
     this.data = {
         basics: {},
@@ -27,10 +27,17 @@ ra.draftWalk = function (status, category, loggedOn) {
             comments: ''
         }
     };
+
+
     this.buttons = {delete: null,
         edit: null,
         duplicate: null};
 
+    this.init = function (status, category, loggedOn) {
+        this.status = status;
+        this.category = category;
+        this.loggedOn = loggedOn;
+    };
     this.createWithDate = function (date) {
         this.date = date;
     };
@@ -58,6 +65,14 @@ ra.draftWalk = function (status, category, loggedOn) {
             this.data.notes = data.notes;
         }
 
+    };
+    this.setStatus = function (status, reason) {
+        this.status = status;
+        if (status === "Cancelled") {
+            this.data.admin.cancelledReason = reason;
+        } else {
+            this.data.admin.cancelledReason = "";
+        }
     };
     this.setDisplayWalk = function (filters) {
         this.displayWalk = false;
@@ -190,14 +205,7 @@ ra.draftWalk = function (status, category, loggedOn) {
             return null;
         }
     };
-    this.YYYYMMDD = function () {
-        if (this.dateSet()) {
-            var basics = this.data.basics;
-            return  ra.date.YYYYMMDD(basics.date);
-        } else {
-            return null;
-        }
-    };
+
     this.displayDetails = function () {
         var html = this.walkDetails();
         ra.modal.display(html, false);
@@ -242,6 +250,147 @@ ra.draftWalk = function (status, category, loggedOn) {
         });
         div.appendChild(button);
     };
+    this.checkFields = function () {
+        this.errors = 0;
+        this.notifications = [];
+        this.checkFieldsBasics();
+        this.checkFieldsMeeting();
+        this.checkFieldsStart();
+        this.checkFieldsWalks();
+        this.checkFieldsContact();
+    };
+    this.checkFieldsBasics = function () {
+        var walk = this.data;
+        if (this.getObjProperty(walk, 'basics') === null) {
+            this.notificationMsg("No basics section found");
+        }
+        if (this.getObjProperty(walk, 'basics.date') === null) {
+            this.notificationMsg("No walk date found");
+        }
+        if (this.getObjProperty(walk, 'basics.title') === null) {
+            this.notificationMsg("No walk title found");
+        }
+        if (this.getObjProperty(walk, 'basics.description') === null) {
+            this.notificationMsg("Information; No walk description found", isWarning);
+        }
+    };
+    this.checkFieldsMeeting = function () {
+        var walk = this.data;
+        if (this.getObjProperty(walk, 'meeting') === null) {
+            this.notificationMsg("No meeting found");
+        }
+        var meet = this.getObjProperty(walk, 'meeting');
+        var type = this.getObjProperty(meet, 'type');
+        if (type === null) {
+            this.notificationMsg("Meeting type not defined");
+        }
+
+        switch (type) {
+            case 'undefined':
+                this.notificationMsg("Meeting type not defined");
+                break;
+            case 'car':
+            case 'coach':
+            case 'public':
+                var meets = this.getObjProperty(meet, 'locations');
+                meets.forEach(element => {
+                    if (this.getObjProperty(element, 'time') === null) {
+                        this.notificationMsg("Meeting time not defined");
+                    }
+                    if (this.getObjProperty(element, 'name') === null) {
+                        this.notificationMsg("Meeting location name not defined");
+                    }
+
+                    if (this.getObjProperty(element, 'latitude') === null) {
+                        this.notificationMsg("Meeting location latitude/longitude not defined");
+                    }
+                });
+                break;
+            case 'none':
+            default:
+        }
+    };
+    this.checkFieldsStart = function () {
+        var walk = this.data;
+        var type = this.getObjProperty(walk, 'start.type');
+        switch (type) {
+            case 'area':
+                var meetingType = this.getObjProperty(walk, 'meeting.type');
+                if (meetingType === null || meetingType === 'undefined' || meetingType === 'none') {
+                    this.notificationMsg("Information: You have not supplied a meeting point nor a starting place", isWarning);
+                }
+                if (this.getObjProperty(walk, 'start.location.name') === null) {
+                    this.notificationMsg("Walk area name not defined");
+                }
+                if (this.getObjProperty(walk, 'start.location.latitude') === null) {
+                    this.notificationMsg("Walk area latitude/longitude not defined");
+                }
+                break;
+            case 'start':
+                if (this.getObjProperty(walk, 'start.location.time') === null) {
+                    this.notificationMsg("Start time not defined");
+                }
+                if (this.getObjProperty(walk, 'start.location.name') === null) {
+                    this.notificationMsg("Start name not defined");
+                }
+                if (this.getObjProperty(walk, 'start.location.latitude') === null) {
+                    this.notificationMsg("Start latitude/longitude not defined");
+                }
+                break;
+            default:
+                this.notificationMsg("Start information not defined");
+        }
+    };
+    this.checkFieldsWalks = function () {
+        var walk = this.data;
+        var walks = this.getObjProperty(walk, 'walks');
+        if (walks === null) {
+            this.notificationMsg("No walk defined");
+        } else {
+            walks.forEach(singlewalk => {
+                var dist = this.getObjProperty(singlewalk, 'distance');
+                if (dist === null || dist === '') {
+                    this.notificationMsg("Walk - No distance specified");
+                }
+                if (this.getObjProperty(singlewalk, 'units') === null) {
+                    this.notificationMsg("Walk - No distance units (miles/km) specified");
+                }
+                if (this.getObjProperty(singlewalk, 'natgrade') === null) {
+                    this.notificationMsg("Walk - No national grade has been assigned");
+
+                }
+                if (this.getObjProperty(singlewalk, 'type') === null) {
+                    this.notificationMsg("Walk - No walk shape assigned, circular,linear");
+                }
+                if (this.getObjProperty(singlewalk, 'type') === "undefined") {
+                    this.notificationMsg("Walk - No walk shape assigned, circular,linear");
+                }
+            });
+        }
+    };
+    this.checkFieldsContact = function () {
+        var walk = this.data;
+
+        if (this.getObjProperty(walk, 'contact') === null) {
+            this.notificationMsg("Contact - Not defined");
+        }
+        if (this.getObjProperty(walk, 'contact.displayName') === null) {
+            this.notificationMsg("Contact - No name defined");
+        }
+        var type = this.getObjProperty(walk, 'contact.contactType');
+        if (type === null || type === 'undefined') {
+            this.notificationMsg("Contact - No type, Leader/Not leader, defined");
+        }
+        var email = this.getObjProperty(walk, 'email.title') !== null;
+        var tel1 = this.getObjProperty(walk, 'contact.telephone1') !== null;
+        var tel2 = this.getObjProperty(walk, 'contact.telephon2') !== null;
+        if (email || tel1 || tel2) {
+            // at least one contact method defined
+        } else {
+            this.notificationMsg("Information:  Contact - No contact method defined (email or telephone)", isWarning);
+        }
+    };
+
 
     this.getObjProperty = function (obj, path) {
         // call getObj("basics.date");
@@ -269,33 +418,11 @@ ra.draftWalk = function (status, category, loggedOn) {
 
     };
 
-    this.getWalkStatus = function (view) {
+    this.getWalkStatus = function () {
         return this.status;
     };
-    this.getWalkCategory = function (view) {
+    this.getWalkCategory = function () {
         return this.category;
-    };
-    this.getWalkValue = function (value) {
-        var out = 'NotSet';
-        var basics = this.basics;
-        var walks = this.walks;
-        var contact = this.contact;
-        switch (value) {
-            case 'dow':
-                if (basics.hasOwnProperty('date')) {
-                    out = ra.date.dow(basics.date);
-                }
-                break;
-            case 'date':
-                if (basics.hasOwnProperty('date')) {
-                    out = basics.date;
-                }
-                break;
-            default:
-
-        }
-        return out;
-
     };
     this.getWalkDate = function (view) {
         var d = this.getObjProperty(this.data, 'basics.date');
@@ -304,11 +431,10 @@ ra.draftWalk = function (status, category, loggedOn) {
                 var dow = ra.date.dow(d);
                 switch (view) {
                     case 'table':
-                        return d + "<br/><b>" + dow + "</b>";
+                        return  "<b>" + ra.date.dowdd(d) + "</b><br/>" + " " + ra.date.month(d) + " " + ra.date.YY(d);
                     case 'list':
-                        return d + " <b>" + dow + "</b>";
                     case 'details':
-                        return d + " <b>" + dow + "</b>";
+                        return  "<b>" + ra.date.dowdd(d) + "</b>" + " " + ra.date.month(d) + " " + ra.date.YY(d);
                 }
             }
         }
@@ -517,14 +643,7 @@ ra.draftWalk = function (status, category, loggedOn) {
         return notes;
 
     };
-    this.hasEditorNotes = function () {
-        var notes = this.getObjProperty(this.data, 'notes.comments');
-        if (notes !== null) {
-            return notes.length > 0;
-        }
-        return false;
 
-    };
     this.getNoWalkIssues = function () {
         this.checkFields();
         return this.errors;
@@ -656,145 +775,13 @@ ra.draftWalk = function (status, category, loggedOn) {
 //    this.displayPreview = function (tag, walks) {
 //        // var command = "ra.display.walksTabs";
 //    };
-    this.checkFields = function () {
-        this.errors = 0;
-        this.notifications = [];
-        this.checkFieldsBasics();
-        this.checkFieldsMeeting();
-        this.checkFieldsStart();
-        this.checkFieldsWalks();
-        this.checkFieldsContact();
-    };
-    this.checkFieldsBasics = function () {
-        var walk = this.data;
-        if (this.getObjProperty(walk, 'basics') === null) {
-            this.notificationMsg("No basics section found");
+    this.hasEditorNotes = function () {
+        var notes = this.getObjProperty(this.data, 'notes.comments');
+        if (notes !== null) {
+            return notes.length > 0;
         }
-        if (this.getObjProperty(walk, 'basics.date') === null) {
-            this.notificationMsg("No walk date found");
-        }
-        if (this.getObjProperty(walk, 'basics.title') === null) {
-            this.notificationMsg("No walk title found");
-        }
-        if (this.getObjProperty(walk, 'basics.description') === null) {
-            this.notificationMsg("No walk description found");
-        }
-    };
-    this.checkFieldsMeeting = function () {
-        var walk = this.data;
-        if (this.getObjProperty(walk, 'meeting') === null) {
-            this.notificationMsg("No meeting found");
-        }
-        var meet = this.getObjProperty(walk, 'meeting');
-        var type = this.getObjProperty(meet, 'type');
-        if (type === null) {
-            this.notificationMsg("Meeting type not defined");
-        }
+        return false;
 
-        switch (type) {
-            case 'undefined':
-                this.notificationMsg("Meeting type not defined");
-                break;
-            case 'car':
-            case 'coach':
-            case 'public':
-                var meets = this.getObjProperty(meet, 'locations');
-                meets.forEach(element => {
-                    if (this.getObjProperty(element, 'time') === null) {
-                        this.notificationMsg("Meeting time not defined");
-                    }
-                    if (this.getObjProperty(element, 'name') === null) {
-                        this.notificationMsg("Meeting location name not defined");
-                    }
-
-                    if (this.getObjProperty(element, 'latitude') === null) {
-                        this.notificationMsg("Meeting location latitude/longitude not defined");
-                    }
-                });
-                break;
-            case 'none':
-            default:
-        }
-    };
-    this.checkFieldsStart = function () {
-        var walk = this.data;
-        var type = this.getObjProperty(walk, 'start.type');
-        switch (type) {
-            case 'area':
-                var meetingType = this.getObjProperty(walk, 'meeting.type');
-                if (meetingType === null || meetingType === 'undefined' || meetingType === 'none') {
-                    this.notificationMsg("Information: You have not supplied a meeting point nor a starting place", isWarning);
-                }
-                if (this.getObjProperty(walk, 'start.location.name') === null) {
-                    this.notificationMsg("Start/Walk area name not defined");
-                }
-                if (this.getObjProperty(walk, 'start.location.latitude') === null) {
-                    this.notificationMsg("Start/Walk area latitude/longitude not defined");
-                }
-                break;
-            case 'start':
-                if (this.getObjProperty(walk, 'start.location.time') === null) {
-                    this.notificationMsg("Start time not defined");
-                }
-                if (this.getObjProperty(walk, 'start.location.name') === null) {
-                    this.notificationMsg("Start name not defined");
-                }
-                if (this.getObjProperty(walk, 'start.location.latitude') === null) {
-                    this.notificationMsg("Start latitude/longitude not defined");
-                }
-                break;
-            default:
-                this.notificationMsg("Start information not defined");
-        }
-    };
-    this.checkFieldsWalks = function () {
-        var walk = this.data;
-        var walks = this.getObjProperty(walk, 'walks');
-        if (walks === null) {
-            this.notificationMsg("No walk defined");
-        } else {
-            walks.forEach(singlewalk => {
-                var dist = this.getObjProperty(singlewalk, 'distance');
-                if (dist === null || dist === '') {
-                    this.notificationMsg("Walk - No distance specified");
-                }
-                if (this.getObjProperty(singlewalk, 'units') === null) {
-                    this.notificationMsg("Walk - No distance units (miles/km) specified");
-                }
-                if (this.getObjProperty(singlewalk, 'natgrade') === null) {
-                    this.notificationMsg("Walk - No national grade has been assigned");
-
-                }
-                if (this.getObjProperty(singlewalk, 'type') === null) {
-                    this.notificationMsg("Walk - No walk shape assigned, circular,linear");
-                }
-                if (this.getObjProperty(singlewalk, 'type') === "undefined") {
-                    this.notificationMsg("Walk - No walk shape assigned, circular,linear");
-                }
-            });
-        }
-    };
-    this.checkFieldsContact = function () {
-        var walk = this.data;
-
-        if (this.getObjProperty(walk, 'contact') === null) {
-            this.notificationMsg("Contact - Not defined");
-        }
-        if (this.getObjProperty(walk, 'contact.displayName') === null) {
-            this.notificationMsg("Contact - No name defined");
-        }
-        var type = this.getObjProperty(walk, 'contact.contactType');
-        if (type === null || type === 'undefined') {
-            this.notificationMsg("Contact - No type, Leader/Not leader, defined");
-        }
-        var email = this.getObjProperty(walk, 'email.title') !== null;
-        var tel1 = this.getObjProperty(walk, 'contact.telephone1') !== null;
-        var tel2 = this.getObjProperty(walk, 'contact.telephon2') !== null;
-        if (email || tel1 || tel2) {
-            // at least one contact method defined
-        } else {
-            this.notificationMsg("Information:  Contact - No contact method defined (email or telephone)", isWarning);
-        }
     };
 
     this.displayJson = function (tag, walk, gwemWalk) {
@@ -1003,6 +990,14 @@ ra.draftWalk = function (status, category, loggedOn) {
             }
 
             return $out;
+        }
+    };
+    this.YYYYMMDD = function () {
+        if (this.dateSet()) {
+            var basics = this.data.basics;
+            return  ra.date.YYYYMMDD(basics.date);
+        } else {
+            return null;
         }
     };
     String.prototype.replaceAt = function (index, char) {

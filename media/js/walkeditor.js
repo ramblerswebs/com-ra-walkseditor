@@ -1,4 +1,4 @@
-var ra, mapLocationInput;
+var ra, mapLocationInput, window, document;
 function walkeditor(walk) {
     this.walk = walk;
 
@@ -9,6 +9,7 @@ function walkeditor(walk) {
             admin.version = '1.0';
             admin.created = new Date();
             admin.updated = null;
+            admin.cancelledReason='';
         }
     };
 
@@ -91,6 +92,9 @@ function walkeditor(walk) {
 
         input.addHeader(notesDiv, "summary", "Editor's Notes", ra.walkseditor.help.editorNotes);
         this.addNotes(notesDiv);
+
+        // add top button
+        this.addScrollButton(form);
 
     };
 
@@ -424,6 +428,42 @@ function walkeditor(walk) {
             _this._tel2.value = item.telephone2;
         });
         return;
+    };
+    this.addScrollButton = function (tag) {
+        //   <button onclick="topFunction()" id="myBtn" title="Go to top">Top</button>
+        var topButton = document.createElement('button');
+        topButton.classList.add('topbutton');
+        topButton.classList.add('link-button');
+        topButton.classList.add('small');
+
+
+        topButton.textContent = "Top";
+        topButton.addEventListener("click", function (e) {
+            //      document.body.scrollTop = 0;
+            //      document.documentElement.scrollTop = 0;
+            window.scrollTo(0, 250);
+        });
+        tag.appendChild(topButton);
+
+
+// When the user scrolls down 20px from the top of the document, show the button
+        window.onscroll = function () {
+            scrollFunction();
+        };
+
+        function scrollFunction() {
+            if (document.body.scrollTop > 500 || document.documentElement.scrollTop > 500) {
+                topButton.style.display = "block";
+            } else {
+                topButton.style.display = "none";
+            }
+        }
+
+// When the user clicks on the button, scroll to the top of the document
+        function topFunction() {
+            document.body.scrollTop = 0;
+            document.documentElement.scrollTop = 0;
+        }
     };
 
     this.sortData = function () {
