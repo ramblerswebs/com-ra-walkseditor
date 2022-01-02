@@ -300,14 +300,14 @@ function mapLocationInput(tag, raobject, location) { // constructor function
         var east = Math.round(grid.easting);
         var north = Math.round(grid.northing);
         var _this = this;
-        alert("The nearest postcodes will be displayed. \nYou can then select the appropriate one for SatNav. \nJust click the correct postcode");
+        // alert("The nearest postcodes will be displayed. \nYou can then select the appropriate one for SatNav. \nJust click the correct postcode");
         var url = "https://postcodes.theramblers.org.uk/index.php?easting=" + east + "&northing=" + north + "&dist=20&maxpoints=20";
         ra.ajax.getJSON(url, function (err, pcs) {
             if (err !== null) {
 
             } else {
                 if (pcs.length !== 0) {
-                    pcs.forEach(function (pc) { 
+                    pcs.forEach(function (pc) {
                         var gr = new OsGridRef(pc.Easting, pc.Northing);
                         var latlong = OsGridRef.osGridToLatLon(gr);
                         var icon = L.icon({
@@ -329,10 +329,16 @@ function mapLocationInput(tag, raobject, location) { // constructor function
                                 }
                             });
                             _this.updateStatusPanel();
+
                         });
-                    });
+                    }
+
+                    );
 
                 }
+                setTimeout(function () {
+                    ra.map.zoomLayer(_this.map, _this.postcodeLayer);
+                }, 1000);
             }
         });
     };
@@ -346,9 +352,13 @@ function mapLocationInput(tag, raobject, location) { // constructor function
         button.addEventListener("click", function (e) {
             _this.placesLayer.clearLayers();
             if (_this.raobject.isLatLongSet) {
-                 alert("The nearest places used by Ramblers' Groups will be displayed");
+                //  alert("The nearest places used by Ramblers' Groups will be displayed");
                 var latlng = new LatLon(_this.raobject.latitude, _this.raobject.longitude);
                 ra.map.displayStartingPlaces(latlng, _this.placesLayer, 20, 30);
+                setTimeout(function () {
+                    ra.map.zoomLayer(_this.map, _this.placesLayer);
+                }, 1000);
+
             } else {
                 alert("Marker position not set");
             }
@@ -382,4 +392,3 @@ mapLocationInput.prototype.publicMethod = function () {
 mapLocationInput.AREA = "Area";
 mapLocationInput.POINT = "Point";
 mapLocationInput.MEETING = "Meet";
-

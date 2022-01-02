@@ -22,7 +22,8 @@ class Ra_walkseditorControllerWalks extends JControllerLegacy {
             $query = $db->getQuery(true);
             $query->select($db->quoteName(array('state', 'date', 'category', 'content')));
             $query->from($db->quoteName('#__ra_walkseditor_walks'));
-            $query->where($db->quoteName('status') . ' = "Published" ');
+            $query->where($db->quoteName('status') . " = " . "'Published'", 'OR');
+            $query->where($db->quoteName('status') . " = " . "'Cancelled'");
             $query->order('ordering ASC');
 
 // Reset the query using our newly populated query object.

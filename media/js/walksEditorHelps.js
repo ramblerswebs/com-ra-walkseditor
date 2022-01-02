@@ -8,24 +8,19 @@ if (typeof (ra) === "undefined") {
 ra.walkseditor.help = (function () {
     var help = {};
     help.locationPostcode = function () {
-        return "locationPostcode";
-        ;
+        return "Use this option if you wish to publish a postcode to aid walkers with their Satnav. <br/>The <b>Add</b> option will display postcodes nearest to the marker. <br/>Select the most appropriate postcode by clicking on it. <br/>NOTE: if you move the marker the postcode will be removed. ";
     };
     help.locationStart = function () {
-        return "locationStart";
-        ;
+        return "This option displays Meeting / Start locations that have been used by Ramblers Groups in the past.<br/>It displays a number of locations around the position of the marker. <br/>Some of these may help you locate a suitable location.";
     };
     help.locationSearch = function () {
-        return "locationSearch";
-        ;
+        return "You can find the location on the map by entering an OS Grid Reference, of any length, a post code or a road or place name with the town or county. You may qualify a road or place name e.g. Bulls Head, Foolow or London Road, Derby. You may also specify a location using What3Words, e.g for the summit of Snowden ///super.ultra.enhancement";
     };
     help.basicDate = function () {
         return "Type in Date in dd/mm/yyyy format or click icon and select date from calendar that comes up";
-        ;
     };
     help.basicTitle = function () {
         return "Choose an eye-catching short title that includes information about the location of the walk.";
-        ;
     };
     help.basicDesc = function () {
         return "Describe what walkers can expect from this walk<ul>" +
@@ -34,111 +29,85 @@ ra.walkseditor.help = (function () {
                 "<li>Let people know what to expect – for example how flat/hilly the walk is, the conditions underfoot and the pace of the group</li>" +
                 "<li>Avoid acronyms and abbreviations – new walkers may not know what you mean!</li>" +
                 "<li>Include information about toilet facilities and refreshment stops</li></ul>";
-
     };
     help.basicNotes = function () {
-        return "h0006 walk additional notes";
-        ;
+        return "This Additional notes field is intended to contain extra information about the walk. It is displayed when the users displays the complete details of the  walk." +
+                "<br/>It can also be used to contain extra data the group wish to display on their site against a walk. In this case it can be included in the table or list views of the walks. The web master would need to have customised the table and list views.";
     };
     help.meetType = function () {
-        return "meet Type";
-        ;
+        return "Select from drop down";
     };
     help.meetTime = function () {
-        return "meet time";
-        ;
+        return "Type in meeting time or click icon to select from drop down";
     };
     help.meetPredefined = function () {
         return "meet predefined";
-        ;
     };
     help.meetName = function () {
-        return "meetName";
-        ;
-    };
+          return "Type in name or general description of meeting place to aid people finding it, e.g. Darley Park Drive cp<br/>You must also specfy the location on the map by positioning the marker on the map";
+   };
     help.areaTime = function () {
-        return "areaTime";
-        ;
+        return "As you have decided to just publish the general area of the walk you may not wish to say the exact time the walk starts. However there are cases when you may wish to let people know when the walk starts but not exactly where, In that case type in start time or click icon to select from drop down";
     };
     help.startType = function () {
-        return "startType";
-        ;
+        return "Select whether the start will be published as a specific location in which case walkers can travel independently to the start of the walk or just a general area for the walk in which case anyone wanting to go to start will need to contact the walk organiser / leader for more details";
     };
     help.startName = function () {
-        return "startName";
-        ;
+        return "Type in name or general description of start place to aid people finding it,e.g. Ladybower Visitors Centre<br/> You must also specfy the location on the map by positioning the marker on the map";
     };
     help.startArea = function () {
-        return "startArea";
-        ;
+        return "Give the name of the general area for the walk, so walkers know where they are going. e.g. Brassington area";
     };
     help.startTime = function () {
-        return "startTime";
-        ;
+        return "Type in start time or click icon to select from drop down";
     };
     help.walkDistance = function () {
         return "Type in numeric distance (to one dec place)";
-        ;
     };
     help.walkUnits = function () {
         return "Select miles or kilometres from drop down";
-        ;
     };
     help.walkType = function () {
         return "Select Circular, Linear or Figure of 8 from drop down";
-        ;
     };
     help.walkNatGrade = function () {
         return "Select National Grade from drop down";
-        ;
     };
     help.walkLeader = function () {
-        return "walkLeader";
-        ;
+        return "If Walk Leader is different from Contact listed lower down then enter it here as you would like it displayed (optional)";
     };
     help.walkLocalGrade = function () {
-        return "walkLocalGrade";
-        ;
+        return "Select local grade from drop down (optional)";
     };
     help.walkPace = function () {
-        return "walkPace";
-        ;
+        return "walkPace???";
     };
     help.walkAscent = function () {
-        return "walkAscent";
-        ;
+        return "Total ascent over whole walk. Ignore descent, otherwise circular walks will always be zero! (Optional)<br/>This is a text field so please indicate if the ascent is in feet or metres.";
     };
     help.walkDuration = function () {
-        return "walkDuration";
-        ;
+        return "Estimate of likely time duration of walk (optional)";
     };
     help.contactName = function () {
-        return "contactName";
-        ;
+        return "Enter name as you would like it displayed, e.g. Chirs V First name and initial of surname";
     };
     help.contactEmail = function () {
-        return "contactEmail";
-        ;
+        return "If you wish people to ask via email about the walk then enter an email address. NOTE: the email address will not be displayed via the group web site or seen by the public, it will only be used to send the email.(Optional)";
     };
     help.contactTel1 = function () {
-        return "contactTel1";
-        ;
+        return "Enter telephone number of contact (Optional)";
     };
     help.contactTel2 = function () {
-        return "contactTel2";
-        ;
+        return "Enter alternative telephone number of contact (optional)";
     };
     help.contactType = function () {
-        return "contactType";
-        ;
+        return "Choose from drop down menu";
     };
     help.contactPredefined = function () {
-        return "contactPredefined";
-        ;
+        return "Click to load and select a contact that has been pre-defined on the system";
     };
     help.editorNotes = function () {
-        return "editorNotes";
-        ;
+        return "You may record any future changes that will be required or additional information required, before the walk can be published";
     };
 
     return help;

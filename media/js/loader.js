@@ -111,7 +111,7 @@ ra.walkseditor.editwalk = function (options, data) {
             if (option === "Cancelled") {
                 reason = prompt("Please say why the walk is being cancelled");
             }
-            draftwalk.setStatus(option, reason);
+            draftwalk.setWalkStatus(option, reason);
         });
 
         var editorDiv = document.createElement('div');

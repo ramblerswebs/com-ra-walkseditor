@@ -2,18 +2,18 @@ var ra, mapLocationInput, window, document;
 function walkeditor(walk) {
     this.walk = walk;
 
-    this.addAdmin = function () {
-        if (!this.walk.hasOwnProperty('admin')) {
-            var admin = {};
-            this.walk.admin = admin;
-            admin.version = '1.0';
-            admin.created = new Date();
-            admin.updated = null;
-            admin.cancelledReason='';
-        }
-    };
-
-    this.addAdmin();
+//    this.addAdmin = function () {
+//        if (!this.walk.hasOwnProperty('admin')) {
+//            var admin = {};
+//            this.walk.admin = admin;
+//            admin.version = '1.0';
+//            admin.created = new Date();
+//            admin.updated = null;
+//            admin.cancelledReason='';
+//        }
+//    };
+//
+//    this.addAdmin();
     this.addEditForm = function (editDiv) {
         // first clear any old form from div
         editDiv.innerHTML = "";

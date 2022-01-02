@@ -9,11 +9,16 @@ ra.draftWalk = function (  ) {
     const isERROR = 'error';
     const isWarning = 'warning';
     const isInformation = 'warning';
-    this.status = "None";
+    //   this.status = "None";
     this.category = "None";
     this.loggedOn = false;
     this.displayWalk = true;
     this.data = {
+        admin: {version: '1.0',
+            created: new Date(),
+            updated: null,
+            status: 'Draft',
+            cancelledReason: ''},
         basics: {},
         meeting: {type: "undefined",
             locations: []
@@ -28,13 +33,12 @@ ra.draftWalk = function (  ) {
         }
     };
 
-
     this.buttons = {delete: null,
         edit: null,
         duplicate: null};
 
     this.init = function (status, category, loggedOn) {
-        this.status = status;
+        this.setWalkStatus(status);
         this.category = category;
         this.loggedOn = loggedOn;
     };
@@ -66,17 +70,10 @@ ra.draftWalk = function (  ) {
         }
 
     };
-    this.setStatus = function (status, reason) {
-        this.status = status;
-        if (status === "Cancelled") {
-            this.data.admin.cancelledReason = reason;
-        } else {
-            this.data.admin.cancelledReason = "";
-        }
-    };
+
     this.setDisplayWalk = function (filters) {
         this.displayWalk = false;
-        var status = "RA_Status_" + this.status;
+        var status = "RA_Status_" + this.getWalkStatus();
         if (!filters[status]) {
             return;
         }
@@ -175,7 +172,7 @@ ra.draftWalk = function (  ) {
         } else {
             cl.add("walk-issues");
         }
-        cl.add('status-' + this.status.replace(/ /g, "_"));
+        cl.add('status-' + this.getWalkStatusString());
         return;
     };
     this.getDisplayClasses = function () {
@@ -186,7 +183,7 @@ ra.draftWalk = function (  ) {
         } else {
             out += " walk-issues";
         }
-        out += ' status-' + this.status.replace(/ /g, "_");
+        out += ' status-' + this.getWalkStatusString();
         return out;
     };
     this.dateSet = function () {
@@ -418,8 +415,17 @@ ra.draftWalk = function (  ) {
 
     };
 
+    this.setWalkStatus = function (status, reason = '') {
+        this.data.admin.status = status;
+        if (status === "Cancelled") {
+            this.data.admin.cancelledReason = reason;
+        } 
+    };
     this.getWalkStatus = function () {
-        return this.status;
+        return this.data.admin.status;
+    };
+    this.getWalkStatusString = function () {
+        return  this.getWalkStatus().replace(/ /g, "_");
     };
     this.getWalkCategory = function () {
         return this.category;
@@ -629,7 +635,7 @@ ra.draftWalk = function (  ) {
     };
     this.getStatusCategory = function (delimiter, noCategories) {
         var notes = '';
-        notes += '[' + this.status + "]";
+        notes += '[' + this.getWalkStatus() + "]";
         if (noCategories > 1) {
             notes += delimiter + "[" + this.category + "]";
         }
@@ -815,9 +821,9 @@ ra.draftWalk = function (  ) {
         var PHP_EOL = "\n";
         var $html = "";
 
-        $html += "<div id='ramblers-details-buttons1' class='walkcontact'></div>" + PHP_EOL;
+        $html += "<div id='ramblers-details-buttons1' ></div>" + PHP_EOL;
         $html += "<div class='walkstdfulldetails stdfulldetails walk draft' >" + PHP_EOL;
-        $html += "<div class='group grade-m'><b>Preview of Walk - " + this.status + " </b></div>" + PHP_EOL;
+        $html += "<div class=\'group status-" + this.getWalkStatusString() + "'><b>Preview of Walk - " + this.getWalkStatus() + " </b></div>" + PHP_EOL;
 
         $html += "<div class='ra preview section'>" + PHP_EOL;
         $html += '<b>Basics:</b><br/>' + this.getWalkBasics('details');
@@ -855,10 +861,10 @@ ra.draftWalk = function (  ) {
         }
         $html += "</div>" + PHP_EOL;
 
-        $html += "<div id='ramblers-details-buttons2' class='walkcontact'></div>" + PHP_EOL;
+        $html += "<div id='ramblers-details-buttons2' ></div>" + PHP_EOL;
 
         //  $html += "</div>" + PHP_EOL;
-        $html += "<div id='ramblers-diagnostics' class='walkcontact'></div>" + PHP_EOL;
+        $html += "<div id='ramblers-diagnostics' ></div>" + PHP_EOL;
         return $html;
     };
     this._addMaptoWalk = function () {
