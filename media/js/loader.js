@@ -63,7 +63,7 @@ ra.walkseditor.editplace = function (options, data) {
 ra.walkseditor.editwalk = function (options, data) {
 
     this.data = data;
-    
+
     this.load = function () {
         var data = this.data;
         // data.editMode = true;
@@ -78,6 +78,13 @@ ra.walkseditor.editwalk = function (options, data) {
         var topOptions = document.createElement('div');
         topOptions.setAttribute('class', 'ra-edit-options');
         tag.appendChild(topOptions);
+        var topHelp = document.createElement('div');
+        topHelp.setAttribute('class', 'ra-edit-options');
+        topOptions.appendChild(topHelp);
+//        var topButtons = document.createElement('div');
+//        topButtons.setAttribute('class', 'ra-edit-options');
+//        topOptions.appendChild(topButtons);
+
         var clear = document.createElement('div');
         clear.setAttribute('class', 'clear');
         tag.appendChild(clear);
@@ -93,6 +100,10 @@ ra.walkseditor.editwalk = function (options, data) {
         var coptions = this.getElementOptions(this.data.fields.category);
         this.statusSelect = this.setElementOptions(topOptions, 'Status', soptions);
         this.categorySelect = this.setElementOptions(topOptions, 'Category', coptions);
+        if (coptions.items.length<2){
+            this.categorySelect.style.display='none';
+        }
+        new ra.help(topHelp, ra.walkseditor.help.editButtons).add();
         this.addButtons(topOptions);
         topOptions.appendChild(button);
         var draftwalk = this.data.walk;

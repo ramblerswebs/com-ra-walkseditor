@@ -129,15 +129,16 @@ ra.walks_editor.viewAllwalks = function (mapOptions, data) {
         }
     };
     this.displayDiagnostics = function (tag) {
-
-        var details = document.createElement('details');
-        tag.appendChild(details);
-        var summary = document.createElement('summary');
-        summary.textContent = "Diagnostics";
-        details.appendChild(summary);
-        var div = document.createElement('div');
-        details.appendChild(div);
-        div.innerHTML = "<pre>" + JSON.stringify(this.data.items, undefined, 4) + "</pre>";
+        if (this.loggedOn) {
+            var details = document.createElement('details');
+            tag.appendChild(details);
+            var summary = document.createElement('summary');
+            summary.textContent = "Diagnostics";
+            details.appendChild(summary);
+            var div = document.createElement('div');
+            details.appendChild(div);
+            div.innerHTML = "<pre>" + JSON.stringify(this.data.items, undefined, 4) + "</pre>";
+        }
     };
     this.removeRecordDisplay = function () {
         this.elements.gpxouter.innerHTML = '';
@@ -376,8 +377,8 @@ ra.walks_editor.viewAllwalks = function (mapOptions, data) {
             var th = document.createElement('th');
             th.innerHTML = col.name;
             if (typeof (col.sort) !== "undefined") {
-               // this.myjplist.sortButton(th, col.sort.colname, col.sort.type, "asc", "▲");
-               // this.myjplist.sortButton(th, col.sort.colname, col.sort.type, "desc", "▼");
+                // this.myjplist.sortButton(th, col.sort.colname, col.sort.type, "asc", "▲");
+                // this.myjplist.sortButton(th, col.sort.colname, col.sort.type, "desc", "▼");
             }
             tr.appendChild(th);
         }
@@ -409,7 +410,7 @@ ra.walks_editor.viewAllwalks = function (mapOptions, data) {
             var td = document.createElement('td');
             td.innerHTML = this.tableValue(walk, col.name);
             if (typeof (col.sort) !== "undefined") {
-              //  td.setAttribute('class', col.sort.colname);
+                //  td.setAttribute('class', col.sort.colname);
             }
             td.classList.add('pointer');
             td.addEventListener('click', function () {

@@ -209,17 +209,17 @@ ra.draftWalk = function (  ) {
         this._addMaptoWalk();
         this.addButtons(document.getElementById('ramblers-details-buttons1'));
         this.addButtons(document.getElementById('ramblers-details-buttons2'));
-
-        var tag = document.getElementById('ramblers-diagnostics');
-        var details = document.createElement('details');
-        tag.appendChild(details);
-        var summary = document.createElement('summary');
-        summary.textContent = "Diagnostics";
-        details.appendChild(summary);
-        var div = document.createElement('div');
-        details.appendChild(div);
-        div.innerHTML = "<pre>" + JSON.stringify(this.data, undefined, 4) + "</pre>";
-
+        if (this.loggedOn) {
+            var tag = document.getElementById('ramblers-diagnostics');
+            var details = document.createElement('details');
+            tag.appendChild(details);
+            var summary = document.createElement('summary');
+            summary.textContent = "Diagnostics";
+            details.appendChild(summary);
+            var div = document.createElement('div');
+            details.appendChild(div);
+            div.innerHTML = "<pre>" + JSON.stringify(this.data, undefined, 4) + "</pre>";
+        }
     };
 
     this.addButtons = function (tag) {
@@ -419,7 +419,7 @@ ra.draftWalk = function (  ) {
         this.data.admin.status = status;
         if (status === "Cancelled") {
             this.data.admin.cancelledReason = reason;
-        } 
+    }
     };
     this.getWalkStatus = function () {
         return this.data.admin.status;

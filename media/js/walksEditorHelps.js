@@ -7,6 +7,13 @@ if (typeof (ra) === "undefined") {
 }
 ra.walkseditor.help = (function () {
     var help = {};
+    help.editButtons=function(){
+        return '<h4>Status</h4><p>The walk can be defined as Draft, Awaiting Approval, Published or Cancelled. Which options you can see depends on your authority and if there are outstanding issues with the walk.</p>'+
+               '<h4>Category</h4><p>If this is shown then you are able to categorise the walk, using the categories defined by your group.</p>'+
+               '<h4>Save</h4><p>Save the walk and close the edit function</p>'+
+               '<h4>Cancel</h4><p>Close the edit function without saving, any changes will be lost</p>'+
+               '<h4>Preview</h4><p>Display a popup showing roughly how the walk would be displayed to the users, plus any outstanding issues</p>';
+    };
     help.locationPostcode = function () {
         return "Use this option if you wish to publish a postcode to aid walkers with their Satnav. <br/>The <b>Add</b> option will display postcodes nearest to the marker. <br/>Select the most appropriate postcode by clicking on it. <br/>NOTE: if you move the marker the postcode will be removed. ";
     };
