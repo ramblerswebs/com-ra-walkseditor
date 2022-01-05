@@ -738,7 +738,7 @@ ra.draftWalk = function (  ) {
         var lat;
         var lng;
         var date = this.getObjProperty(this.data, 'basics.date');
-        var title = this.getObjProperty(this.data, 'basics,title');
+        var title = this.getObjProperty(this.data, 'basics.title');
         var time = this.getObjProperty(this.data, 'start.location.time');
         var name = this.getObjProperty(this.data, 'start.location.name');
         var gr = this.getObjProperty(this.data, 'start.location.gridref8');
