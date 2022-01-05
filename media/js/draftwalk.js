@@ -105,6 +105,17 @@ ra.draftWalk = function (  ) {
             if (walkDate > filters.RA_DateEnd) {
                 return;
             }
+            var today = new Date().toISOString().slice(0, 10);
+            if (!filters.RA_DatePast) {
+                if (walkDate < today) {
+                    return;
+                }
+            }
+            if (!filters.RA_DateFuture) {
+                if (walkDate >= today) {
+                    return;
+                }
+            }
             var dow = this.dow();
             switch (dow) {
                 case "Monday":

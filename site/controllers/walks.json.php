@@ -12,9 +12,8 @@ class Ra_walkseditorControllerWalks extends JControllerLegacy {
 
     public function execute($task) {
         try {
-            $search = JFactory::getApplication()->input->get('search');
-            $search = strtolower($search);
-
+            //    $search = JFactory::getApplication()->input->get('search');
+            //    $search = strtolower($search);
             // Get a db connection.
             $db = JFactory::getDbo();
 
@@ -32,9 +31,14 @@ class Ra_walkseditorControllerWalks extends JControllerLegacy {
 // Load the results as a list of stdClass objects (see later for more options on retrieving data).
             $results = $db->loadObjectList();
             $walks = [];
-            foreach ($results as $key => $result) {
+            $today = date("Y-m-d");
+           
+            foreach ($results as $result) {
                 $walk = json_decode($result->content);
-                $walks[] = $walk;
+                if ($today < $result->date) {
+                      $walks[] = $walk;
+                }
+              
             }
             foreach ($walks as $walk) {
                 if (!property_exists($walk->basics, 'notes')) {
@@ -63,7 +67,7 @@ class Ra_walkseditorControllerWalks extends JControllerLegacy {
                 if (!property_exists($walk->contact, 'telephone2')) {
                     $walk->contact->telephone2 = '';
                 }
-                if (!property_exists($walk, 'notes')) {
+                if (property_exists($walk, 'notes')) {
                     unset($walk->notes);
                 }
             }

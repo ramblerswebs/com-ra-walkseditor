@@ -77,7 +77,7 @@ function walkeditor(walk) {
         // Contacts Section
 
         var contactDiv = document.createElement('details');
-        contactDiv.setAttribute('class', 'section contact');
+        contactDiv.setAttribute('class', 'section xcontact');
         contactDiv.setAttribute('open', true);
         form.appendChild(contactDiv);
 

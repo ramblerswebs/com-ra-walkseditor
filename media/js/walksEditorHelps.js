@@ -7,12 +7,14 @@ if (typeof (ra) === "undefined") {
 }
 ra.walkseditor.help = (function () {
     var help = {};
-    help.editButtons=function(){
-        return '<h4>Status</h4><p>The walk can be defined as Draft, Awaiting Approval, Published or Cancelled. Which options you can see depends on your authority and if there are outstanding issues with the walk.</p>'+
-               '<h4>Category</h4><p>If this is shown then you are able to categorise the walk, using the categories defined by your group.</p>'+
-               '<h4>Save</h4><p>Save the walk and close the edit function</p>'+
-               '<h4>Cancel</h4><p>Close the edit function without saving, any changes will be lost</p>'+
-               '<h4>Preview</h4><p>Display a popup showing roughly how the walk would be displayed to the users, plus any outstanding issues</p>';
+    help.editButtons = function () {
+        return '<h4>Status</h4><p>The walk can be defined as Draft, Awaiting Approval, Published or Cancelled. Which options you can see depends on your authority and if there are outstanding issues with the walk.</p>' +
+                'Published and Cancelled walks are viewable by the public and are displayed within the Group\'s walks programme' +
+                '<h4>Category</h4><p>If this is shown then you are able to categorise the walk, using the categories defined by your group.</p>' +
+                '<h4>Save</h4><p>Save the walk and close the edit function</p>' +
+                '<h4>Cancel</h4><p>Close the edit function without saving, any changes will be lost</p>' +
+               '<p><b>Note: Failing to either Save or Close the walk may result in locking others from editing the walk</b></p>' +
+                '<h4>Preview</h4><p>Display a popup showing roughly how the walk would be displayed to the users, plus any outstanding issues</p>';
     };
     help.locationPostcode = function () {
         return "Use this option if you wish to publish a postcode to aid walkers with their Satnav. <br/>The <b>Add</b> option will display postcodes nearest to the marker. <br/>Select the most appropriate postcode by clicking on it. <br/>NOTE: if you move the marker the postcode will be removed. ";
@@ -21,7 +23,7 @@ ra.walkseditor.help = (function () {
         return "This option displays Meeting / Start locations that have been used by Ramblers Groups in the past.<br/>It displays a number of locations around the position of the marker. <br/>Some of these may help you locate a suitable location.";
     };
     help.locationSearch = function () {
-        return "You can find the location on the map by entering an OS Grid Reference, of any length, a post code or a road or place name with the town or county. You may qualify a road or place name e.g. Bulls Head, Foolow or London Road, Derby. You may also specify a location using What3Words, e.g for the summit of Snowden ///super.ultra.enhancement";
+        return "You can find a location, and move the marker, on the map by entering<ul><li>an OS Grid Reference, of any length</li><li>a post code</li><li>a road or place name with the town or county You may qualify a road or place name e.g. Bulls Head, Foolow or London Road, Derby. </li><li>You may also specify a location using What3Words, e.g for the summit of Snowden ///super.ultra.enhancement</li></ul>";
     };
     help.basicDate = function () {
         return "Type in Date in dd/mm/yyyy format or click icon and select date from calendar that comes up";
@@ -51,8 +53,8 @@ ra.walkseditor.help = (function () {
         return "meet predefined";
     };
     help.meetName = function () {
-          return "Type in name or general description of meeting place to aid people finding it, e.g. Darley Park Drive cp<br/>You must also specfy the location on the map by positioning the marker on the map";
-   };
+        return "Type in name or general description of meeting place to aid people finding it, e.g. Darley Park Drive cp<br/>You must also specfy the location on the map by positioning the marker on the map";
+    };
     help.areaTime = function () {
         return "As you have decided to just publish the general area of the walk you may not wish to say the exact time the walk starts. However there are cases when you may wish to let people know when the walk starts but not exactly where, In that case type in start time or click icon to select from drop down";
     };

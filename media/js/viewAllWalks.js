@@ -463,143 +463,144 @@ ra.walks_editor.viewAllwalks = function (mapOptions, data) {
         }
         return 'unknown';
     };
-    this.displayWalk = function ($walk) {
-        var $display = true;
-        switch ($walk.dayofweek) {
-            case "Monday":
-                $display = this.settings.filter.RA_DayOfWeek_0;
-                this.resetDisplay("RA_DayOfWeek_0");
-                break;
-            case "Tuesday":
-                $display = this.settings.filter.RA_DayOfWeek_1;
-                this.resetDisplay("RA_DayOfWeek_1");
-                break;
-            case "Wednesday":
-                $display = this.settings.filter.RA_DayOfWeek_2;
-                this.resetDisplay("RA_DayOfWeek_2");
-                break;
-            case "Thursday":
-                $display = this.settings.filter.RA_DayOfWeek_3;
-                this.resetDisplay("RA_DayOfWeek_3");
-                break;
-            case "Friday":
-                $display = this.settings.filter.RA_DayOfWeek_4;
-                this.resetDisplay("RA_DayOfWeek_4");
-                break;
-            case "Saturday":
-                $display = this.settings.filter.RA_DayOfWeek_5;
-                this.resetDisplay("RA_DayOfWeek_5");
-                break;
-            case "Sunday":
-                $display = this.settings.filter.RA_DayOfWeek_6;
-                this.resetDisplay("RA_DayOfWeek_6");
-                break;
-            default:
-                break;
-        }
-        if (!$display) {
-            return false;
-        }
-        switch ($walk.nationalGrade) {
-            case "Easy Access":
-                $display = this.settings.filter.RA_Diff_ea;
-                this.resetDisplay("RA_Diff_ea");
-                break;
-            case "Easy":
-                $display = this.settings.filter.RA_Diff_e;
-                this.resetDisplay("RA_Diff_e");
-                break;
-            case "Leisurely":
-                $display = this.settings.filter.RA_Diff_l;
-                this.resetDisplay("RA_Diff_l");
-                break;
-            case "Moderate":
-                $display = this.settings.filter.RA_Diff_m;
-                this.resetDisplay("RA_Diff_m");
-                break;
-            case "Strenuous":
-                $display = this.settings.filter.RA_Diff_s;
-                this.resetDisplay("RA_Diff_s");
-                break;
-            case "Technical":
-                $display = this.settings.filter.RA_Diff_t;
-                this.resetDisplay("RA_Diff_t");
-                break;
-            default:
-                break;
-        }
-        if (!$display) {
-            return false;
-        }
-        var dist = Math.ceil($walk.distanceMiles);
-        switch (dist) {
-            case 0:
-            case 1:
-            case 2:
-            case 3:
-                $display = this.settings.filter.RA_Dist_0;
-                this.resetDisplay("RA_Dist_0");
-                break;
-            case 4:
-            case 5:
-                $display = this.settings.filter.RA_Dist_1;
-                this.resetDisplay("RA_Dist_1");
-                break;
-            case 6:
-            case 7:
-            case 8:
-                $display = this.settings.filter.RA_Dist_2;
-                this.resetDisplay("RA_Dist_2");
-                break;
-            case 9:
-            case 10:
-                $display = this.settings.filter.RA_Dist_3;
-                this.resetDisplay("RA_Dist_3");
-                break;
-            case 11:
-            case 12:
-            case 13:
-                $display = this.settings.filter.RA_Dist_4;
-                this.resetDisplay("RA_Dist_4");
-                break;
-            case 14:
-            case 15:
-                $display = this.settings.filter.RA_Dist_5;
-                this.resetDisplay("RA_Dist_5");
-                break;
-            default:
-                $display = this.settings.filter.RA_Dist_6;
-                this.resetDisplay("RA_Dist_6");
-                break;
-        }
-        if (!$display) {
-            return false;
-        }
-        $display = this.settings.filter[$walk.groupCode];
-        if (!$display) {
-            return false;
-        }
-        var d1 = $walk.walkDate.substring(0, 10);
-        var d = this.settings.filter["RA_DateStart"];
-        if (d !== "") {
-            $display = d1 >= d;
-        }
-        if (!$display) {
-            return false;
-        }
-        var d = this.settings.filter["RA_DateEnd"];
-        if (d !== "") {
-            $display = d1 <= d;
-        }
-        if (this.settings.filter.updated > 0) {
-            $display = $walk.updatedDays < this.settings.filter.updated;
-        }
-        if (!$display) {
-            return false;
-        }
-
-        return $display;
-    };
+//    this.displayWalk = function ($walk) {
+//        var $display = true;
+//        switch ($walk.dayofweek) {
+//            case "Monday":
+//                $display = this.settings.filter.RA_DayOfWeek_0;
+//                this.resetDisplay("RA_DayOfWeek_0");
+//                break;
+//            case "Tuesday":
+//                $display = this.settings.filter.RA_DayOfWeek_1;
+//                this.resetDisplay("RA_DayOfWeek_1");
+//                break;
+//            case "Wednesday":
+//                $display = this.settings.filter.RA_DayOfWeek_2;
+//                this.resetDisplay("RA_DayOfWeek_2");
+//                break;
+//            case "Thursday":
+//                $display = this.settings.filter.RA_DayOfWeek_3;
+//                this.resetDisplay("RA_DayOfWeek_3");
+//                break;
+//            case "Friday":
+//                $display = this.settings.filter.RA_DayOfWeek_4;
+//                this.resetDisplay("RA_DayOfWeek_4");
+//                break;
+//            case "Saturday":
+//                $display = this.settings.filter.RA_DayOfWeek_5;
+//                this.resetDisplay("RA_DayOfWeek_5");
+//                break;
+//            case "Sunday":
+//                $display = this.settings.filter.RA_DayOfWeek_6;
+//                this.resetDisplay("RA_DayOfWeek_6");
+//                break;
+//            default:
+//                break;
+//        }
+//        if (!$display) {
+//            return false;
+//        }
+//        switch ($walk.nationalGrade) {
+//            case "Easy Access":
+//                $display = this.settings.filter.RA_Diff_ea;
+//                this.resetDisplay("RA_Diff_ea");
+//                break;
+//            case "Easy":
+//                $display = this.settings.filter.RA_Diff_e;
+//                this.resetDisplay("RA_Diff_e");
+//                break;
+//            case "Leisurely":
+//                $display = this.settings.filter.RA_Diff_l;
+//                this.resetDisplay("RA_Diff_l");
+//                break;
+//            case "Moderate":
+//                $display = this.settings.filter.RA_Diff_m;
+//                this.resetDisplay("RA_Diff_m");
+//                break;
+//            case "Strenuous":
+//                $display = this.settings.filter.RA_Diff_s;
+//                this.resetDisplay("RA_Diff_s");
+//                break;
+//            case "Technical":
+//                $display = this.settings.filter.RA_Diff_t;
+//                this.resetDisplay("RA_Diff_t");
+//                break;
+//            default:
+//                break;
+//        }
+//        if (!$display) {
+//            return false;
+//        }
+//        var dist = Math.ceil($walk.distanceMiles);
+//        switch (dist) {
+//            case 0:
+//            case 1:
+//            case 2:
+//            case 3:
+//                $display = this.settings.filter.RA_Dist_0;
+//                this.resetDisplay("RA_Dist_0");
+//                break;
+//            case 4:
+//            case 5:
+//                $display = this.settings.filter.RA_Dist_1;
+//                this.resetDisplay("RA_Dist_1");
+//                break;
+//            case 6:
+//            case 7:
+//            case 8:
+//                $display = this.settings.filter.RA_Dist_2;
+//                this.resetDisplay("RA_Dist_2");
+//                break;
+//            case 9:
+//            case 10:
+//                $display = this.settings.filter.RA_Dist_3;
+//                this.resetDisplay("RA_Dist_3");
+//                break;
+//            case 11:
+//            case 12:
+//            case 13:
+//                $display = this.settings.filter.RA_Dist_4;
+//                this.resetDisplay("RA_Dist_4");
+//                break;
+//            case 14:
+//            case 15:
+//                $display = this.settings.filter.RA_Dist_5;
+//                this.resetDisplay("RA_Dist_5");
+//                break;
+//            default:
+//                $display = this.settings.filter.RA_Dist_6;
+//                this.resetDisplay("RA_Dist_6");
+//                break;
+//        }
+//        if (!$display) {
+//            return false;
+//        }
+//        $display = this.settings.filter[$walk.groupCode];
+//        if (!$display) {
+//            return false;
+//        }
+//        var d1 = $walk.walkDate.substring(0, 10);
+//        var d = this.settings.filter["RA_DateStart"];
+//        if (d !== "") {
+//            $display = d1 >= d;
+//        }
+//        if (!$display) {
+//            return false;
+//        }
+//        var d = this.settings.filter["RA_DateEnd"];
+//        if (d !== "") {
+//            $display = d1 <= d;
+//        }
+//        if (this.settings.filter.updated > 0) {
+//            $display = $walk.updatedDays < this.settings.filter.updated;
+//        }
+//        if (!$display) {
+//            return false;
+//        }
+//        
+//
+//        return $display;
+//    };
 
     this.setFilters = function (items) {
         if (items.length === 0) {
@@ -612,6 +613,7 @@ ra.walks_editor.viewAllwalks = function (mapOptions, data) {
         filter.setFilterGroup(result.issues);
         filter.setFilterGroup(result.editorNotes);
         filter.setFilterGroup(result.dates, true);
+        filter.setFilterGroup(result.timeSpan);
         filter.setFilterGroup(result.dow);
         filter.setFilterGroup(result.dateSet);
 
@@ -626,7 +628,8 @@ ra.walks_editor.viewAllwalks = function (mapOptions, data) {
             filter.addFilter(div, 'Category', result.category);
             filter.addFilter(div, 'Issues', result.issues);
             filter.addFilter(div, 'Dates', result.dates, true, true);
-            filter.addFilter(div, 'Date Set', result.dateSet);
+            filter.addFilter(div, 'Past/Future', result.timeSpan);
+             filter.addFilter(div, 'Date Set', result.dateSet);
             filter.addFilter(div, 'Day of the Week', result.dow);
             filter.addFilter(div, 'Editor notes', result.editorNotes);
 
@@ -642,7 +645,8 @@ ra.walks_editor.viewAllwalks = function (mapOptions, data) {
                 NotSet: {no: 0, name: 'Not Set ', id: 'RA_DateNotSet'}},
             dates: {min: {no: '9999-99-99', name: 'Start', id: 'RA_DateStart'},
                 max: {no: '0000-00-00', name: 'End ', id: 'RA_DateEnd'}},
-
+            timeSpan: {past: {no: 0, name: 'Past', id: 'RA_DatePast'},
+                future: {no: 0, name: 'Future', id: 'RA_DateFuture'}},
             dow: {Monday: {no: 0, name: 'Monday', id: 'RA_DayOfWeek_0'},
                 Tuesday: {no: 0, name: 'Tuesday', id: 'RA_DayOfWeek_1'},
                 Wednesday: {no: 0, name: 'Wednesday', id: 'RA_DayOfWeek_2'},
@@ -678,6 +682,7 @@ ra.walks_editor.viewAllwalks = function (mapOptions, data) {
             result.category[category].no += 1;
 
             var basics = walk.basics;
+            var today=new Date().toISOString().slice(0, 10);
             if (basics.hasOwnProperty('date')) {
                 var dayofweek = ra.date.dow(basics.date);
                 result.dow[dayofweek].no += 1;
@@ -689,9 +694,16 @@ ra.walks_editor.viewAllwalks = function (mapOptions, data) {
                 if (yyyymmdd > result.dates.max.no) {
                     result.dates.max.no = yyyymmdd;
                 }
+                if (yyyymmdd>today){
+                     result.timeSpan.future.no+=1;
+                }else{
+                    result.timeSpan.past.no+=1;
+                }
+                
+              
             } else {
                 result.dateSet.NotSet.no += 1;
-            }
+                            }
             var no = items[i].walk.getNoWalkIssues();
             if (no === 0) {
                 result.issues.None.no += 1;

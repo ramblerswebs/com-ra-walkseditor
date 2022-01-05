@@ -110,6 +110,8 @@ function mapLocationInput(tag, raobject, location) { // constructor function
         right.style.width = '70%';
         tr.appendChild(right);
         var mapoptions = Object.assign({}, ra.defaultMapOptions);
+        mapoptions.mouseposition = true;
+        mapoptions.maptools = true;
         mapoptions.mapHeight = "400px";
         this.lmap = new leafletMap(right, mapoptions);
         this.map = this.lmap.map;
@@ -274,6 +276,9 @@ function mapLocationInput(tag, raobject, location) { // constructor function
                 alert("You must position marker before adding postcode");
             }
         });
+        document.addEventListener("postcodes-loaded", function (e) {
+            ra.map.zoomLayer(_this.map, _this.postcodeLayer);
+        });
         return button;
     };
     this.deletePostcodeButton = function (tag) {
@@ -332,13 +337,12 @@ function mapLocationInput(tag, raobject, location) { // constructor function
 
                         });
                     }
-
                     );
-
+                    let event = new Event("postcodes-loaded", {bubbles: true}); // 
+                    event.raData = {};
+                    event.raData.layer = _this.postcodeLayer;
+                    document.dispatchEvent(event);
                 }
-                setTimeout(function () {
-                    ra.map.zoomLayer(_this.map, _this.postcodeLayer);
-                }, 1000);
             }
         });
     };
@@ -349,15 +353,16 @@ function mapLocationInput(tag, raobject, location) { // constructor function
         button.innerHTML = "Display";
         tag.appendChild(button);
         var _this = this;
+        document.addEventListener("start-places-loaded", function (e) {
+            ra.map.zoomLayer(_this.map, _this.placesLayer);
+        });
         button.addEventListener("click", function (e) {
             _this.placesLayer.clearLayers();
             if (_this.raobject.isLatLongSet) {
                 //  alert("The nearest places used by Ramblers' Groups will be displayed");
                 var latlng = new LatLon(_this.raobject.latitude, _this.raobject.longitude);
                 ra.map.displayStartingPlaces(latlng, _this.placesLayer, 20, 30);
-                setTimeout(function () {
-                    ra.map.zoomLayer(_this.map, _this.placesLayer);
-                }, 1000);
+
 
             } else {
                 alert("Marker position not set");
