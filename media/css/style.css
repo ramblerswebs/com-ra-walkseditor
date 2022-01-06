@@ -101,6 +101,9 @@ button.ra-button{
     border-radius:10px;
     border-width: 0px;
 }
+button.ra-button:hover{
+    background-color: var(--sunrise);
+}
 button.actionbutton {
     background-color: var(--mintCake);
     color:#FFFFFF;
@@ -165,10 +168,6 @@ select.gwem {
     /*  box-shadow: 1px 1px 11px #330033;*/
     background: var(--sunset);
     margin-bottom: 4px;
-}
-
-select.gwemXXX option:hover {
-    background: var(--sunrise);
 }
 
 input.gwem {
@@ -414,6 +413,13 @@ details[open].section > summary {
 .status-Cancelled {
     background-color:  var(--mintCake)!important;
     border-color:  var(--mintCake)!important;
+}
+.status-Draft:hover,
+.status-Awaiting_Approval:hover,
+.status-Published:hover,
+.status-Cancelled:hover {
+    background-color:  var(--sunrise)!important;
+    border-color:  var(--sunrise)!important;
 }
 
 .status-Cancelled {

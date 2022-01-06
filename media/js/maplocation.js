@@ -201,6 +201,7 @@ function mapLocationInput(tag, raobject, location) { // constructor function
         }
         var _this = this;
         var marker = L.marker([lat, long], {draggable: true, icon: icon}).addTo(this.layer);
+        this.map.panTo([lat, long],{animate:true});
         marker.addEventListener('dragend', function (e) {
             let event = new Event("marker-moved", {bubbles: true}); // (2)
             event.ra = {};
