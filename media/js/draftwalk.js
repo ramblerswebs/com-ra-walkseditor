@@ -49,26 +49,32 @@ ra.draftWalk = function (  ) {
         this.buttons = value;
     };
     this.createFromJson = function (json) {
-        var data = JSON.parse(json);
-        if (typeof data.basics !== 'undefined') {
-            this.data.basics = data.basics;
-        }
-        if (typeof data.meeting !== 'undefined') {
-            this.data.meeting = data.meeting;
-        }
-        if (typeof data.start !== 'undefined') {
-            this.data.start = data.start;
-        }
-        if (typeof data.walks !== 'undefined') {
-            this.data.walks = data.walks;
-        }
-        if (typeof data.contact !== 'undefined') {
-            this.data.contact = data.contact;
-        }
-        if (typeof data.notes !== 'undefined') {
-            this.data.notes = data.notes;
-        }
+        var data;
+        try {
+            data = JSON.parse(json);
+            if (typeof data.basics !== 'undefined') {
+                this.data.basics = data.basics;
+            }
+            if (typeof data.meeting !== 'undefined') {
+                this.data.meeting = data.meeting;
+            }
+            if (typeof data.start !== 'undefined') {
+                this.data.start = data.start;
+            }
+            if (typeof data.walks !== 'undefined') {
+                this.data.walks = data.walks;
+            }
+            if (typeof data.contact !== 'undefined') {
+                this.data.contact = data.contact;
+            }
+            if (typeof data.notes !== 'undefined') {
+                this.data.notes = data.notes;
+            }
 
+        } catch (err) {
+            alert('Cannot process walk (json=' + json + ' )');
+        }
+      
     };
 
     this.setDisplayWalk = function (filters) {
@@ -281,6 +287,9 @@ ra.draftWalk = function (  ) {
         if (this.getObjProperty(walk, 'basics.description') === null) {
             this.notificationMsg("Information; No walk description found", isWarning);
         }
+        if (this.getObjProperty(walk, 'basics.description') === '') {
+            this.notificationMsg("Information; No walk description found", isWarning);
+        }
     };
     this.checkFieldsMeeting = function () {
         var walk = this.data;
@@ -400,13 +409,13 @@ ra.draftWalk = function (  ) {
     };
 
 
-    this.getObjProperty = function (obj, path) {
+    this.getObjProperty = function (obj, path, defaultvalue = null) {
         // call getObj("basics.date");
         if (typeof obj === 'undefined') {
-            return null;
+            return defaultvalue;
         }
         if (obj === null) {
-            return null;
+            return defaultvalue;
         }
         var property;
         var result = null;
@@ -418,7 +427,7 @@ ra.draftWalk = function (  ) {
                 result = item;
                 item = item[property];
             } else {
-                return null;
+                return defaultvalue;
 
             }
         }
@@ -502,54 +511,55 @@ ra.draftWalk = function (  ) {
 
         var meets = this.getObjProperty(this.data, 'meeting.locations');
         meets.forEach(element => {
-            var time = this.getObjProperty(element, 'time');
-            var name = this.getObjProperty(element, 'name');
-            var gr = this.getObjProperty(element, 'gridref8');
+            var time = this.getObjProperty(element, 'time', '????');
+            var name = this.getObjProperty(element, 'name', '????');
+            var gr = this.getObjProperty(element, 'gridref8', '????');
+            var pc = this.getObjProperty(element, 'postcode.value', '');
             switch (view) {
                 case 'table':
-                    out += '<br/>' + time + ' at ' + name + ' GR: ' + gr;
+                    out += '<br/>' + time + ' at ' + name + ' (' + gr + ' ' + pc + ')';
                     break;
                 case 'list':
-                    out += ', ' + time + ' at ' + name + ' GR: ' + gr;
+                    out += ', ' + time + ' at ' + name + ' (' + gr + ' ' + pc + ')';
                     break;
                 case 'details':
-                    out += '<br/>' + time + ' at ' + name + ' GR: ' + gr;
+                    out += '<br/>' + time + ' at ' + name + ' (' + gr + ' ' + pc + ')';
                     break;
             }
         });
-        return out.replaceAll('null', '????');
+        return out;
     };
     this.getWalkStart = function (view) {
         var type = this.getObjProperty(this.data, 'start.type');
         var out = "";
         switch (type) {
             case 'start':
-                var time = this.getObjProperty(this.data, 'start.location.time');
-                var name = this.getObjProperty(this.data, 'start.location.name');
-                var gr = this.getObjProperty(this.data, 'start.location.gridref8');
-
+                var time = this.getObjProperty(this.data, 'start.location.time', '????');
+                var name = this.getObjProperty(this.data, 'start.location.name', '????');
+                var gr = this.getObjProperty(this.data, 'start.location.gridref8', '????');
+                var pc = this.getObjProperty(this.data, 'postcode.value', '');
                 switch (view) {
                     case 'table':
                         out += time;
                         out += " at " + name;
-                        out += ", " + gr;
+                        out += ", " + gr + ' ' + pc;
                         break;
                     case 'list':
                         out += time;
                         out += " at " + name;
-                        out += ", " + gr;
+                        out += ", " + gr + ' ' + pc;
                         break;
                     case 'details':
                         out += 'Start: ';
                         out += time;
                         out += " at " + name;
-                        out += "</br/>Grid Ref " + gr;
+                        out += "</br/>Grid Ref " + gr + ' ' + pc;
                         break;
                 }
                 break;
             case 'area':
-                var name = this.getObjProperty(this.data, 'start.location.name');
-                var gr = this.getObjProperty(this.data, 'start.location.gridref8');
+                var name = this.getObjProperty(this.data, 'start.location.name', '????');
+                var gr = this.getObjProperty(this.data, 'start.location.gridref8', '????');
                 switch (view) {
                     case 'table':
                         out += 'General Area: ';
@@ -571,7 +581,7 @@ ra.draftWalk = function (  ) {
             default:
                 out = "????";
         }
-        return out.replaceAll('null', '????');
+        return out;
     };
     this.getWalkTitle = function (view = 'default') {
         var d = this.getObjProperty(this.data, 'basics.title');
@@ -789,9 +799,7 @@ ra.draftWalk = function (  ) {
         cluster.addMarker(popup, lat, lng, {icon: icon, title: title, riseOnHover: true});
     };
 
-//    this.displayPreview = function (tag, walks) {
-//        // var command = "ra.display.walksTabs";
-//    };
+
     this.hasEditorNotes = function () {
         var notes = this.getObjProperty(this.data, 'notes.comments');
         if (notes !== null) {
@@ -910,11 +918,22 @@ ra.draftWalk = function (  ) {
                     var gr = this.getObjProperty(element, 'gridref8');
                     var lat = this.getObjProperty(element, 'latitude');
                     var long = this.getObjProperty(element, 'longitude');
+                    var pc = this.getObjProperty(element, 'postcode.value', null);
+                    var pcLat = this.getObjProperty(element, 'postcode.latitude');
+                    var pcLng = this.getObjProperty(element, 'postcode.longitude');
 
                     out += time + ' at ' + name + ' GR: ' + gr;
                     if (lat !== null && long !== null) {
                         L.marker([lat, long]).addTo(layer);
                         points += 1;
+                        if (pc !== null) {
+                            ra.map.addPostcodeIcon(pc, [pcLat, pcLng], layer);
+//                            var icon = L.icon({
+//                                iconUrl: ra.baseDirectory() + "media/com_ra_walkseditor/css/postcode-icon.png"
+//                            });
+//                            L.marker([pcLat, pcLng], {icon: icon}).addTo(layer);
+
+                        }
                     }
                 });
             }

@@ -119,6 +119,12 @@ function mapLocationInput(tag, raobject, location) { // constructor function
         this.postcodeLayer = L.featureGroup().addTo(this.map);
         this.placesLayer = L.featureGroup().addTo(this.map);
 
+        if (this.raobject.hasOwnProperty('postcode')) {
+            var pc = this.raobject.postcode.value;
+            var pcLat = this.raobject.postcode.latitude;
+            var pcLng = this.raobject.postcode.longitude;
+            ra.map.addPostcodeIcon(pc, [pcLat, pcLng], this.postcodeLayer);
+        }
         this.updateMapMarker();
         tag.addEventListener('toggle', function () {
             _this.map.invalidateSize();
@@ -201,7 +207,7 @@ function mapLocationInput(tag, raobject, location) { // constructor function
         }
         var _this = this;
         var marker = L.marker([lat, long], {draggable: true, icon: icon}).addTo(this.layer);
-        this.map.panTo([lat, long],{animate:true});
+        this.map.panTo([lat, long], {animate: true});
         marker.addEventListener('dragend', function (e) {
             let event = new Event("marker-moved", {bubbles: true}); // (2)
             event.ra = {};
@@ -316,10 +322,11 @@ function mapLocationInput(tag, raobject, location) { // constructor function
                     pcs.forEach(function (pc) {
                         var gr = new OsGridRef(pc.Easting, pc.Northing);
                         var latlong = OsGridRef.osGridToLatLon(gr);
-                        var icon = L.icon({
-                            iconUrl: ra.baseDirectory() + "media/com_ra_walkseditor/css/postcode-icon.png"
-                        });
-                        var marker = L.marker([latlong.lat, latlong.lon], {icon: icon}).addTo(_this.postcodeLayer);
+//                        var icon = L.icon({
+//                            iconUrl: ra.baseDirectory() + "media/com_ra_walkseditor/css/postcode-icon.png"
+//                        });
+//                        var marker = L.marker([latlong.lat, latlong.lon], {icon: icon}).addTo(_this.postcodeLayer);
+                        var marker = ra.map.addPostcodeIcon(pc.Postcode, [latlong.lat, latlong.lon], _this.postcodeLayer);
                         marker.ra = {};
                         marker.ra.postcode = pc.Postcode.replace(/  /g, " ");
                         marker.ra.latlong = latlong;
