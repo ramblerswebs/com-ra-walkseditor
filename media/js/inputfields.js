@@ -102,13 +102,11 @@ function raInputFields() {
         quill.on('text-change', function (delta, oldDelta, source) {
             raobject[property] = quill.root.innerHTML;
         });
-//        container.addEventListener("change", function (e) {
-//            raobject[e.target.raproperty] = quill.getContents();
-//        });
-//        inputTag.addEventListener("change", function (e) {
-//            e.target.raobject[e.target.raproperty] =  quill.getContents();
-//        });
-
+        quill.clipboard.addMatcher(Node.ELEMENT_NODE, function (node, delta) {
+            var plaintext = node.innerText;
+            var Delta = Quill.import('delta');
+            return new Delta().insert(plaintext);
+        });
         return inputTag;
     };
     this.addQuill = function (container) {
