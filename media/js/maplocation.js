@@ -316,16 +316,12 @@ function mapLocationInput(tag, raobject, location) { // constructor function
         var url = "https://postcodes.theramblers.org.uk/index.php?easting=" + east + "&northing=" + north + "&dist=20&maxpoints=20";
         ra.ajax.getJSON(url, function (err, pcs) {
             if (err !== null) {
-
+                alert('Sorry something went wrong fetching the postcode, error:' + err);
             } else {
                 if (pcs.length !== 0) {
                     pcs.forEach(function (pc) {
                         var gr = new OsGridRef(pc.Easting, pc.Northing);
                         var latlong = OsGridRef.osGridToLatLon(gr);
-//                        var icon = L.icon({
-//                            iconUrl: ra.baseDirectory() + "media/com_ra_walkseditor/css/postcode-icon.png"
-//                        });
-//                        var marker = L.marker([latlong.lat, latlong.lon], {icon: icon}).addTo(_this.postcodeLayer);
                         var marker = ra.map.addPostcodeIcon(pc.Postcode, [latlong.lat, latlong.lon], _this.postcodeLayer);
                         marker.ra = {};
                         marker.ra.postcode = pc.Postcode.replace(/  /g, " ");
@@ -370,8 +366,6 @@ function mapLocationInput(tag, raobject, location) { // constructor function
                 //  alert("The nearest places used by Ramblers' Groups will be displayed");
                 var latlng = new LatLon(_this.raobject.latitude, _this.raobject.longitude);
                 ra.map.displayStartingPlaces(latlng, _this.placesLayer, 20, 30);
-
-
             } else {
                 alert("Marker position not set");
             }

@@ -67,7 +67,9 @@ $walkdate = $app->getUserState('com_ra_walkseditor.edit.walk.date');
             <?php echo $this->form->getInput('created_by'); ?>
             <?php echo $this->form->getInput('modified_by'); ?>
             <div style="display:none">
-                <?php echo $this->form->renderField('date'); ?>
+                <?php 
+                echo $this->form->renderField('date');
+                ?>
                 <?php echo $this->form->renderField('content'); ?>
 
                 <?php echo $this->form->renderField('category'); ?>

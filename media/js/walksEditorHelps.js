@@ -17,7 +17,7 @@ ra.walkseditor.help = (function () {
                 '<h4>Preview</h4><p>Display a popup showing roughly how the walk would be displayed to the users, plus any outstanding issues</p>';
     };
     help.locationPostcode = function () {
-        return "Use this option if you wish to publish a postcode to aid walkers with their Satnav. <br/>The <b>Add</b> option will display postcodes nearest to the marker. <br/>Select the most appropriate postcode by clicking on it. <br/>NOTE: if you move the marker the postcode will be removed. ";
+        return "Use this option if you wish to publish a postcode to aid walkers with their Satnav. <br/>The <b>Add</b> option will display postcodes nearest to the marker. <br/>NOTE: the postcodes may take a few seconds to appear<br/>Select the most appropriate postcode by clicking on it. <br/>NOTE: if you move the marker the postcode will be removed. ";
     };
     help.locationStart = function () {
         return "This option displays Meeting / Start locations that have been used by Ramblers Groups in the past.<br/>It displays a number of locations around the position of the marker. <br/>Some of these may help you locate a suitable location.";
@@ -44,7 +44,7 @@ ra.walkseditor.help = (function () {
                 "<br/>It can also be used to contain extra data the group wish to display on their site against a walk. In this case it can be included in the table or list views of the walks. The web master would need to have customised the table and list views.";
     };
     help.meetType = function () {
-        return "Select from drop down";
+        return "Select from drop down<br/>Specify the option that best describes your walk, remember you also have the option of specifying either the start of the walk, where you put your boots on and walk or the general area for the walk.<br/>Use the later if you do not wish walkers to travel directly to the start or they need to contact the group to do this. ";
     };
     help.meetTime = function () {
         return "Type in meeting time or click icon to select from drop down";
@@ -59,7 +59,7 @@ ra.walkseditor.help = (function () {
         return "As you have decided to just publish the general area of the walk you may not wish to say the exact time the walk starts. However there are cases when you may wish to let people know when the walk starts but not exactly where, In that case type in start time or click icon to select from drop down";
     };
     help.startType = function () {
-        return "Select whether the start will be published as a specific location in which case walkers can travel independently to the start of the walk or just a general area for the walk in which case anyone wanting to go to start will need to contact the walk organiser / leader for more details";
+        return "Select whether the start will be published as a specific location in which case walkers can travel independently to the start of the walk or just a general area for the walk in which case anyone wanting to go to start will need to contact the walk organiser / leader for more details<br/>If you meet up and travel to the start of the walk together, then specify this using the Meeting option";
     };
     help.startName = function () {
         return "Type in name or general description of start place to aid people finding it,e.g. Ladybower Visitors Centre<br/> You must also specfy the location on the map by positioning the marker on the map";
@@ -110,10 +110,10 @@ ra.walkseditor.help = (function () {
         return "Enter alternative telephone number of contact (optional)";
     };
     help.contactType = function () {
-        return "Choose from drop down menu";
+        return "Choose from drop down menu<br/>If the contact is not the leader then you can optionally specify who the leader is under the Walk section (distance, grade etc)";
     };
     help.contactPredefined = function () {
-        return "Click to load and select a contact that has been pre-defined on the system";
+        return "Click to search for a contact that has been saved on the system";
     };
     help.editorNotes = function () {
         return "You may record any future changes that will be required or additional information required, before the walk can be published";

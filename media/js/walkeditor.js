@@ -403,7 +403,7 @@ function walkeditor(walk) {
         }
         var options = {
             undefined: "Please Select...",
-            isLeader: "Yes they are the Leader",
+            isLeader: "Yes - they are the Leader",
             isNotLeader: "No - not the leader"
         };
         if (!this.walk.hasOwnProperty('contact')) {
@@ -413,12 +413,12 @@ function walkeditor(walk) {
         var input = new raInputFields;
         var itemDiv = input.itemsItemDivs(tag);
         //  selectContactItem(itemDiv, contact);
-        this._displayName = input.addText(itemDiv, 'name', "Display Name:", contact, 'displayName', '', ra.walkseditor.help.contactName);
+        input.addPredefinedContactButton(itemDiv, contact, ra.walkseditor.help.contactPredefined);        this._displayName = input.addText(itemDiv, 'name', "Display Name:", contact, 'displayName', '', ra.walkseditor.help.contactName);
         this._email = input.addEmail(itemDiv, 'email', "Email Address:", contact, 'email', ra.walkseditor.help.contactEmail);
         this._tel1 = input.addText(itemDiv, 'tel1', "Contact Telephone 1:", contact, 'telephone1', '', ra.walkseditor.help.contactTel1);
         this._tel2 = input.addText(itemDiv, 'tel2', "Contact Telephone 2:", contact, 'telephone2', '', ra.walkseditor.help.contactTel2);
         this._option = input.addSelect(itemDiv, 'moptions', 'Contact is walks Leader ', options, contact, 'contactType', ra.walkseditor.help.contactType);
-        input.addPredefinedContactButton(itemDiv, contact, ra.walkseditor.help.contactPredefined);
+   
         var _this = this;
         itemDiv.addEventListener("predefinedContact", function (e) {
             var item = e.raData.item;

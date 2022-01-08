@@ -74,7 +74,7 @@ ra.draftWalk = function (  ) {
         } catch (err) {
             alert('Cannot process walk (json=' + json + ' )');
         }
-      
+
     };
 
     this.setDisplayWalk = function (filters) {
@@ -537,7 +537,7 @@ ra.draftWalk = function (  ) {
                 var time = this.getObjProperty(this.data, 'start.location.time', '????');
                 var name = this.getObjProperty(this.data, 'start.location.name', '????');
                 var gr = this.getObjProperty(this.data, 'start.location.gridref8', '????');
-                var pc = this.getObjProperty(this.data, 'postcode.value', '');
+                var pc = this.getObjProperty(this.data, 'start.location.postcode.value', '');
                 switch (view) {
                     case 'table':
                         out += time;
@@ -592,12 +592,14 @@ ra.draftWalk = function (  ) {
     };
     this.getWalkDifficulty = function (view) {
         var out = '';
+        if (view === 'details') {
+            out += "<ul>";
+        }
         var walks = this.getObjProperty(this.data, 'walks');
         walks.forEach(element => {
             var distance = this.getObjProperty(element, 'distance');
             var units = this.getObjProperty(element, 'units');
             var natgrade = this.getObjProperty(element, 'natgrade');
-
             switch (view) {
                 case 'table':
                     out += distance + ' ' + units + ' ' + natgrade + '<br/>';
@@ -606,14 +608,36 @@ ra.draftWalk = function (  ) {
                     out += distance + ' ' + units + ', ';
                     break;
                 case 'details':
-                    out += distance + ' ' + units + ' ' + natgrade + '<br/>';
+                    var localgrade = this.getObjProperty(element, 'localgrade');
+                    var leader = this.getObjProperty(element, 'leader');
+                    var ascent = this.getObjProperty(element, 'ascent');
+                    var duration = this.getObjProperty(element, 'duration');
+                    out += '<li>' + distance + ' ' + units + ' ' + natgrade;
+                    if (localgrade !== null) {
+                        out += " / " + localgrade;
+                    }
+                    if (ascent !== null) {
+                        out += " A: " + ascent;
+                    }
+                    if (duration !== null) {
+                        out += " D: " + duration;
+                    }
+                    if (leader !== null) {
+                        out += " L: " + leader;
+                    }
+                    out += '</li>';
+                    
                     break;
             }
 
         });
+        if (view === 'details') {
+            out += "</ul>";
+        }
         return out.replaceAll('null', '????');
 
     };
+   
     this.getWalkContact = function (view) {
         var d = this.getObjProperty(this.data, 'contact');
         var out = '';
@@ -857,7 +881,7 @@ ra.draftWalk = function (  ) {
         $html += "</div>" + PHP_EOL;
 
         $html += "<div class='ra preview section'>";
-        $html += '<b>Difficulty:</b><br/>' + this.getWalkDifficulty('details');
+        $html += '<b>Walk(s):</b><br/>' + this.getWalkDifficulty('details');
         $html += "</div>" + PHP_EOL;
 
         $html += "<div class='ra preview section'>";
@@ -898,13 +922,13 @@ ra.draftWalk = function (  ) {
             var out = '';
             switch (type) {
                 case 'car':
-                    out = 'Car Share';
+                    out = 'Car Share at ';
                     break;
                 case 'coach':
-                    out = 'Coach walk';
+                    out = 'Coach walk pickup at ';
                     break;
                 case 'public':
-                    out = 'Using public transport';
+                    out = 'Using public transport at ';
                     break;
                 case 'none':
                     break;
@@ -913,26 +937,22 @@ ra.draftWalk = function (  ) {
             if (out !== '') {
                 var meets = this.getObjProperty(this.data, 'meeting.locations');
                 meets.forEach(element => {
-                    var time = this.getObjProperty(element, 'time');
-                    var name = this.getObjProperty(element, 'name');
+                    var time = this.getObjProperty(element, 'time', '???');
+                    var name = this.getObjProperty(element, 'name', '???');
                     var gr = this.getObjProperty(element, 'gridref8');
                     var lat = this.getObjProperty(element, 'latitude');
                     var long = this.getObjProperty(element, 'longitude');
                     var pc = this.getObjProperty(element, 'postcode.value', null);
                     var pcLat = this.getObjProperty(element, 'postcode.latitude');
                     var pcLng = this.getObjProperty(element, 'postcode.longitude');
-
-                    out += time + ' at ' + name + ' GR: ' + gr;
                     if (lat !== null && long !== null) {
-                        L.marker([lat, long]).addTo(layer);
+                        out += time + ' from ' + name + ', ' + gr;
+
+                        var marker = L.marker([lat, long]).addTo(layer);
+                        marker.bindPopup(out);
                         points += 1;
                         if (pc !== null) {
                             ra.map.addPostcodeIcon(pc, [pcLat, pcLng], layer);
-//                            var icon = L.icon({
-//                                iconUrl: ra.baseDirectory() + "media/com_ra_walkseditor/css/postcode-icon.png"
-//                            });
-//                            L.marker([pcLat, pcLng], {icon: icon}).addTo(layer);
-
                         }
                     }
                 });
@@ -940,21 +960,27 @@ ra.draftWalk = function (  ) {
         }
 
         var type = this.getObjProperty(this.data, 'start.type');
-        var out = "";
+        var out = "Start of walk at ";
         switch (type) {
             case 'start':
-                var time = this.getObjProperty(this.data, 'start.location.time');
-                var name = this.getObjProperty(this.data, 'start.location.name');
+                var time = this.getObjProperty(this.data, 'start.location.time', '???');
+                var name = this.getObjProperty(this.data, 'start.location.name', '???');
                 var gr = this.getObjProperty(this.data, 'start.location.gridref8');
                 var lat = this.getObjProperty(this.data, 'start.location.latitude');
                 var long = this.getObjProperty(this.data, 'start.location.longitude');
-
+                var pc = this.getObjProperty(this.data, 'start.location.postcode.value', null);
+                var pcLat = this.getObjProperty(this.data, 'start.location.postcode.latitude');
+                var pcLng = this.getObjProperty(this.data, 'start.location.postcode.longitude');
                 out += time;
-                out += " at " + name;
+                out += " from " + name;
                 out += ", " + gr;
                 if (lat !== null && long !== null) {
-                    L.marker([lat, long]).addTo(layer);
+                    var marker = L.marker([lat, long]).addTo(layer);
+                    marker.bindPopup(out);
                     points += 1;
+                }
+                if (pc !== null) {
+                    ra.map.addPostcodeIcon(pc, [pcLat, pcLng], layer);
                 }
 
                 break;

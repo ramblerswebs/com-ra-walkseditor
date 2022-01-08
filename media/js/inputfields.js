@@ -85,22 +85,16 @@ function raInputFields() {
         container.setAttribute('class', 'gwem quill');
         var inputTag = document.createElement('div');
         container.appendChild(inputTag);
-        //    inputTag.setAttribute('class', ' gwem');
-        // inputTag.setAttribute('class', 'gwem');
-        //  inputTag.setAttribute('rows', rows);
-        //  inputTag.setAttribute('placeholder', placeholder);
-
         inputTag.style.width = '95%';
         inputTag.raobject = raobject;
         inputTag.raproperty = property;
         if (raobject.hasOwnProperty(property)) {  // Initialise value
             inputTag.innerHTML = raobject[property];
-        } else {
-
-        }
+        } 
         var quill = this.addQuill(inputTag);
         quill.on('text-change', function (delta, oldDelta, source) {
-            raobject[property] = quill.root.innerHTML;
+               raobject[property] = quill.root.innerHTML.replaceAll('"',"'");
+          //  raobject[property] = quill.root.innerHTML;
         });
         quill.clipboard.addMatcher(Node.ELEMENT_NODE, function (node, delta) {
             var plaintext = node.innerText;
@@ -492,7 +486,7 @@ function raInputFields() {
         var findButton = document.createElement('button');
         findButton.setAttribute('type', 'button');
         findButton.setAttribute('class', 'predefinedlist');
-        findButton.textContent = "Load predefined Contact";
+        findButton.textContent = "Search saved contacts";
         findButton.addEventListener("recordfound", function (e) { // (1)
             var item = e.raData.item;
             dataObject.displayName = item.displayname;
