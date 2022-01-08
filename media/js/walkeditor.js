@@ -84,6 +84,31 @@ function walkeditor(walk) {
         input.addHeader(contactDiv, "summary", "Contact");
         this.addContact(contactDiv);
 
+        // ??? fields
+
+        // Publicity
+
+        var pubDiv = document.createElement('details');
+        pubDiv.setAttribute('class', 'section publicity');
+        form.appendChild(pubDiv);
+
+        input.addHeader(pubDiv, "summary", "Extra fields (GWEM Style)", null);
+
+        this.addPublicity(pubDiv);
+
+        // add top button
+        this.addScrollButton(form);
+
+        // Publicity
+
+        var pubDiv = document.createElement('details');
+        pubDiv.setAttribute('class', 'section publicity');
+        form.appendChild(pubDiv);
+
+        input.addHeader(pubDiv, "summary", "Accessibility (WM Style)", null);
+
+        this.addAccessibility(pubDiv);
+
         // Editors notes
 
         var notesDiv = document.createElement('details');
@@ -97,7 +122,6 @@ function walkeditor(walk) {
         this.addScrollButton(form);
 
     };
-
 
     this.addBasics = function (tag) {
 
@@ -413,12 +437,13 @@ function walkeditor(walk) {
         var input = new raInputFields;
         var itemDiv = input.itemsItemDivs(tag);
         //  selectContactItem(itemDiv, contact);
-        input.addPredefinedContactButton(itemDiv, contact, ra.walkseditor.help.contactPredefined);        this._displayName = input.addText(itemDiv, 'name', "Display Name:", contact, 'displayName', '', ra.walkseditor.help.contactName);
+        input.addPredefinedContactButton(itemDiv, contact, ra.walkseditor.help.contactPredefined);
+        this._displayName = input.addText(itemDiv, 'name', "Display Name:", contact, 'displayName', '', ra.walkseditor.help.contactName);
         this._email = input.addEmail(itemDiv, 'email', "Email Address:", contact, 'email', ra.walkseditor.help.contactEmail);
         this._tel1 = input.addText(itemDiv, 'tel1', "Contact Telephone 1:", contact, 'telephone1', '', ra.walkseditor.help.contactTel1);
         this._tel2 = input.addText(itemDiv, 'tel2', "Contact Telephone 2:", contact, 'telephone2', '', ra.walkseditor.help.contactTel2);
         this._option = input.addSelect(itemDiv, 'moptions', 'Contact is walks Leader ', options, contact, 'contactType', ra.walkseditor.help.contactType);
-   
+
         var _this = this;
         itemDiv.addEventListener("predefinedContact", function (e) {
             var item = e.raData.item;
@@ -529,7 +554,18 @@ function walkeditor(walk) {
             toilet: 'toilet',
             refresh: 'refreshments',
             disabledToilets: 'disabled toilet'};
-        var surroundings = {city: 'city', country: 'country', farmland: 'farmland'};
+        var surroundings = {
+            city: 'city, town', coast: 'coast',
+            country: 'country park', farmland: 'farmland',
+            hill: 'hill',
+            lake: 'lake, pond',
+            marst: 'marsh',
+            moor: 'moor',
+            mount: 'mountain',
+            open: 'open country',
+            ect: 'etc'
+        };
+
         var theme = {ad: 'adventure', hist: 'history', long: 'long distance path'};
         if (!this.walk.hasOwnProperty('publicity')) {
             this.walk.publicity = {};
@@ -538,12 +574,55 @@ function walkeditor(walk) {
         var input = new raInputFields;
         var itemDiv = input.itemsItemDivs(tag);
         var comment = document.createElement('p');
-        comment.textContent = 'Change this secition to whatever options we agree upon';
+        comment.textContent = 'This is not exactly what GWEM has ';
         itemDiv.appendChild(comment);
         input.addMultiChoice(itemDiv, 'surroundings', 'Surroundings', surroundings, publicity, 'surroundings');
         input.addMultiChoice(itemDiv, 'suitablity', 'Suitablity', suitablity, publicity, 'suitablity');
-        input.addMultiChoice(itemDiv, 'facilities', 'facilities', suitablity, publicity, 'facilities');
+        input.addMultiChoice(itemDiv, 'facilities', 'facilities', facilities, publicity, 'facilities');
         input.addMultiChoice(itemDiv, 'theme', 'theme', theme, publicity, 'theme');
+
+        return;
+
+    };
+    this.addAccessibility = function (tag) {
+
+
+        if (tag === null) {
+            throw new Error("raWalkType container is null");
+        }
+
+
+        var access = {
+            dog: 'Dog friendly',
+            ass: 'Assistance dogs only',
+            pushchair: 'No Stiles',
+            slow: 'Slower pace',
+            fast: 'Fast pace',
+            family: 'Family-Friendly'
+        };
+        var facilities = {
+            toilet: 'Toilets available',
+            refresh: 'Refreshments available (Pub/cafe)'};
+
+        var transport = {access: 'Accessible by public transport',
+            park: 'Car parking available',
+            share: 'Car sharing available',
+            coach: 'Coach trip'};
+        if (!this.walk.hasOwnProperty('publicity')) {
+            this.walk.accessibility = {};
+        }
+        var accessibility = this.walk.accessibility;
+        var input = new raInputFields;
+        var itemDiv = input.itemsItemDivs(tag);
+        var comment = document.createElement('p');
+        comment.textContent = 'Change this secition to whatever options we agree upon';
+        itemDiv.appendChild(comment);
+        input.addMultiChoice(itemDiv, 'facilities', 'facilities', facilities, accessibility, 'facilities');
+        input.addMultiChoice(itemDiv, 'transport', 'transport', transport, accessibility, 'transport');
+//        var comment = document.createElement('p');
+//        comment.textContent = 'The following items seem to be about the actual walk like distance, ascent, pace';
+//        itemDiv.appendChild(comment);
+        input.addMultiChoice(itemDiv, 'accessibility', 'accessibility', access, accessibility, 'access');
 
         return;
 
