@@ -445,7 +445,18 @@ ra.draftWalk = function (  ) {
         return this.data.admin.status;
     };
     this.getWalkStatusString = function () {
-        return  this.getWalkStatus().replace(/ /g, "_");
+        var status = this.getWalkStatus().replace(/ /g, "_");
+        switch (status) {
+            case 'Approved':
+            case 'Cancelled':
+                var d = this.getObjProperty(this.data, 'basics.date');
+                var value = ra.date._setDateTime(d);
+                var today = new Date();
+                if (value < today) {
+                    return 'Past';
+                }
+        }
+        return status;
     };
     this.getWalkCategory = function () {
         return this.category;
@@ -626,7 +637,7 @@ ra.draftWalk = function (  ) {
                         out += " L: " + leader;
                     }
                     out += '</li>';
-                    
+
                     break;
             }
 
@@ -637,7 +648,7 @@ ra.draftWalk = function (  ) {
         return out.replaceAll('null', '????');
 
     };
-   
+
     this.getWalkContact = function (view) {
         var d = this.getObjProperty(this.data, 'contact');
         var out = '';

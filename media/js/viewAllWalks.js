@@ -78,10 +78,12 @@ ra.walks_editor.viewAllwalks = function (mapOptions, data) {
             {name: 'calendar', parent: 'row', tag: 'td', attrs: {class: 'ra-tab'}, textContent: 'Calendar'},
             //          {name: 'issues', parent: 'row', tag: 'td', attrs: {class: 'ra-tab'}, textContent: 'Issues'},
             {name: 'gpxouter', parent: 'root', tag: 'div', attrs: {class: 'gpxouter'}},
+            {name: 'legend', parent: 'root', tag: 'div'},
             {name: 'diagnostics', parent: 'root', tag: 'div', attrs: {class: 'diagnostics'}}
         ];
 
         this.elements = ra.html.generateTags(this.masterdiv, tags);
+        this.legend(this.elements.legend);
         this.elements.heading.innerHTML = 'Display Draft Walks Programme';
         if (this.loggedOn) {
             this.addButton(this.elements.buttons, 'Create New Walk', this.data.newUrl);
@@ -629,7 +631,7 @@ ra.walks_editor.viewAllwalks = function (mapOptions, data) {
             filter.addFilter(div, 'Issues', result.issues);
             filter.addFilter(div, 'Dates', result.dates, true, true);
             filter.addFilter(div, 'Past/Future', result.timeSpan);
-             filter.addFilter(div, 'Date Set', result.dateSet);
+            filter.addFilter(div, 'Date Set', result.dateSet);
             filter.addFilter(div, 'Day of the Week', result.dow);
             filter.addFilter(div, 'Editor notes', result.editorNotes);
 
@@ -682,7 +684,7 @@ ra.walks_editor.viewAllwalks = function (mapOptions, data) {
             result.category[category].no += 1;
 
             var basics = walk.basics;
-            var today=new Date().toISOString().slice(0, 10);
+            var today = new Date().toISOString().slice(0, 10);
             if (basics.hasOwnProperty('date')) {
                 var dayofweek = ra.date.dow(basics.date);
                 result.dow[dayofweek].no += 1;
@@ -694,16 +696,16 @@ ra.walks_editor.viewAllwalks = function (mapOptions, data) {
                 if (yyyymmdd > result.dates.max.no) {
                     result.dates.max.no = yyyymmdd;
                 }
-                if (yyyymmdd>today){
-                     result.timeSpan.future.no+=1;
-                }else{
-                    result.timeSpan.past.no+=1;
+                if (yyyymmdd > today) {
+                    result.timeSpan.future.no += 1;
+                } else {
+                    result.timeSpan.past.no += 1;
                 }
-                
-              
+
+
             } else {
                 result.dateSet.NotSet.no += 1;
-                            }
+            }
             var no = items[i].walk.getNoWalkIssues();
             if (no === 0) {
                 result.issues.None.no += 1;
@@ -720,5 +722,29 @@ ra.walks_editor.viewAllwalks = function (mapOptions, data) {
         }
         this.settings.noCategories = Object.keys(result.category).length;
         return result;
+    };
+    this.legend = function (tag) {
+
+        var tags = [
+            {name: 'details', parent: 'root', tag: 'details', attrs: {open: true}},
+            {name: 'summary', parent: 'details', tag: 'summary', textContent: 'Legend', attrs: {class: 'ra legendsummary'}},
+            {name: 'draft', parent: 'details', tag: 'div', attrs: {class: 'ra legend draft'}},
+            {parent: 'draft', tag: 'div', attrs: {class: 'legendbox'}},
+            {parent: 'draft', tag: 'div', textContent: 'Draft', attrs: {class: 'legendtext'}},
+            {name: 'waiting', parent: 'details', tag: 'div', attrs: {class: 'ra legend waiting'}},
+            {parent: 'waiting', tag: 'div', attrs: {class: 'legendbox'}},
+            {parent: 'waiting', tag: 'div', textContent: 'Awaiting Approval', attrs: {class: 'legendtext'}},
+            {name: 'past', parent: 'details', tag: 'div', attrs: {class: 'ra legend past'}},
+            {parent: 'past', tag: 'div', attrs: {class: 'legendbox'}},
+            {parent: 'past', tag: 'div', textContent: 'Past', attrs: {class: 'legendtext'}},
+            {name: 'publicwalks', parent: 'details', tag: 'h5', textContent: 'Viewable by Public'},
+            {name: 'published', parent: 'details', tag: 'div', attrs: {class: 'ra legend published'}},
+            {parent: 'published', tag: 'div', attrs: {class: 'legendbox'}},
+            {parent: 'published', tag: 'div', textContent: 'Published', attrs: {class: 'legendtext'}},
+            {name: 'cancelled', parent: 'details', tag: 'div', attrs: {class: 'ra legend cancelled'}},
+            {parent: 'cancelled', tag: 'div', attrs: {class: 'legendbox'}},
+            {parent: 'cancelled', tag: 'div', textContent: 'Cancelled', attrs: {class: 'legendtext'}}
+        ];
+        ra.html.generateTags(tag, tags);
     };
 };

@@ -34,6 +34,7 @@ $app = Factory::getApplication();
 $copy = $app->getUserState('com_ra_walkseditor.edit.walk.copy');
 if ($copy) {
     $this->item->id = null;
+     $app->setUserState('com_ra_walkseditor.edit.walk.copy',null);
 }
 $walkdate = $app->getUserState('com_ra_walkseditor.edit.walk.date');
 ?>
