@@ -305,9 +305,9 @@ preview = function () {
                 this.setValue(meet, 'latitude', point, 'latitude', ul, "Error: No latitude given for meeting location");
                 this.setValue(meet, 'longitude', point, 'longitude', ul, "Error: No longitude given for meeting location");
                 this.setValue(meet, 'gridref8', point, 'gridRef', ul, "Error: No grid reference given for meeting location");
-                this.setValue(meet, 'nearestpostcode.postcode', point, 'postcode', ul, "Error: No nearest postcode for meeting location");
-                this.setValue(meet, 'nearestpostcode.latitude', point, 'postcodeLatitude', ul, "Error: No postcode latitude given for meeting location");
-                this.setValue(meet, 'nearestpostcode.longitude', point, 'postcodeLongitude', ul, "Error: No postcode longitude given for meeting location");
+//                this.setValue(meet, 'nearestpostcode.postcode', point, 'postcode', ul, "Error: No nearest postcode for meeting location");
+//                this.setValue(meet, 'nearestpostcode.latitude', point, 'postcodeLatitude', ul, "Error: No postcode latitude given for meeting location");
+//                this.setValue(meet, 'nearestpostcode.longitude', point, 'postcodeLongitude', ul, "Error: No postcode longitude given for meeting location");
 
                 gwem.points.push(point);
                 if (walk.meeting.locations.length > 1) {
@@ -342,9 +342,9 @@ preview = function () {
                         this.setValue(walk, 'start.location.latitude', start, 'latitude', ul, "Error: No latitude given for Start location");
                         this.setValue(walk, 'start.location.longitude', start, 'longitude', ul, "Error: No longitude given for Start location");
                         this.setValue(walk, 'start.location.gridref8', start, 'gridRef', ul, "Error: No grid reference given for Start location");
-                        this.setValue(walk, 'start.location.nearestpostcode.postcode', start, 'postcode', ul, "Error: No nearest postcode for Start location");
-                        this.setValue(walk, 'start.location.nearestpostcode.latitude', start, 'postcodeLatitude', ul, "Error: No postcode latitude given for Start location");
-                        this.setValue(walk, 'start.location.nearestpostcode.longitude', start, 'postcodeLongitude', ul, "Error: No postcode longitude given for Start location");
+//                        this.setValue(walk, 'start.location.nearestpostcode.postcode', start, 'postcode', ul, "Error: No nearest postcode for Start location");
+//                        this.setValue(walk, 'start.location.nearestpostcode.latitude', start, 'postcodeLatitude', ul, "Error: No postcode latitude given for Start location");
+//                        this.setValue(walk, 'start.location.nearestpostcode.longitude', start, 'postcodeLongitude', ul, "Error: No postcode longitude given for Start location");
 
                         break;
                     default:

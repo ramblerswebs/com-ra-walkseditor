@@ -53,7 +53,7 @@ function mapLocationInput(tag, raobject, location) { // constructor function
     this.zoomMap = function () {
         var lat = this.raobject.latitude;
         var long = this.raobject.longitude;
-        this.map.setView([lat, long], 12);
+        this.map.setView([lat, long], 15);
     };
     this.addLocationEditor = function (tag) {
         this.setSummary();
@@ -313,7 +313,7 @@ function mapLocationInput(tag, raobject, location) { // constructor function
         var north = Math.round(grid.northing);
         var _this = this;
         // alert("The nearest postcodes will be displayed. \nYou can then select the appropriate one for SatNav. \nJust click the correct postcode");
-        var url = "https://postcodes.theramblers.org.uk/index.php?easting=" + east + "&northing=" + north + "&dist=20&maxpoints=20";
+        var url = "https://postcodes.theramblers.org.uk/index.php?easting=" + east + "&northing=" + north + "&dist=10&maxpoints=20";
         ra.ajax.getJSON(url, function (err, pcs) {
             if (err !== null) {
                 alert('Sorry something went wrong fetching the postcode, error:' + err);
@@ -346,6 +346,8 @@ function mapLocationInput(tag, raobject, location) { // constructor function
                     event.raData = {};
                     event.raData.layer = _this.postcodeLayer;
                     document.dispatchEvent(event);
+                }else{
+                    alert('No postcodes found within 10Km')
                 }
             }
         });
