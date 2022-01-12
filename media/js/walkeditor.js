@@ -674,7 +674,7 @@ function raItems(options) {
         if (many) {
             this._addItem = document.createElement('button');
             this._addItem.setAttribute('type', 'button');
-            this._addItem.setAttribute('class', 'actionbutton right');
+            this._addItem.setAttribute('class', 'ra-button right');
             this._addItem.setAttribute('data-object', itemName);
             this._addItem.textContent = "Add";
             this._addItem.ra = {};
@@ -684,7 +684,7 @@ function raItems(options) {
             this._addItem.addEventListener("click", this.addButton);
             this._sortItems = document.createElement('button');
             this._sortItems.setAttribute('type', 'button');
-            this._sortItems.setAttribute('class', 'actionbutton right');
+            this._sortItems.setAttribute('class', 'ra-button right');
             this._sortItems.textContent = "Sort";
             this._sortItems.ra = {};
             //   this._sortItems.ra.walk = this.walk;
@@ -719,7 +719,7 @@ function raItems(options) {
         itemsDiv.appendChild(itemDiv);
         this._deleteItem = document.createElement('button');
         this._deleteItem.setAttribute('type', 'button');
-        this._deleteItem.setAttribute('class', 'actionbutton delete');
+        this._deleteItem.setAttribute('class', 'ra-button right');
         this._deleteItem.setAttribute('data-object', type);
         this._deleteItem.textContent = "Delete";
         this._deleteItem.ra = {};

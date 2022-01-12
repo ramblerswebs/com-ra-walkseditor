@@ -16,13 +16,10 @@ ra.walkseditor.editplace = function (options, data) {
 
     this.data = data;
     this.options = options;
-    //   var masterdiv = document.getElementById(options.divId);
-    //   this.lmap = new leafletMap(masterdiv, options);
+    
     this.load = function () {
 
         var data = this.data;
-
-        //   this.fields = data.fields;
         data.editMode = true;
         data.record = {};
         var fields = data.fields;
@@ -66,7 +63,6 @@ ra.walkseditor.editwalk = function (options, data) {
 
     this.load = function () {
         var data = this.data;
-        // data.editMode = true;
         data.walk = new ra.draftWalk();
         var date = null;
         if (this.data.walkdate !== null) {
@@ -81,31 +77,21 @@ ra.walkseditor.editwalk = function (options, data) {
         var topHelp = document.createElement('div');
         topHelp.setAttribute('class', 'ra-edit-options');
         topOptions.appendChild(topHelp);
-//        var topButtons = document.createElement('div');
-//        topButtons.setAttribute('class', 'ra-edit-options');
-//        topOptions.appendChild(topButtons);
 
         var clear = document.createElement('div');
         clear.setAttribute('class', 'clear');
         tag.appendChild(clear);
         var _this = this;
-
-        var button = document.createElement('button');
-        button.innerHTML = 'Preview';
-        button.setAttribute('class', 'actionbutton');
-        button.addEventListener("click", function () {
-            _this.data.walk.displayDetails();
-        });
         var soptions = this.getElementOptions(this.data.fields.status);
         var coptions = this.getElementOptions(this.data.fields.category);
         this.statusSelect = this.setElementOptions(topOptions, 'Status', soptions);
         this.categorySelect = this.setElementOptions(topOptions, 'Category', coptions);
-        if (coptions.items.length<2){
-            this.categorySelect.style.display='none';
+        if (coptions.items.length < 2) {
+            this.categorySelect.style.display = 'none';
         }
         new ra.help(topHelp, ra.walkseditor.help.editButtons).add();
         this.addButtons(topOptions);
-        topOptions.appendChild(button);
+
         var draftwalk = this.data.walk;
         var errors = draftwalk.getNoWalkIssues();
         this.resetStatusButton(errors);
@@ -127,11 +113,13 @@ ra.walkseditor.editwalk = function (options, data) {
 
         var editorDiv = document.createElement('div');
         tag.appendChild(editorDiv);
-
-        var editor = new walkeditor(this.data.walk.data);
+       var editor = new walkeditor(this.data.walk.data);
         editor.sortData();
         editor.addEditForm(editorDiv);
-        //    this.setSubmitButton();
+        var bottomOptions = document.createElement('div');
+        bottomOptions.setAttribute('class', 'ra-edit-options');
+        tag.appendChild(bottomOptions);
+        this.addButtons(bottomOptions);
 
     };
     this.getElementOptions = function (id) {
@@ -150,22 +138,7 @@ ra.walkseditor.editwalk = function (options, data) {
         }
         return options;
     };
-//    this.getElementOptions = function (id) {
-//        var element = document.getElementById(id);
-//        var children = element.children;
-//        var options = {};
-//        options.items = [];
-//        options.id = id;
-//        var i;
-//        for (i = 0; i < children.length; i++) {
-//            var text = children[i].textContent;
-//            var value = children[i].value;
-//            var selected = children[i].getAttribute('selected');
-//            var item = {text: text, value: value, selected: selected};
-//            options.items.push(item);
-//        }
-//        return options;
-//    };
+
     this.setElementOptions = function (tag, name, options) {
         var container = document.createElement('div');
         tag.appendChild(container);
@@ -194,9 +167,10 @@ ra.walkseditor.editwalk = function (options, data) {
         var _this = this;
         var submitButton = document.createElement('button');
         submitButton.setAttribute('type', 'button');
-        submitButton.setAttribute('class', 'actionbutton');
+        submitButton.setAttribute('class', 'ra-button');
         submitButton.textContent = "Save";
         submitButton.addEventListener("click", function (e) {
+
             var element = _this.statusSelect;
             var disabled = element.selectedOptions[0].disabled;
             if (disabled) {
@@ -230,13 +204,21 @@ ra.walkseditor.editwalk = function (options, data) {
         tag.appendChild(submitButton);
         var cancelButton = document.createElement('button');
         cancelButton.setAttribute('type', 'button');
-        cancelButton.setAttribute('class', 'actionbutton');
+        cancelButton.setAttribute('class', 'ra-button');
         cancelButton.textContent = "Cancel";
         cancelButton.addEventListener("click", function (e) {
             var cancelURL = _this.data.fields.cancel;
             window.location.replace(cancelURL);
         });
         tag.appendChild(cancelButton);
+
+        var previewButton = document.createElement('button');
+        previewButton.innerHTML = 'Preview';
+        previewButton.setAttribute('class', 'ra-button');
+        previewButton.addEventListener("click", function () {
+            _this.data.walk.displayDetails();
+        });
+        tag.appendChild(previewButton);
     };
 
     this.resetStatusButton = function (errors) {

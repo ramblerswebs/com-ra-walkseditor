@@ -182,25 +182,19 @@ ra.draftWalk = function (  ) {
         return;
     };
     this.addDisplayClasses = function (cl) {
-
-        var errors = this.getNoWalkIssues();
-        if (errors === 0) {
-            cl.add("walk-noissues");
-        } else {
-            cl.add("walk-issues");
+        cl.add(this.getWalkStatusClass());
+        if (this.isPast()) {
+            cl.add('status-Past');
         }
-        cl.add('status-' + this.getWalkStatusString());
         return;
     };
-    this.getDisplayClasses = function () {
-        var out = '';
-        var errors = this.getNoWalkIssues();
-        if (errors === 0) {
-            out += " walk-noissues";
-        } else {
-            out += " walk-issues";
+    this.getEventClassesArray = function () {
+        var out = [];
+        out.push('pointer');
+        out.push(this.getWalkStatusClass());
+        if (this.isPast()) {
+            out.push('status-Past');
         }
-        out += ' status-' + this.getWalkStatusString();
         return out;
     };
     this.dateSet = function () {
@@ -243,27 +237,40 @@ ra.draftWalk = function (  ) {
 
         //      this.addButton(div, 'View', item.viewUrl);
         if (this.buttons.edit !== null) {
-            this.addButton(tag, 'Edit', this.buttons.edit);
+            this.addButton(tag, 'Edit', this.buttons.edit,ra.walkseditor.help.editQuestion());
         }
         if (this.buttons.duplicate !== null) {
             this.addButton(tag, 'Duplicate', this.buttons.duplicate);
         }
         if (this.buttons.delete !== null) {
-            this.addButton(tag, 'Delete', this.buttons.delete);
+            this.addButton(tag, 'Delete', this.buttons.delete,ra.walkseditor.help.deleteQuestion());
         }
 
         return;
     };
-    this.addButton = function (div, name, url) {
+    this.addButton = function (div, name, url, confirmMsg = '') {
         var button = document.createElement('button');
         button.setAttribute('type', 'button');
         button.classList.add('ra-button');
         button.innerHTML = name;
+        var _this = this;
         button.addEventListener('click', function () {
-            window.location.replace(url);
+            var ok = true;
+            if (confirmMsg !== '') {
+                switch (_this.getWalkStatus()) {
+                    case "Published":
+                    case "Cancelled":
+                        ok = confirm(confirmMsg);
+                        break;
+                }
+            }
+            if (ok) {
+                window.location.replace(url);
+            }
         });
         div.appendChild(button);
     };
+
     this.checkFields = function () {
         this.errors = 0;
         this.notifications = [];
@@ -444,7 +451,7 @@ ra.draftWalk = function (  ) {
     this.getWalkStatus = function () {
         return this.data.admin.status;
     };
-    this.getWalkStatusString = function () {
+    this.getWalkStatusClass = function () {
         var status = this.getWalkStatus().replace(/ /g, "_");
         switch (status) {
             case 'Approved':
@@ -453,10 +460,24 @@ ra.draftWalk = function (  ) {
                 var value = ra.date._setDateTime(d);
                 var today = new Date();
                 if (value < today) {
-                    return 'Past';
+                    return 'status-' + status; // + ' status-Past';
                 }
         }
-        return status;
+        return 'status-' + status;
+    };
+    this.isPast = function () {
+        var status = this.getWalkStatus();
+        switch (status) {
+            case 'Approved':
+            case 'Cancelled':
+                var d = this.getObjProperty(this.data, 'basics.date');
+                var value = ra.date._setDateTime(d);
+                var today = new Date();
+                if (value < today) {
+                    return true;
+                }
+        }
+        return false;
     };
     this.getWalkCategory = function () {
         return this.category;
@@ -772,7 +793,7 @@ ra.draftWalk = function (  ) {
         }
         event.start = d;
         event.title = title;
-        event.classNames = ['pointer ' + this.getDisplayClasses()];
+        event.classNames = this.getEventClassesArray();
 
 
         return event;
@@ -877,7 +898,7 @@ ra.draftWalk = function (  ) {
 
         $html += "<div id='ramblers-details-buttons1' ></div>" + PHP_EOL;
         $html += "<div class='walkstdfulldetails stdfulldetails walk draft' >" + PHP_EOL;
-        $html += "<div class=\'group status-" + this.getWalkStatusString() + "'><b>Preview of Walk - " + this.getWalkStatus() + " </b></div>" + PHP_EOL;
+        $html += "<div class=\'group " + this.getWalkStatusClass() + "'><b>Preview of Walk - " + this.getWalkStatus() + " </b></div>" + PHP_EOL;
 
         $html += "<div class='ra preview section'>" + PHP_EOL;
         $html += '<b>Basics:</b><br/>' + this.getWalkBasics('details');

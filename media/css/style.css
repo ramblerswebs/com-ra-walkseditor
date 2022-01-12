@@ -104,7 +104,7 @@ button.ra-button{
 button.ra-button:hover{
     background-color: var(--sunrise);
 }
-button.actionbutton {
+DELbutton.actionbutton {
     background-color: var(--mintCake);
     color:#FFFFFF;
     padding: 1px;
@@ -118,10 +118,10 @@ button.right {
 
     float:right;
 }
-button.actionbutton.delete {
+DELbutton.actionbutton.delete {
     float:right;
 }
-button.actionbutton.noLocation {
+DELbutton.actionbutton.noLocation {
     visibility: hidden;
 }
 button.predefinedlist {

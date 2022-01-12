@@ -13,8 +13,15 @@ ra.walkseditor.help = (function () {
                 '<h4>Category</h4><p>If this is shown then you are able to categorise the walk, using the categories defined by your group.</p>' +
                 '<h4>Save</h4><p>Save the walk and close the edit function</p>' +
                 '<h4>Cancel</h4><p>Close the edit function without saving, any changes will be lost</p>' +
-               '<p><b>Note: Failing to either Save or Close the walk may result in locking others from editing the walk</b></p>' +
+                '<p><b>Note: Failing to either Save or Close the walk may result in locking others from editing the walk</b></p>' +
                 '<h4>Preview</h4><p>Display a popup showing roughly how the walk would be displayed to the users, plus any outstanding issues</p>';
+    };
+    help.editQuestion = function () {
+        return ('This is a published or cancelled walk that is viewable by the public\r\n\r\nAre you sure you wish to edit this walk?');
+    };
+    help.deleteQuestion = function () {
+        return ('This is a published or cancelled walk that is viewable by the public\r\n\r\nAre you sure you wish to delete this walk?');
+
     };
     help.locationPostcode = function () {
         return "Use this option if you wish to publish a postcode to aid walkers with their Satnav. <br/>The <b>Add</b> option will display postcodes nearest to the marker. <br/>NOTE: the postcodes may take a few seconds to appear<br/>Select the most appropriate postcode by clicking on it. <br/>NOTE: if you move the marker the postcode will be removed. ";
