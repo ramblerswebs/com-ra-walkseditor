@@ -127,7 +127,7 @@ class Walkseditor extends RLeafletMap {
         $this->options->print = true;
         $this->options->ramblersPlaces = true;
         $this->options->controlcontainer = true;
-        //  $document = JFactory::getDocument();
+        $document = JFactory::getDocument();
         RLoad::addScript("libraries/ramblers/js/ramblerswalks.js", "text/javascript");
         $path = "media/com_ra_walkseditor/js/";
         RLoad::addScript($path . "loader.js", "text/javascript");
@@ -148,6 +148,7 @@ class Walkseditor extends RLeafletMap {
 
         $path = "media/com_ra_walkseditor/css/";
         RLoad::addStyleSheet($path . "style.css", "text/css");
+        $document->addScript("libraries/ramblers/vendors/jplist-es6-master/dist/1.2.0/jplist.min.js", "text/javascript");
 
         parent::addScriptsandStyles($this->options);
         parent::getOptionsScript();
