@@ -79,6 +79,7 @@ function mapLocationInput(tag, raobject, location) { // constructor function
             {name: 'drag', parent: 'root', tag: 'p'},
             {name: 'buttons', parent: 'root', tag: 'div'},
             {name: 'search', parent: 'buttons', tag: 'div'},
+            {name: 'hr', parent: 'buttons', tag: 'hr'},
             {name: 'pc', parent: 'buttons', tag: 'div'},
             {name: 'pcTitle', parent: 'pc', tag: 'h5'},
             {name: 'addDelPC', parent: 'pc', tag: 'div'},
@@ -87,7 +88,7 @@ function mapLocationInput(tag, raobject, location) { // constructor function
             {name: 'addremove', parent: 'places', tag: 'div'}
         ];
         this.elements = ra.html.generateTags(left, tags);
-        this.elements.drag.innerHTML = "Drag marker to correct location";
+        this.elements.drag.innerHTML = "To change location <b>drag marker</b> and/or search for location";
         this.updateStatusPanel();
         var comment = document.createElement('p');
         comment.innerHTML = '';
@@ -113,11 +114,12 @@ function mapLocationInput(tag, raobject, location) { // constructor function
         mapoptions.mouseposition = true;
         mapoptions.maptools = true;
         mapoptions.mapHeight = "400px";
-        this.lmap = new leafletMap(right, mapoptions);
+        this.lmap = new ra.leafletmap(right, mapoptions);
         this.map = this.lmap.map;
         this.layer = L.featureGroup().addTo(this.map);
         this.postcodeLayer = L.featureGroup().addTo(this.map);
-        this.placesLayer = L.featureGroup().addTo(this.map);
+        //   this.placesLayer = L.featureGroup().addTo(this.map);
+        this._rightclick = this.lmap.rightclickControl();
 
         if (this.raobject.hasOwnProperty('postcode')) {
             var pc = this.raobject.postcode.value;
@@ -243,7 +245,7 @@ function mapLocationInput(tag, raobject, location) { // constructor function
         findButton.textContent = "Location search";
         tag.appendChild(findButton);
         new ra.help(tag, ra.walkseditor.help.locationSearch).add();
-        var feed = new feeds();
+        var feed = new ra.feedhandler();
         findButton.feedhelper = feed;
         findButton.addEventListener("click", function (e) {
             var target = e.target;
@@ -284,7 +286,8 @@ function mapLocationInput(tag, raobject, location) { // constructor function
             }
         });
         document.addEventListener("postcodes-loaded", function (e) {
-            ra.map.zoomLayer(_this.map, _this.postcodeLayer);
+            var bounds = _this.postcodeLayer.getBounds();
+            _this.map.fitBounds(bounds, {padding: [20, 20]});
         });
         return button;
     };
@@ -346,7 +349,7 @@ function mapLocationInput(tag, raobject, location) { // constructor function
                     event.raData = {};
                     event.raData.layer = _this.postcodeLayer;
                     document.dispatchEvent(event);
-                }else{
+                } else {
                     alert('No postcodes found within 10Km')
                 }
             }
@@ -359,15 +362,17 @@ function mapLocationInput(tag, raobject, location) { // constructor function
         button.innerHTML = "Display";
         tag.appendChild(button);
         var _this = this;
-        document.addEventListener("start-places-loaded", function (e) {
-            ra.map.zoomLayer(_this.map, _this.placesLayer);
-        });
         button.addEventListener("click", function (e) {
-            _this.placesLayer.clearLayers();
+            //_this.placesLayer.clearLayers();
             if (_this.raobject.isLatLongSet) {
                 //  alert("The nearest places used by Ramblers' Groups will be displayed");
-                var latlng = new LatLon(_this.raobject.latitude, _this.raobject.longitude);
-                ra.map.displayStartingPlaces(latlng, _this.placesLayer, 20, 30);
+              
+                var options = {
+                    location: {lat: _this.raobject.latitude, lng: _this.raobject.longitude},
+                    distance: 20,
+                    limit: 30,
+                    cluster: true};
+                _this._rightclick.rightClickDisplayPlaces(options);
             } else {
                 alert("Marker position not set");
             }
@@ -382,8 +387,7 @@ function mapLocationInput(tag, raobject, location) { // constructor function
         tag.appendChild(button);
         var _this = this;
         button.addEventListener("click", function (e) {
-            _this.placesLayer.clearLayers();
-
+            _this._rightclick.rightClickClearPlaces();
         });
         return button;
     };

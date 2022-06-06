@@ -1,18 +1,25 @@
 :root {
     /* Ramblers colours */
     /* 2021  */
-    --mintCake:#9BC8AB;
+    --mintcake:#9BC8AB;
     --sunset:#F08050;
     --granite:#404141;
-    --rosyCheeks:#F6B09D;
+    --rosycheeks:#F6B09D;
     --sunrise:#F9B104;
     --cloudy:#FFFFFF;
     --gradeEA:#ADADAD;
-    --gradeE:var(--mintCake);
-    --gradeL:var(--rosyCheeks);
+    --gradeE:var(--mintcake);
+    --gradeL:var(--rosycheeks);
     --gradeM:var(--sunset);
     --gradeS:var(--sunrise);
     --gradeT:var(--granite);
+    --pastcolor: #999;
+
+    --draftStatus:white;
+    --awaiting_ApprovalStatus:rgb(171, 171, 171);
+    --cancelledStatus:var(--mintcake);
+    --publishedStatus:var(--mintcake);
+
 }
 
 #form-draftgwem2event {
@@ -23,6 +30,9 @@ body {
     font-family: verdana;
     font-size: 18px;
     line-height: 24px;
+}
+a{
+    cursor:pointer;
 }
 
 details.section > summary  {
@@ -44,7 +54,7 @@ span.error{
     color:red;
 }
 .alignRight {
-    margin-left: auto; 
+    margin-left: auto;
     margin-right: 0;
     text-align:right;
 }
@@ -92,7 +102,7 @@ div.js-item{
     border-radius: 10px;
 }
 button.ra-button{
-    background-color: var(--mintCake);
+    background-color: var(--mintcake);
     color:#FFFFFF;
     padding: 1px;
     padding-left: 5px;
@@ -105,7 +115,7 @@ button.ra-button:hover{
     background-color: var(--sunrise);
 }
 DELbutton.actionbutton {
-    background-color: var(--mintCake);
+    background-color: var(--mintcake);
     color:#FFFFFF;
     padding: 1px;
     padding-left: 5px;
@@ -261,7 +271,7 @@ button.tablinks{
     max-height:85%;
     background-color:#ffffff;
     border-radius: 25px;
-    padding: 20px; 
+    padding: 20px;
     content: "";
     display: table;
     clear: both;
@@ -300,10 +310,7 @@ span.zoomout {
     background: #fff;
     border: 1px solid #666;
 }
-div.odd.draftwalk,
-div.even.draftwalk{
-    margin-bottom:  2px;
-}
+
 div.display.section {
     margin: 2px;
     border-radius: 10px 10px 10px 10px;
@@ -340,15 +347,15 @@ div.display.section {
         min-width: 200px;
 
     }
-}         
+}
 div.display {
     font-size:14px;
     line-height: 16px;
-}  
+}
 div.display h2{
     font-size:18px;
     line-height: 18px;
-}  
+}
 div.ra-edit-options {
     float:right;
     border:2px;
@@ -366,7 +373,7 @@ form#form-draftgwem2event{
 
 }
 
-details summary { 
+details summary {
     cursor: pointer;
 }
 
@@ -401,43 +408,49 @@ details[open].section > summary {
 }
 
 .group.status-Draft{
-    background-color:  #eeeeee !important;
+    background-color:  var(--draftStatus) !important;
     color: var(--graphite) !important;
     border: 2px solid #404141 !important;
 }
+.status-Draft{
+    background-color: var(--draftStatus) !important;
+}
 .status-Awaiting_Approval{
-    background-color:  #ababab !important;
+    background-color: var(--awaiting_ApprovalStatus) !important;
 }
 
-.status-Published,
-.status-Cancelled {
-    background-color:  var(--mintCake)!important;
-    border-color:  var(--mintCake)!important;
+.status-Published,.status-Cancelled {
+    background-color:  var(--mintcake)!important;
 }
+
 .status-Past{
-    background-color: var(--rosyCheeks) !important;
+    margin: 10px 10px 10px 10px;
+}
+tr.status-Past td  {
+    border: 10px solid var(--pastcolor) !important;
 }
 .status-Draft:hover,
 .status-Awaiting_Approval:hover,
 .status-Published:hover,
 .status-Cancelled:hover {
-    background-color:  var(--sunrise)!important;
-    border-color:  var(--sunrise)!important;
+    opacity: 0.5;
 }
 
 .status-Cancelled {
     text-decoration: line-through;
+    color: var(--cancelled) !important;
 }
 .fc-h-event.status-Draft {
     background-color:  #eeeeee !important;
-    border-color:  var(--mintCake)!important;
+    border-color:  var(--mintcake)!important;
 }
 .fc-h-event.status-Awaiting_Approval{
-    background-color:  #ababab !important;
-    border-color:  var(--mintCake)!important;
+    background-color:  var(--awaiting_Approval) !important;
+    border-color:  var(--mintcake)!important;
 }
 .fc-h-event.status-Cancelled div div div div{
     text-decoration: line-through;
+    color: var(--cancelled);
 }
 
 
@@ -448,7 +461,7 @@ div.gwem.quill{
     position: relative;
     right: -5%;
 }
-div.gwem.quill div.ql-toolbar.ql-snow{ 
+div.gwem.quill div.ql-toolbar.ql-snow{
     background-color: #ffffff;
     border-radius:15px 15px 0px 0px;
     width:95%;
@@ -470,8 +483,8 @@ div.gwem.quill  div.ql-container.ql-snow{
 }
 
 .status-Published.noerrors{
-    background-color: var(--mintCake);
-    border-color: var(--mintCake);
+    background-color: var(--mintcake);
+    border-color: var(--mintcake);
 }
 .status-Awaiting.Approval.noerrors div div div div{
     color:#121212;
@@ -491,7 +504,8 @@ details.ra.legendheading h5{
     font-weight: bold;
 }
 div.ra.legend div.legendbox{
-    width : 50px;
+    padding: 8px;
+    min-width:200px;
     height:20px;
     border: 2px solid #cccccc;
     display:inline-block;
@@ -500,7 +514,7 @@ div.ra.legend div.legendtext{
     display:inline;
     padding-left:30px;
     font-weight: bold;
-     font-size: 17px;
+    font-size: 17px;
 }
 div.ra.legend.draft div.legendbox{
 }
@@ -509,16 +523,20 @@ div.ra.legend.waiting div.legendbox{
     border-color:#ababab;
 }
 div.ra.legend.past div.legendbox{
-    background-color: var(--rosyCheeks);
-    border-color: var(--rosyCheeks);
+    background-color: var(--mintcake);
+
+}
+div.ra.legend.past {
+    background-color: var(--pastcolor);
+    width:250px;
 }
 div.ra.legend.published div.legendbox{
-    background-color: var(--mintCake);
-    border-color: var(--mintCake);
+    background-color: var(--mintcake);
 }
 div.ra.legend.cancelled div.legendbox{
-    background-color: var(--mintCake);
-    border-color: var(--mintCake);
+    background-color: var(--mintcake);
+    text-decoration: line-through;
+    color: var(--cancelled) !important;
 }
 
 button.topbutton {
@@ -594,4 +612,6 @@ button.topbutton:hover {
     color:#CCCCCC;
 }
 
-div.error{color:red;}
+div.error{
+    color:red;
+}

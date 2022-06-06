@@ -92,7 +92,7 @@ class Ra_walkseditorControllerWalkForm extends \Joomla\CMS\MVC\Controller\FormCo
 
         // Check for errors.
         if ($data === false) {
-        // Get the validation messages.
+            // Get the validation messages.
             $errors = $model->getErrors();
 
             // Push up to three validation messages out to the user.
@@ -148,6 +148,11 @@ class Ra_walkseditorControllerWalkForm extends \Joomla\CMS\MVC\Controller\FormCo
 
         // Flush the data from the session.
         $app->setUserState('com_ra_walkseditor.edit.walk.data', null);
+        // changes to remove walks cache to enable walks to appear striaght away
+        $status = $data['status'];
+        if ($status == 'Published' or $status == 'Cancelled') {
+            echo 'delete cache';
+        }
     }
 
     /**

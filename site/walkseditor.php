@@ -15,17 +15,12 @@ class Walkseditor extends RLeafletMap {
 
     public function editWalk($walkdate) {
 
-        $this->defineScriptsandCss();
-
         //  $this->help_page = "https://maphelp.ramblers-webs.org.uk/draw-walking-route.html";
 
-        $this->options->maptools = true;
+        $this->options->settings = true;
         $this->options->mylocation = true;
         $this->options->rightclick = true;
         $this->options->fullscreen = true;
-        $this->options->search = true;
-        $this->options->locationsearch = true;
-        $this->options->osgrid = true;
         $this->options->mouseposition = true;
         $this->options->postcodes = true;
         $this->options->fitbounds = true;
@@ -40,22 +35,19 @@ class Walkseditor extends RLeafletMap {
         };
         $this->data->walkdate = $walkdate;
         $this->data->fields = $this->fields;
+
         parent::setCommand('ra.walkseditor.editwalk');
         parent::setDataObject($this->data);
         parent::display();
+        $this->defineScriptsandCss();
     }
 
     public function viewWalk() {
 
-        $this->defineScriptsandCss();
-
-        $this->options->maptools = true;
+        $this->options->settings = true;
         $this->options->mylocation = true;
         $this->options->rightclick = true;
         $this->options->fullscreen = true;
-        $this->options->search = true;
-        $this->options->locationsearch = true;
-        $this->options->osgrid = true;
         $this->options->mouseposition = true;
         $this->options->postcodes = true;
         $this->options->fitbounds = true;
@@ -72,20 +64,16 @@ class Walkseditor extends RLeafletMap {
         parent::setCommand('ra.walkseditor.viewwalk');
         parent::setDataObject($this->data);
         parent::display();
+        $this->defineScriptsandCss();
     }
 
     // view all walks
     public function viewAllWalks($data) {
 
-        $this->defineScriptsandCss();
-
-        $this->options->maptools = true;
+        $this->options->settings = true;
         $this->options->mylocation = true;
         $this->options->rightclick = true;
         $this->options->fullscreen = true;
-        $this->options->search = true;
-        $this->options->locationsearch = true;
-        $this->options->osgrid = true;
         $this->options->mouseposition = true;
         $this->options->postcodes = true;
         $this->options->fitbounds = true;
@@ -100,15 +88,13 @@ class Walkseditor extends RLeafletMap {
         parent::setCommand('ra.walks_editor.viewAllwalks');
         parent::setDataObject($this->data);
         parent::display();
+        $this->defineScriptsandCss();
     }
 
     public function editPlace() {
         //  $this->help_page = "https://maphelp.ramblers-webs.org.uk/draw-walking-route.html";
-        $this->defineScriptsandCss();
+
         $this->options->fullscreen = true;
-        $this->options->search = true;
-        $this->options->locationsearch = true;
-        $this->options->osgrid = true;
         $this->options->mouseposition = true;
         $this->options->postcodes = true;
         $this->options->fitbounds = false;
@@ -126,14 +112,12 @@ class Walkseditor extends RLeafletMap {
         parent::setCommand('ra.walkseditor.editplace');
         parent::setDataObject($this->data);
         parent::display();
+        $this->defineScriptsandCss();
     }
 
     public function editEvent() {
         //  $this->help_page = "https://maphelp.ramblers-webs.org.uk/draw-walking-route.html";
         $this->options->fullscreen = true;
-        $this->options->search = true;
-        $this->options->locationsearch = true;
-        $this->options->osgrid = true;
         $this->options->mouseposition = true;
         $this->options->postcodes = true;
         $this->options->fitbounds = false;
@@ -185,9 +169,6 @@ class Walkseditor extends RLeafletMap {
     public function viewEvent() {
         //  $this->help_page = "https://maphelp.ramblers-webs.org.uk/draw-walking-route.html";
         $this->options->fullscreen = true;
-        $this->options->search = true;
-        $this->options->locationsearch = true;
-        $this->options->osgrid = true;
         $this->options->mouseposition = true;
         $this->options->postcodes = true;
         $this->options->fitbounds = false;
@@ -226,58 +207,11 @@ class Walkseditor extends RLeafletMap {
     }
 
     private function defineScriptsandCss() {
+
         JHtml::_('jquery.framework');
         $document = JFactory::getDocument();
-        RLoad::addScript("libraries/ramblers/js/feedhandler.js", "text/javascript");
-        RLoad::addScript("libraries/ramblers/js/ra.js", "text/javascript");
-        // Leaflet
-        $document->addStyleSheet("libraries/ramblers/vendors/leaflet1.7.1/leaflet.css", "text/css");
-        $document->addScript("libraries/ramblers/vendors/leaflet1.7.1/leaflet.js", "text/javascript");
-        RLoad::addScript("libraries/ramblers/leaflet/ramblersleaflet.js", "text/javascript");
-        RLoad::addStyleSheet("libraries/ramblers/leaflet/ramblersleaflet.css", "text/css");
-        RLoad::addScript("libraries/ramblers/vendors/Leaflet.fullscreen-1.0.2/dist/Leaflet.fullscreen.min.js", "text/javascript");
-
-
-        $document->addStyleSheet("libraries/ramblers/vendors/Leaflet.markercluster-1.4.1/dist/MarkerCluster.css", "text/css");
-        $document->addStyleSheet("libraries/ramblers/vendors/Leaflet.markercluster-1.4.1/dist/MarkerCluster.Default.css", "text/css");
-        $document->addScript("libraries/ramblers/vendors/Leaflet.markercluster-1.4.1/dist/leaflet.markercluster.js", "text/javascript");
-
-        RLoad::addScript("libraries/ramblers/leaflet/L.Control.Mouse.js", "text/javascript");
-        RLoad::addStyleSheet("libraries/ramblers/leaflet/L.Control.Mouse.css", "text/css");
-
-        // grid ref to/from lat/long
-        $document->addScript("libraries/ramblers/vendors/geodesy/vector3d.js", "text/javascript");
-        $document->addScript("libraries/ramblers/vendors/geodesy/latlon-ellipsoidal.js", "text/javascript");
-        $document->addScript("libraries/ramblers/vendors/geodesy/osgridref.js", "text/javascript");
-
-        // Bing maps
-        $document->addScript("libraries/ramblers/vendors/bing/bing.js", "text/javascript");
-
-        $path = "libraries/ramblers/vendors/leaflet.browser.print-1/src/";
-        $document->addScript($path . "leaflet.browser.print.js", "text/javascript");
-        $document->addScript($path . "leaflet.browser.print.sizes.js", "text/javascript");
-        $document->addScript($path . "leaflet.browser.print.utils.js", "text/javascript");
-
-        RLoad::addScript("libraries/ramblers/js/ra.js", "text/javascript");
-        RLoad::addScript("libraries/ramblers/js/raMap.js", "text/javascript");
-        RLoad::addScript("libraries/ramblers/js/raWalk.js", "text/javascript");
-        RLoad::addScript("libraries/ramblers/js/raLocation.js", "text/javascript");
-        RLoad::addScript("libraries/ramblers/leaflet/ra-map-mylocation.js", "text/javascript");
-
-        RLoad::addScript("libraries/ramblers/leaflet/ra-container.js", "text/javascript");
-
         RLoad::addStyleSheet("libraries/ramblers/jsonwalks/css/ramblerslibrary.css", "text/css");
-        // tools
 
-        RLoad::addStyleSheet("libraries/ramblers/leaflet/ra-map-tools.css", "text/css");
-        RLoad::addScript("libraries/ramblers/leaflet/ra-map-tools.js", "text/javascript");
-        RLoad::addScript("libraries/ramblers/js/feedhandler.js", "text/javascript");
-
-        RLoad::addScript("libraries/ramblers/jsonwalks/std/display.js", "text/javascript");
-
-        $document->addScript("libraries/ramblers/vendors/jplist-es6-master/dist/1.2.0/jplist.min.js", "text/javascript");
-
-        RLoad::addScript("libraries/ramblers/js/ramblerswalks.js", "text/javascript");
         $path = "media/com_ra_walkseditor/";
         RLoad::addScript($path . "js/loader.js", "text/javascript");
         RLoad::addScript($path . "js/tabs.js", "text/javascript");

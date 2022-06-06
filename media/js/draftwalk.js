@@ -237,13 +237,13 @@ ra.draftWalk = function (  ) {
 
         //      this.addButton(div, 'View', item.viewUrl);
         if (this.buttons.edit !== null) {
-            this.addButton(tag, 'Edit', this.buttons.edit,ra.walkseditor.help.editQuestion());
+            this.addButton(tag, 'Edit', this.buttons.edit, ra.walkseditor.help.editQuestion());
         }
         if (this.buttons.duplicate !== null) {
             this.addButton(tag, 'Duplicate', this.buttons.duplicate);
         }
         if (this.buttons.delete !== null) {
-            this.addButton(tag, 'Delete', this.buttons.delete,ra.walkseditor.help.deleteQuestion());
+            this.addButton(tag, 'Delete', this.buttons.delete, ra.walkseditor.help.deleteQuestion());
         }
 
         return;
@@ -466,16 +466,13 @@ ra.draftWalk = function (  ) {
         return 'status-' + status;
     };
     this.isPast = function () {
-        var status = this.getWalkStatus();
-        switch (status) {
-            case 'Approved':
-            case 'Cancelled':
-                var d = this.getObjProperty(this.data, 'basics.date');
-                var value = ra.date._setDateTime(d);
-                var today = new Date();
-                if (value < today) {
-                    return true;
-                }
+        var d = this.getObjProperty(this.data, 'basics.date', null);
+        if (d !== null) {
+            var value = ra.date._setDateTime(d);
+            var today = new Date();
+            if (value < today) {
+                return true;
+            }
         }
         return false;
     };
@@ -808,6 +805,7 @@ ra.draftWalk = function (  ) {
         var time = this.getObjProperty(this.data, 'start.location.time');
         var name = this.getObjProperty(this.data, 'start.location.name');
         var gr = this.getObjProperty(this.data, 'start.location.gridref8');
+        var _this = this;
         popup = "<b>Date: " + date + "<br/>Title: " + title + "</b><br/>";
         switch (type) {
             case 'start':
@@ -851,8 +849,15 @@ ra.draftWalk = function (  ) {
         }
         //      var marker = L.marker([lat, lng], {icon: icon, title: title, riseOnHover: true}).addTo(layer);
         //     marker.bindPopup(popup, {offset: popupoffset, autoClose: false}).closePopup();
+        var pp = document.createElement('div');
+        pp.setAttribute('class', 'pointer');
+        pp.setAttribute('title', 'View walk details');
+        pp.innerHTML = popup;
+        pp.addEventListener('click', function () {
+            _this.displayDetails();
+        });
+        var marker = cluster.addMarker(pp, lat, lng, {icon: icon, title: title, riseOnHover: true});
 
-        cluster.addMarker(popup, lat, lng, {icon: icon, title: title, riseOnHover: true});
     };
 
 
@@ -945,7 +950,7 @@ ra.draftWalk = function (  ) {
     this._addMaptoWalk = function () {
 
         var tag = document.getElementById("detailsMapDiv");
-        var lmap = new leafletMap(tag, ra.defaultMapOptions);
+        var lmap = new ra.leafletmap(tag, ra.defaultMapOptions);
         var map = lmap.map;
         var points = 0;
         var layer = L.featureGroup().addTo(map);

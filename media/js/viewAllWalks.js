@@ -181,7 +181,7 @@ ra.walks_editor.viewAllwalks = function (mapOptions, data) {
         var pagination = document.createElement('div');
         tag.appendChild(pagination);
         this.itemsPerPage = 10;
-        var printButton = this.myjplist.addPagination(items.length, pagination, this.jplistGroup, this.itemsPerPage, false);
+        this.myjplist.addPagination(items.length, pagination, this.jplistGroup, this.itemsPerPage);
 
         var table = document.createElement('table');
         tag.appendChild(table);
@@ -213,7 +213,7 @@ ra.walks_editor.viewAllwalks = function (mapOptions, data) {
         var pagination = document.createElement('div');
         tag.appendChild(pagination);
         this.itemsPerPage = 10;
-        var printButton = this.myjplist.addPagination(items.length, pagination, this.jplistGroup, this.itemsPerPage, false);
+        this.myjplist.addPagination(items.length, pagination, this.jplistGroup, this.itemsPerPage);
 
         var div = document.createElement('div');
         div.setAttribute('data-jplist-group', this.jplistGroup);
@@ -248,6 +248,7 @@ ra.walks_editor.viewAllwalks = function (mapOptions, data) {
                 walkDiv.innerHTML = out;
                 walkDiv.ra = {};
                 walkDiv.ra.walk = walk;
+                walkDiv.setAttribute('title', 'View walk details');
                 walkDiv.addEventListener('click', function () {
                     this.ra.walk.displayDetails();
                 });
@@ -265,7 +266,7 @@ ra.walks_editor.viewAllwalks = function (mapOptions, data) {
         var comment = document.createElement('p');
         comment.innerHTML = "Walks without a start/walking area are plotted in North Seaa";
         mapTags.comments.appendChild(comment);
-        var lmap = new leafletMap(mapTags.mapped, this.mapOptions);
+        var lmap = new ra.leafletmap(mapTags.mapped, this.mapOptions);
         var map = lmap.map;
         //  var layer = L.featureGroup().addTo(map);
         var mycluster = new cluster(map);
@@ -338,15 +339,24 @@ ra.walks_editor.viewAllwalks = function (mapOptions, data) {
             },
             select: function (info) {
                 var option;
-                alert('check date is in the future');
+
                 if (_this.data.newUrl !== null) {
                     if (_this.data.newUrl.includes('?')) { // allow for SEO
                         option = "&";
                     } else {
                         option = "?";
                     }
-                    var url = _this.data.newUrl + option + "date=" + info.startStr.replaceAll("-", "%20");
-                    window.location.replace(url);
+                    var walkdate = info.startStr;
+                    var today = new Date();
+                    var now = ra.date.YYYYMMDD(today);
+                    if (walkdate > now) {
+                        var url = _this.data.newUrl + option + "date=" + walkdate.replaceAll("-", "%20");
+                        window.location.replace(url);
+                    } else {
+                        alert('Walk MUST be in the future');
+                    }
+                } else {
+                    alert('You must log on to be able to add walks');
                 }
             }
         });
@@ -415,6 +425,7 @@ ra.walks_editor.viewAllwalks = function (mapOptions, data) {
                 //  td.setAttribute('class', col.sort.colname);
             }
             td.classList.add('pointer');
+            td.setAttribute('title', 'View walk details');
             td.addEventListener('click', function () {
                 walk.displayDetails();
             });
@@ -629,9 +640,11 @@ ra.walks_editor.viewAllwalks = function (mapOptions, data) {
             filter.addFilter(div, 'Status', result.status);
             filter.addFilter(div, 'Category', result.category);
             filter.addFilter(div, 'Issues', result.issues);
+
+            filter.addFilter(div, 'Date Set', result.dateSet);
             filter.addFilter(div, 'Dates', result.dates, true, true);
             filter.addFilter(div, 'Past/Future', result.timeSpan);
-            filter.addFilter(div, 'Date Set', result.dateSet);
+
             filter.addFilter(div, 'Day of the Week', result.dow);
             filter.addFilter(div, 'Editor notes', result.editorNotes);
 
@@ -729,21 +742,22 @@ ra.walks_editor.viewAllwalks = function (mapOptions, data) {
             {name: 'details', parent: 'root', tag: 'details', attrs: {open: true}},
             {name: 'summary', parent: 'details', tag: 'summary', textContent: 'Legend', attrs: {class: 'ra legendsummary'}},
             {name: 'draft', parent: 'details', tag: 'div', attrs: {class: 'ra legend draft'}},
-            {parent: 'draft', tag: 'div', attrs: {class: 'legendbox'}},
-            {parent: 'draft', tag: 'div', textContent: 'Draft', attrs: {class: 'legendtext'}},
+            {parent: 'draft', tag: 'div', attrs: {class: 'legendbox'}, textContent: 'Draft'},
+
             {name: 'waiting', parent: 'details', tag: 'div', attrs: {class: 'ra legend waiting'}},
-            {parent: 'waiting', tag: 'div', attrs: {class: 'legendbox'}},
-            {parent: 'waiting', tag: 'div', textContent: 'Awaiting Approval', attrs: {class: 'legendtext'}},
-            {name: 'past', parent: 'details', tag: 'div', attrs: {class: 'ra legend past'}},
-            {parent: 'past', tag: 'div', attrs: {class: 'legendbox'}},
-            {parent: 'past', tag: 'div', textContent: 'Past', attrs: {class: 'legendtext'}},
+            {parent: 'waiting', tag: 'div', attrs: {class: 'legendbox'}, textContent: 'Awaiting Approval'},
+
             {name: 'publicwalks', parent: 'details', tag: 'h5', textContent: 'Viewable by Public'},
             {name: 'published', parent: 'details', tag: 'div', attrs: {class: 'ra legend published'}},
-            {parent: 'published', tag: 'div', attrs: {class: 'legendbox'}},
-            {parent: 'published', tag: 'div', textContent: 'Published', attrs: {class: 'legendtext'}},
+            {parent: 'published', tag: 'div', attrs: {class: 'legendbox'}, textContent: 'Published'},
+
             {name: 'cancelled', parent: 'details', tag: 'div', attrs: {class: 'ra legend cancelled'}},
-            {parent: 'cancelled', tag: 'div', attrs: {class: 'legendbox'}},
-            {parent: 'cancelled', tag: 'div', textContent: 'Cancelled', attrs: {class: 'legendtext'}}
+            {parent: 'cancelled', tag: 'div', attrs: {class: 'legendbox'}, textContent: 'Cancelled'},
+
+            {name: 'pastheading', parent: 'details', tag: 'h5', textContent: 'Past Walks'},
+            {name: 'past', parent: 'details', tag: 'div', attrs: {class: 'ra legend past'}},
+            {parent: 'past', tag: 'div', attrs: {class: 'legendbox status-Past'}, textContent: 'Past'}
+
         ];
         ra.html.generateTags(tag, tags);
     };

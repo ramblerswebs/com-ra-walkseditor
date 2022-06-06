@@ -90,11 +90,11 @@ function raInputFields() {
         inputTag.raproperty = property;
         if (raobject.hasOwnProperty(property)) {  // Initialise value
             inputTag.innerHTML = raobject[property];
-        } 
+        }
         var quill = this.addQuill(inputTag);
         quill.on('text-change', function (delta, oldDelta, source) {
-               raobject[property] = quill.root.innerHTML.replaceAll('"',"'");
-          //  raobject[property] = quill.root.innerHTML;
+            raobject[property] = quill.root.innerHTML.replaceAll('"', "'");
+            //  raobject[property] = quill.root.innerHTML;
         });
         quill.clipboard.addMatcher(Node.ELEMENT_NODE, function (node, delta) {
             var plaintext = node.innerText;
@@ -306,7 +306,8 @@ function raInputFields() {
             }
         });
         if (helpFunction !== null) {
-            new ra.help(itemDiv, helpFunction).add();
+            var h = new ra.help(itemDiv, helpFunction);
+            h.add();
         }
         return inputTag;
     };
@@ -469,7 +470,7 @@ function raInputFields() {
         if (helpFunction !== null) {
             new ra.help(tag, helpFunction).add();
         }
-        var feed = new feeds();
+        var feed = new ra.feedhandler();
         findButton.feedhelper = feed;
         findButton.addEventListener("click", function (e) {
             var target = e.target;
@@ -503,7 +504,7 @@ function raInputFields() {
         if (helpFunction !== null) {
             new ra.help(tag, helpFunction).add();
         }
-        var feed = new feeds();
+        var feed = new ra.feedhandler();
         findButton.feedhelper = feed;
         findButton.addEventListener("click", function (e) {
             var target = e.target;

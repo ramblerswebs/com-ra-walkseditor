@@ -262,7 +262,7 @@ ra.walkseditor.editwalk = function (options, data) {
 //
 //    this.data = data;
 //    //   var masterdiv = document.getElementById(options.divId);
-//    //   this.lmap = new leafletMap(masterdiv, options);
+//    //   this.lmap = new ra.leafletmap(masterdiv, options);
 //    this.load = function () {
 //
 //        var data = this.data;
