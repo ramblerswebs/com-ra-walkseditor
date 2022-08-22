@@ -32,14 +32,19 @@ class Ra_walkseditorControllerWalks extends JControllerLegacy {
             $results = $db->loadObjectList();
             $walks = [];
             $today = date("Y-m-d");
-           
+
             foreach ($results as $result) {
                 $walk = json_decode($result->content);
                 if ($today < $result->date) {
-                      $walks[] = $walk;
+                    $walks[] = $walk;
                 }
-              
             }
+
+       //     function cmp($a, $b) {
+       //         return strcmp($a->basics->date, $b->basics->date);
+       //     }
+
+        //    usort($walks, "cmp");
             foreach ($walks as $walk) {
                 if (!property_exists($walk->basics, 'notes')) {
                     $walk->basics->notes = '';

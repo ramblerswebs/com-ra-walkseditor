@@ -312,6 +312,11 @@ function raInputFields() {
         return inputTag;
     };
     this.addMultiChoice = function (tag, divClass, label, options, raobject, property, helpFunction = null) {
+        // add property if it does not exsist
+        if (!raobject.hasOwnProperty(property)) {
+            raobject[property] = {};
+        }
+        var targetObject = raobject[property];
         var itemDiv = document.createElement('div');
         itemDiv.setAttribute('class', divClass);
         tag.appendChild(itemDiv);
@@ -323,39 +328,33 @@ function raInputFields() {
         div.style.marginLeft = '200px';
         itemDiv.appendChild(div);
         for (var key in options) {
-            var value = options[key];
-            var option = document.createElement("input");
-            option.setAttribute('type', "checkbox");
-            option.setAttribute('id', key);
-            option.name = key;
-            option.value = value;
-            div.appendChild(option);
+            var option = options[key];
+            var checkbox = document.createElement("input");
+            checkbox.setAttribute('type', "checkbox");
+            checkbox.setAttribute('id', key);
+            checkbox.name = key;
+            checkbox.value = option;
+            div.appendChild(checkbox);
             var lab = document.createElement("label");
             lab.setAttribute('for', key);
             lab.style.display = 'inline';
-            lab.textContent = value;
+            lab.textContent = option;
             div.appendChild(lab);
             div.appendChild(document.createElement("br"));
-            //          <label for="vehicle2"> I have a car</label><br>
+            checkbox.ra = {};
+            checkbox.ra.targetObject = targetObject;
+            checkbox.ra.data = raobject;
+
+            checkbox.ra.item = key;
+            if (targetObject.hasOwnProperty(key)) {  // Initialise value
+                checkbox.checked = targetObject[key];
+            }
+            checkbox.addEventListener("change", function (e) {
+                var ra = e.target.ra;
+                ra.targetObject[ra.item] = e.target.checked;
+            });
         }
 
-
-
-//        var inputTag = document.createElement('input');
-//        inputTag.setAttribute('type', "checkbox");
-//        inputTag.setAttribute('name', 'gwem');
-//         inputTag.setAttribute('value', 'gwem');
-//        
-//        itemDiv.appendChild(_label);
-//        itemDiv.appendChild(inputTag);
-        //    inputTag.raobject = raobject;
-        //    inputTag.raproperty = property;
-        //     if (raobject.hasOwnProperty(property)) {  // Initialise value
-        //         inputTag.value = raobject[property];
-        //     }
-        //     inputTag.addEventListener("change", function (e) {
-        //         e.target.raobject[e.target.raproperty] = e.target.value;
-        //     });
         if (helpFunction !== null) {
             new ra.help(itemDiv, helpFunction).add();
         }

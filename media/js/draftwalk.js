@@ -67,6 +67,15 @@ ra.draftWalk = function (  ) {
             if (typeof data.contact !== 'undefined') {
                 this.data.contact = data.contact;
             }
+            if (typeof data.facilities !== 'undefined') {
+                this.data.facilities = data.facilities;
+            }
+            if (typeof data.transport !== 'undefined') {
+                this.data.transport = data.transport;
+            }
+            if (typeof data.accessibility !== 'undefined') {
+                this.data.accessibility = data.accessibility;
+            }
             if (typeof data.notes !== 'undefined') {
                 this.data.notes = data.notes;
             }
@@ -214,9 +223,95 @@ ra.draftWalk = function (  ) {
         }
     };
 
+    this.exportToWMLine = function () {
+        var distance = '';
+        var units = '';
+        var natgrade = '';
+
+        var data = [];
+        data.push(this.getObjProperty(this.data, 'basics.date', ''));
+        data.push(this.getObjProperty(this.data, 'basics.title', ''));
+        data.push(this.getObjProperty(this.data, 'basics.description', ''));
+        data.push(this.getObjProperty(this.data, 'basics.notes', ''));
+        data.push(this.getObjProperty(this.data, 'contact.displayName', ''));
+        //  data.push(this.getObjProperty(this.data, 'contact.email', ''));
+        //  data.push(this.getObjProperty(this.data, 'contact.telephone1', ''));
+        //  data.push(this.getObjProperty(this.data, 'contact.telephone2', ''));
+        //  data.push(this.getObjProperty(this.data, 'contact.contactType', ''));
+        var walks = this.getObjProperty(this.data, 'walks', null);
+        if (walks.length > 0) {
+            var walk1 = walks[0];
+            data.push(this.getObjProperty(walk1, 'type', ''));
+            distance = this.getObjProperty(walk1, 'distance', '');
+            units = this.getObjProperty(walk1, 'units', '');
+            natgrade = this.getObjProperty(walk1, 'natgrade', '');
+        } else {
+            data.push('null');
+        }
+        var start = this.getObjProperty(this.data, 'start', null);
+        if (start === null) {
+            this.exportLocation(data, null);
+        } else {
+
+        }
+        this.exportLocation(data, this.getObjProperty(this.data, 'start', null));
+        this.exportLocation(data, this.getObjProperty(this.data, 'meeting', null));
+        this.exportLocation(data, this.getObjProperty(this.data, 'finish', null));
+
+        data.push(natgrade);
+        switch (units) {
+            case "miles":
+                data.push('');
+                data.push(distance);
+                break;
+            case "km":
+                data.push(distance);
+                data.push('');
+                break;
+            default:
+                data.push('');
+                data.push('');
+        }
+        data.push('');  // ascent
+        data.push('');
+        data.push(this.getObjProperty(this.data, 'facilities.refresh', ''));
+        data.push(this.getObjProperty(this.data, 'facilities.toilet', ''));
+        data.push(this.getObjProperty(this.data, 'transport.access', ''));
+        data.push(this.getObjProperty(this.data, 'transport.park', ''));
+        data.push(this.getObjProperty(this.data, 'transport.share', ''));
+        data.push(this.getObjProperty(this.data, 'transport.coach', ''));
+        data.push(this.getObjProperty(this.data, 'accessibility.dog', ''));
+        data.push(this.getObjProperty(this.data, 'accessibility.intro', ''));
+        data.push(this.getObjProperty(this.data, 'accessibility.nostiles', ''));
+        data.push(this.getObjProperty(this.data, 'accessibility.family', ''));
+        data.push(this.getObjProperty(this.data, 'accessibility.wheelchair', ''));
+
+        var out = ra.arrayToCSV(data) + "\n\r";
+        return out;
+    };
+    this.exportLocation = function (dataarray, data) {
+        if (data === null) {
+            dataarray.push('');
+            dataarray.push('');
+            dataarray.push('');
+            dataarray.push('');
+            dataarray.push('');
+            dataarray.push('');
+            dataarray.push('');
+        } else {
+            dataarray.push(this.getObjProperty(data, 'location.time', ''));
+            dataarray.push(this.getObjProperty(data, 'location.latitude', ''));
+            dataarray.push(this.getObjProperty(data, 'location.longitude', ''));
+            dataarray.push(this.getObjProperty(data, 'location.postcode.value', ''));
+            dataarray.push(''); //  GR
+            dataarray.push(''); //  W3W
+            dataarray.push(this.getObjProperty(data, 'location.name', ''));
+        }
+
+    };
     this.displayDetails = function () {
         var html = this.walkDetails();
-        ra.modal.display(html, false);
+        ra.modals.createModal(html, false);
         this._addMaptoWalk();
         this.addButtons(document.getElementById('ramblers-details-buttons1'));
         this.addButtons(document.getElementById('ramblers-details-buttons2'));
@@ -457,7 +552,7 @@ ra.draftWalk = function (  ) {
             case 'Approved':
             case 'Cancelled':
                 var d = this.getObjProperty(this.data, 'basics.date');
-                var value = ra.date._setDateTime(d);
+                var value = ra.date.getDateTime(d);
                 var today = new Date();
                 if (value < today) {
                     return 'status-' + status; // + ' status-Past';
@@ -468,7 +563,7 @@ ra.draftWalk = function (  ) {
     this.isPast = function () {
         var d = this.getObjProperty(this.data, 'basics.date', null);
         if (d !== null) {
-            var value = ra.date._setDateTime(d);
+            var value = ra.date.getDateTime(d);
             var today = new Date();
             if (value < today) {
                 return true;
@@ -723,6 +818,45 @@ ra.draftWalk = function (  ) {
         return notes;
 
     };
+    this.getWalkFacilities = function () {
+        var out = "";
+        var facilities = {
+            refresh: 'Refreshments available (Pub/cafe)',
+            toilet: 'Toilets available'};
+        var transport = {access: 'Accessible by public transport',
+            park: 'Car parking available',
+            share: 'Car sharing available',
+            coach: 'Coach trip'};
+        var access = {
+            dog: 'Dog friendly',
+            intro: 'Introductory walk',
+            nostiles: 'No Stiles',
+            family: 'Family-Friendly',
+            wheelchair: 'Wheelchair accessible'
+        };
+        out += this.getWalkFacilitiesItem(facilities, "Facilities", 'facilities');
+        out += this.getWalkFacilitiesItem(transport, "Transport", 'transport');
+        out += this.getWalkFacilitiesItem(access, "Accessibility", 'accessibility');
+        return out;
+
+    };
+    this.getWalkFacilitiesItem = function (options, title, section) {
+        var out = "";
+        var d = this.getObjProperty(this.data, section);
+        if (d !== null) {
+            for (var key in options) {
+                var option = options[key];
+                var value = this.getObjProperty(d, key, false);
+                if (value) {
+                    out += "<li>" + option + "</li>";
+                }
+            }
+        }
+        if (out !== "") {
+            out = "<b>" + title + "</b><br/><ul>" + out + "</ul>";
+        }
+        return out;
+    };
 
     this.getNoWalkIssues = function () {
         this.checkFields();
@@ -928,9 +1062,16 @@ ra.draftWalk = function (  ) {
 
         var mapdiv = "detailsMapDiv";
         $html += "<div id='" + mapdiv + "'></div>" + PHP_EOL;
+
+        $html += "<div class='ra preview section'>" + PHP_EOL;
+        $html += this.getWalkFacilities();
+
+        $html += "</div>" + PHP_EOL;
         $html += "<div class='ra preview section'>" + PHP_EOL;
         $html += '<b>Issues:</b><br/>' + this.getWalkMessages();
         $html += "</div>" + PHP_EOL;
+
+
 
 
         var notes = this.getWalkNotes('details');

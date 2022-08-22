@@ -88,16 +88,16 @@ function walkeditor(walk) {
 
         // Publicity
 
-        var pubDiv = document.createElement('details');
-        pubDiv.setAttribute('class', 'section publicity');
-        form.appendChild(pubDiv);
+        //    var pubDiv = document.createElement('details');
+        //    pubDiv.setAttribute('class', 'section publicity');
+        //    form.appendChild(pubDiv);
 
-        input.addHeader(pubDiv, "summary", "Extra fields (GWEM Style)", null);
+        //    input.addHeader(pubDiv, "summary", "Extra fields (GWEM Style)", null);
 
-        this.addPublicity(pubDiv);
+        //    this.addPublicity(pubDiv);
 
         // add top button
-        this.addScrollButton(form);
+        //  this.addScrollButton(form);
 
         // Publicity
 
@@ -105,9 +105,9 @@ function walkeditor(walk) {
         pubDiv.setAttribute('class', 'section publicity');
         form.appendChild(pubDiv);
 
-        input.addHeader(pubDiv, "summary", "Accessibility (WM Style)", null);
+        input.addHeader(pubDiv, "summary", "Facilities, Accessibility and Transport ", null);
 
-        this.addAccessibility(pubDiv);
+        this.addFacilities(pubDiv);
 
         // Editors notes
 
@@ -538,91 +538,63 @@ function walkeditor(walk) {
         return;
 
     };
-    this.addPublicity = function (tag) {
+
+//        if (tag === null) {
+//            throw new Error("raWalkType container is null");
+//        }
+//
+//        var suitablity = {child: 'Child friendly',
+//            dog: 'Dog friendly',
+//            nocar: 'No car needed',
+//            pushchair: 'Pushchair friendly',
+//            wheelchair: 'Wheelchair friendly'};
+//        var facilities = {parking: 'parking',
+//            toilet: 'toilet',
+//            refresh: 'refreshments',
+//            disabledToilets: 'disabled toilet'};
+//        var surroundings = {
+//            city: 'city, town', coast: 'coast',
+//            country: 'country park', farmland: 'farmland',
+//            hill: 'hill',
+//            lake: 'lake, pond',
+//            marst: 'marsh',
+//            moor: 'moor',
+//            mount: 'mountain',
+//            open: 'open country',
+//            ect: 'etc'
+//        };
+//
+
+    this.addFacilities = function (tag) {
 
 
         if (tag === null) {
             throw new Error("raWalkType container is null");
         }
 
-        var suitablity = {child: 'Child friendly',
-            dog: 'Dog friendly',
-            nocar: 'No car needed',
-            pushchair: 'Pushchair friendly',
-            wheelchair: 'Wheelchair friendly'};
-        var facilities = {parking: 'parking',
-            toilet: 'toilet',
-            refresh: 'refreshments',
-            disabledToilets: 'disabled toilet'};
-        var surroundings = {
-            city: 'city, town', coast: 'coast',
-            country: 'country park', farmland: 'farmland',
-            hill: 'hill',
-            lake: 'lake, pond',
-            marst: 'marsh',
-            moor: 'moor',
-            mount: 'mountain',
-            open: 'open country',
-            ect: 'etc'
-        };
-
-        var theme = {ad: 'adventure', hist: 'history', long: 'long distance path'};
-        if (!this.walk.hasOwnProperty('publicity')) {
-            this.walk.publicity = {};
-        }
-        var publicity = this.walk.publicity;
-        var input = new raInputFields;
-        var itemDiv = input.itemsItemDivs(tag);
-        var comment = document.createElement('p');
-        comment.textContent = 'This is not exactly what GWEM has ';
-        itemDiv.appendChild(comment);
-        input.addMultiChoice(itemDiv, 'surroundings', 'Surroundings', surroundings, publicity, 'surroundings');
-        input.addMultiChoice(itemDiv, 'suitablity', 'Suitablity', suitablity, publicity, 'suitablity');
-        input.addMultiChoice(itemDiv, 'facilities', 'facilities', facilities, publicity, 'facilities');
-        input.addMultiChoice(itemDiv, 'theme', 'theme', theme, publicity, 'theme');
-
-        return;
-
-    };
-    this.addAccessibility = function (tag) {
-
-
-        if (tag === null) {
-            throw new Error("raWalkType container is null");
-        }
-
-
-        var access = {
-            dog: 'Dog friendly',
-            ass: 'Assistance dogs only',
-            pushchair: 'No Stiles',
-            slow: 'Slower pace',
-            fast: 'Fast pace',
-            family: 'Family-Friendly'
-        };
         var facilities = {
-            toilet: 'Toilets available',
-            refresh: 'Refreshments available (Pub/cafe)'};
-
+            refresh: 'Refreshments available (Pub/cafe)',
+            toilet: 'Toilets available'};
         var transport = {access: 'Accessible by public transport',
             park: 'Car parking available',
             share: 'Car sharing available',
             coach: 'Coach trip'};
-        if (!this.walk.hasOwnProperty('publicity')) {
-            this.walk.accessibility = {};
-        }
-        var accessibility = this.walk.accessibility;
+        var access = {
+            dog: 'Dog friendly',
+            intro: 'Introductory walk',
+            nostiles: 'No Stiles',
+            family: 'Family-Friendly',
+            wheelchair: 'Wheelchair accessible'
+        };
+      
         var input = new raInputFields;
         var itemDiv = input.itemsItemDivs(tag);
         var comment = document.createElement('p');
         comment.textContent = 'Change this secition to whatever options we agree upon';
         itemDiv.appendChild(comment);
-        input.addMultiChoice(itemDiv, 'facilities', 'facilities', facilities, accessibility, 'facilities');
-        input.addMultiChoice(itemDiv, 'transport', 'transport', transport, accessibility, 'transport');
-//        var comment = document.createElement('p');
-//        comment.textContent = 'The following items seem to be about the actual walk like distance, ascent, pace';
-//        itemDiv.appendChild(comment);
-        input.addMultiChoice(itemDiv, 'accessibility', 'accessibility', access, accessibility, 'access');
+        input.addMultiChoice(itemDiv, 'facilities', 'Facilities', facilities, this.walk, 'facilities');
+        input.addMultiChoice(itemDiv, 'transport', 'Transport', transport, this.walk, 'transport');
+        input.addMultiChoice(itemDiv, 'accessibility', 'Accessibility', access, this.walk, 'accessibility');
 
         return;
 
