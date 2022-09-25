@@ -39,7 +39,7 @@ class Walkseditor extends RLeafletMap {
         parent::setCommand('ra.walkseditor.editwalk');
         parent::setDataObject($this->data);
         parent::display();
-        $this->defineScriptsandCss();
+        RWalkseditor::addScriptsandCss();
     }
 
     public function viewWalk() {
@@ -64,7 +64,7 @@ class Walkseditor extends RLeafletMap {
         parent::setCommand('ra.walkseditor.viewwalk');
         parent::setDataObject($this->data);
         parent::display();
-        $this->defineScriptsandCss();
+        RWalkseditor::addScriptsandCss();
     }
 
     // view all walks
@@ -85,13 +85,12 @@ class Walkseditor extends RLeafletMap {
         $this->options->controlcontainer = true;
         $this->options->calendar = true;
         $this->data = $data;
-        parent::setCommand('ra.walks_editor.viewAllwalks');
+        parent::setCommand('ra.walkseditor.viewAllwalks');
         parent::setDataObject($this->data);
         parent::display();
         $document = JFactory::getDocument();
         $document->addScript("libraries/ramblers/vendors/jplist-es6-master/dist/1.2.0/jplist.min.js", "text/javascript");
-
-        $this->defineScriptsandCss();
+        RWalkseditor::addScriptsandCss();
     }
 
     public function editPlace() {
@@ -115,7 +114,7 @@ class Walkseditor extends RLeafletMap {
         parent::setCommand('ra.walkseditor.editplace');
         parent::setDataObject($this->data);
         parent::display();
-        $this->defineScriptsandCss();
+        RWalkseditor::addScriptsandCss();
     }
 
     public function editEvent() {
@@ -136,11 +135,11 @@ class Walkseditor extends RLeafletMap {
         RLoad::addScript($path . "loader.js", "text/javascript");
         RLoad::addScript($path . "clocklet.min.js", "text/javascript");
         RLoad::addStyleSheet($path . "clocklet.min.css", "text/css");
-        RLoad::addScript($path . "tabs.js", "text/javascript");
-        RLoad::addScript($path . "walkcontroller.js", "text/javascript");
+        //  RLoad::addScript($path . "tabs.js", "text/javascript");
+        //   RLoad::addScript($path . "walkcontroller.js", "text/javascript");
         //    RLoad::addScript($path . "mapdisplay.js", "text/javascript");
         RLoad::addScript($path . "inputfields.js", "text/javascript");
-        RLoad::addScript($path . "raGeneral.js", "text/javascript");
+        //  RLoad::addScript($path . "raGeneral.js", "text/javascript");
         RLoad::addScript($path . "walkeditor.js", "text/javascript");
         RLoad::addScript($path . "maplocation.js", "text/javascript");
         RLoad::addScript($path . "draftwalk.js", "text/javascript");
@@ -185,11 +184,11 @@ class Walkseditor extends RLeafletMap {
         RLoad::addScript("libraries/ramblers/js/ramblerswalks.js", "text/javascript");
         $path = "media/com_ra_walkseditor/js/";
         RLoad::addScript($path . "loader.js", "text/javascript");
-        RLoad::addScript($path . "tabs.js", "text/javascript");
-        RLoad::addScript($path . "walkcontroller.js", "text/javascript");
+        //  RLoad::addScript($path . "tabs.js", "text/javascript");
+        //  RLoad::addScript($path . "walkcontroller.js", "text/javascript");
         //   RLoad::addScript($path . "mapdisplay.js", "text/javascript");
         RLoad::addScript($path . "inputfields.js", "text/javascript");
-        RLoad::addScript($path . "raGeneral.js", "text/javascript");
+        //  RLoad::addScript($path . "raGeneral.js", "text/javascript");
         RLoad::addScript($path . "draftwalk.js", "text/javascript");
 
         $path = "media/com_ra_walkseditor/css/";
@@ -207,31 +206,6 @@ class Walkseditor extends RLeafletMap {
 
         echo '<div id="js-outer-content"></div>';
         echo "<br/>";
-    }
-
-    private function defineScriptsandCss() {
-
-        JHtml::_('jquery.framework');
-        $document = JFactory::getDocument();
-        RLoad::addStyleSheet("libraries/ramblers/jsonwalks/css/ramblerslibrary.css", "text/css");
-
-        $path = "media/com_ra_walkseditor/";
-        RLoad::addScript($path . "js/loader.js", "text/javascript");
-        RLoad::addScript($path . "js/tabs.js", "text/javascript");
-        RLoad::addScript($path . "js/walkcontroller.js", "text/javascript");
-        //    RLoad::addScript($path . "js/mapdisplay.js", "text/javascript");
-        RLoad::addScript($path . "js/inputfields.js", "text/javascript");
-        RLoad::addScript($path . "js/raGeneral.js", "text/javascript");
-        RLoad::addScript($path . "js/draftwalk.js", "text/javascript");
-        RLoad::addScript($path . "js/clocklet.min.js", "text/javascript");
-        RLoad::addStyleSheet($path . "js/clocklet.min.css", "text/css");
-        RLoad::addScript($path . "js/viewAllWalks.js", "text/javascript");
-        RLoad::addScript($path . "js/walkeditor.js", "text/javascript");
-        RLoad::addScript($path . "js/placeEditor.js", "text/javascript");
-        RLoad::addScript($path . "js/maplocation.js", "text/javascript");
-        RLoad::addScript($path . "js/walksEditorHelps.js", "text/javascript");
-
-        RLoad::addStyleSheet($path . "css/style.css", "text/css");
     }
 
 }

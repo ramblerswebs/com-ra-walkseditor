@@ -23,6 +23,8 @@ HTMLHelper::_('formbehavior.chosen', 'select');
 
 $user = Factory::getUser();
 $userId = $user->get('id');
+//$a=$user->getAuthorisedViewLevels();
+//$b=$user->getAuthorisedGroups();
 $listOrder = $this->state->get('list.ordering');
 $listDirn = $this->state->get('list.direction');
 $canCreate = $user->authorise('core.create', 'com_ra_walkseditor') && file_exists(JPATH_COMPONENT . DIRECTORY_SEPARATOR . 'models' . DIRECTORY_SEPARATOR . 'forms' . DIRECTORY_SEPARATOR . 'walkform.xml');

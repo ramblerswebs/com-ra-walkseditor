@@ -25,8 +25,8 @@ $lang = Factory::getLanguage();
 $lang->load('com_ra_walkseditor', JPATH_SITE);
 $doc = Factory::getDocument();
 $doc->addScript(Uri::base() . '/media/com_ra_walkseditor/js/form.js');
-$doc->addScript("https://cdn.quilljs.com/1.3.6/quill.js");
-$doc->addStyleSheet("https://cdn.quilljs.com/1.3.6/quill.snow.css", "text/css");
+//$doc->addScript("https://cdn.quilljs.com/1.3.6/quill.js");
+//$doc->addStyleSheet("https://cdn.quilljs.com/1.3.6/quill.snow.css", "text/css");
 
 $user = Factory::getUser();
 $canEdit = Ra_walkseditorHelpersRa_walkseditor::canUserEdit($this->item, $user);
