@@ -43,7 +43,7 @@ class Walkseditor extends RLeafletMap {
     }
 
     public function viewWalk() {
-
+// is this used?
         $this->options->settings = true;
         $this->options->mylocation = true;
         $this->options->rightclick = true;
@@ -85,11 +85,11 @@ class Walkseditor extends RLeafletMap {
         $this->options->controlcontainer = true;
         $this->options->calendar = true;
         $this->data = $data;
-        parent::setCommand('ra.walkseditor.viewAllwalks');
+        parent::setCommand('ra.walkseditor.comp.viewAllwalks');
         parent::setDataObject($this->data);
         parent::display();
         $document = JFactory::getDocument();
-        $document->addScript("libraries/ramblers/vendors/jplist-es6-master/dist/1.2.0/jplist.min.js", "text/javascript");
+        $document->addScript("media/lib_ramblers/vendors/jplist-es6-master/dist/1.2.0/jplist.min.js", "text/javascript");
         RWalkseditor::addScriptsandCss();
     }
 
@@ -130,11 +130,11 @@ class Walkseditor extends RLeafletMap {
         $this->options->ramblersPlaces = true;
         $this->options->controlcontainer = true;
         $document = JFactory::getDocument();
-        RLoad::addScript("libraries/ramblers/js/ramblerswalks.js", "text/javascript");
-        $path = "media/com_ra_walkseditor/js/";
-        RLoad::addScript($path . "loader.js", "text/javascript");
-        RLoad::addScript($path . "clocklet.min.js", "text/javascript");
-        RLoad::addStyleSheet($path . "clocklet.min.css", "text/css");
+        RLoad::addScript("media/lib_ramblers/js/ramblerswalks.js", "text/javascript");
+        $path = "media/lib_ramblers/walkseditor/js/";
+     //   RLoad::addScript($path . "loader.js", "text/javascript");
+     //   RLoad::addScript($path . "clocklet.min.js", "text/javascript");
+     //   RLoad::addStyleSheet($path . "clocklet.min.css", "text/css");
         //  RLoad::addScript($path . "tabs.js", "text/javascript");
         //   RLoad::addScript($path . "walkcontroller.js", "text/javascript");
         //    RLoad::addScript($path . "mapdisplay.js", "text/javascript");
@@ -145,7 +145,7 @@ class Walkseditor extends RLeafletMap {
         RLoad::addScript($path . "draftwalk.js", "text/javascript");
         RLoad::addScript($path . "viewAllWalks.js", "text/javascript");
 
-        $path = "libraries/ramblers/js/";
+        $path = "media/lib_ramblers/js/";
         RLoad::addScript($path . "feedhandler.js", "text/javascript");
 
         $path = "media/com_ra_walkseditor/css/";

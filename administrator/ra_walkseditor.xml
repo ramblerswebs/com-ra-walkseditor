@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension type="component" version="3.0" method="upgrade">
     <name>com_ra_walkseditor</name>
-    <creationDate>2022-09-25</creationDate>
-    <copyright>2021 webmaster@ramblers-webs.org.uk</copyright>
+    <creationDate>2023-02-13</creationDate>
+    <copyright>2023 chris@cevsystems.co.uk</copyright>
     <license>GNU General Public License version 2 or later; see LICENSE.txt</license>
     <author>Chris Vaughan Derby &amp; South Derbyshire Ramblers</author>
     <authorEmail>webmaster@ramblers-webs.org.uk</authorEmail>
     <authorUrl>http://ramblers-webs.org.uk</authorUrl>
-    <version>0.0.3</version>
+    <version>0.0.4</version>
     <description>COM_RA_WALKSEDITOR_XML_DESCRIPTION</description>
     
     <scriptfile>script.php</scriptfile>
