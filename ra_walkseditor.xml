@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension type="component" version="3.0" method="upgrade">
     <name>com_ra_walkseditor</name>
-    <creationDate>2023-03-08</creationDate>
+    <creationDate>2023-03-14</creationDate>
     <copyright>2023 chris@cevsystems.co.uk</copyright>
     <license>GNU General Public License version 2 or later; see LICENSE.txt</license>
     <author>Chris Vaughan Derby &amp; South Derbyshire Ramblers</author>
